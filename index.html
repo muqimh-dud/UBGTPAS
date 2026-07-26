@@ -6,46 +6,71 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>MUSABX Browser</title>
+<title>MUSABX v2</title>
 
 <style>
 
+/* =========================
+   MUSABX GLOBAL STYLE
+========================= */
+
 *{
-box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
 }
 
 
 body{
 
-margin:0;
-height:100vh;
+    margin:0;
 
-background:
-radial-gradient(circle at top,#1e3a8a,#080f1f 60%);
+    height:100vh;
 
-display:flex;
-justify-content:center;
-align-items:center;
+    background:
+    radial-gradient(circle at top,#2563eb,#020617);
 
-color:white;
+    color:white;
+
+    overflow:hidden;
 
 }
 
 
 
-.browser{
+#app{
 
-width:95%;
-height:95vh;
+    width:100%;
 
-background:#111827;
+    height:100%;
 
-border-radius:25px;
+    display:flex;
 
-padding:20px;
+    flex-direction:column;
 
-box-shadow:0 0 40px black;
+}
+
+
+
+/* =========================
+        TOP BAR
+========================= */
+
+
+.topbar{
+
+    height:65px;
+
+    background:#111827;
+
+    display:flex;
+
+    align-items:center;
+
+    padding:10px;
+
+    gap:10px;
+
+    box-shadow:0 5px 20px black;
 
 }
 
@@ -53,25 +78,25 @@ box-shadow:0 0 40px black;
 
 .logo{
 
-text-align:center;
+    font-size:28px;
 
-font-size:40px;
+    font-weight:bold;
 
-font-weight:bold;
+    color:#38bdf8;
 
-color:#38bdf8;
-
-margin-bottom:15px;
+    white-space:nowrap;
 
 }
 
 
 
-.top{
+.urlbar{
 
-display:flex;
+    flex:1;
 
-gap:10px;
+    display:flex;
+
+    gap:8px;
 
 }
 
@@ -79,21 +104,21 @@ gap:10px;
 
 input{
 
-flex:1;
+    flex:1;
 
-padding:15px;
+    padding:12px;
 
-font-size:16px;
+    border-radius:12px;
 
-border:none;
+    border:none;
 
-border-radius:12px;
+    outline:none;
 
-background:#1f2937;
+    background:#1f2937;
 
-color:white;
+    color:white;
 
-outline:none;
+    font-size:16px;
 
 }
 
@@ -101,19 +126,19 @@ outline:none;
 
 button{
 
-padding:12px 16px;
+    border:none;
 
-border:none;
+    border-radius:10px;
 
-border-radius:12px;
+    padding:10px 14px;
 
-background:#38bdf8;
+    background:#38bdf8;
 
-color:black;
+    color:black;
 
-font-weight:bold;
+    font-weight:bold;
 
-cursor:pointer;
+    cursor:pointer;
 
 }
 
@@ -121,35 +146,118 @@ cursor:pointer;
 
 button:hover{
 
-opacity:.8;
+    opacity:.8;
 
 }
 
 
 
-.controls{
 
-display:flex;
+/* =========================
+          TABS
+========================= */
 
-gap:10px;
 
-flex-wrap:wrap;
+.tabs{
 
-margin-top:12px;
+    height:45px;
+
+    background:#020617;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:5px;
 
 }
 
 
 
-.loading{
+.tab{
 
-display:none;
+    background:#1f2937;
 
-text-align:center;
+    padding:8px 15px;
 
-color:#38bdf8;
+    border-radius:10px;
 
-margin:10px;
+    cursor:pointer;
+
+}
+
+
+
+.tab.active{
+
+    background:#38bdf8;
+
+    color:black;
+
+}
+
+
+
+.newtab{
+
+    background:#22c55e;
+
+}
+
+
+
+/* =========================
+        CONTENT
+========================= */
+
+
+.main{
+
+    flex:1;
+
+    display:flex;
+
+}
+
+
+
+.sidebar{
+
+    width:220px;
+
+    background:#111827;
+
+    padding:15px;
+
+}
+
+
+
+.sidebar h3{
+
+    margin-top:0;
+
+}
+
+
+
+.appbutton{
+
+    width:100%;
+
+    margin-bottom:10px;
+
+}
+
+
+
+.viewer{
+
+    flex:1;
+
+    background:white;
 
 }
 
@@ -157,19 +265,142 @@ margin:10px;
 
 iframe{
 
-width:100%;
+    width:100%;
 
-height:calc(100% - 180px);
+    height:100%;
 
-margin-top:10px;
-
-border:none;
-
-border-radius:15px;
-
-background:white;
+    border:none;
 
 }
+
+
+
+
+
+/* =========================
+       BOTTOM BAR
+========================= */
+
+
+.bottom{
+
+    height:40px;
+
+    background:#111827;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:10px;
+
+    font-size:14px;
+
+}
+
+
+
+
+
+/* =========================
+        PANELS
+========================= */
+
+
+.panel{
+
+    position:fixed;
+
+    top:70px;
+
+    right:20px;
+
+    width:300px;
+
+    background:#111827;
+
+    border-radius:15px;
+
+    padding:20px;
+
+    display:none;
+
+    box-shadow:0 0 30px black;
+
+}
+
+
+
+.panel h2{
+
+    margin-top:0;
+
+}
+
+
+
+.item{
+
+    padding:10px;
+
+    background:#1f2937;
+
+    border-radius:10px;
+
+    margin-bottom:8px;
+
+}
+
+
+
+/* =========================
+        LOADING
+========================= */
+
+
+#loading{
+
+    position:fixed;
+
+    top:50%;
+
+    left:50%;
+
+    transform:translate(-50%,-50%);
+
+    background:#111827;
+
+    padding:20px;
+
+    border-radius:15px;
+
+    display:none;
+
+    z-index:999;
+
+}
+
+
+
+
+
+/* =========================
+        FULLSCREEN
+========================= */
+
+
+.fullscreen{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:9999;
+
+}
+
 
 
 
@@ -178,38 +409,91 @@ background:white;
 </head>
 
 
+
 <body>
 
 
-<div class="browser" id="browserBox">
+
+<div id="app">
+
+
+
+<!-- TOP BAR -->
+
+<div class="topbar">
 
 
 <div class="logo">
-
 🚀 MUSABX
+</div>
+
+
+
+<div class="urlbar">
+
+
+<input
+id="url"
+placeholder="Search or enter website..."
+>
+
+
+<button onclick="go()">
+GO
+</button>
+
+
+
+</div>
+
+
+<button onclick="back()">
+⬅
+</button>
+
+
+<button onclick="forward()">
+➡
+</button>
+
+
+<button onclick="reload()">
+🔄
+</button>
+
+
+
+<button onclick="toggleFullscreen()">
+⛶
+</button>
+
+
+
+<button onclick="openSettings()">
+⚙
+</button>
+
+
 
 </div>
 
 
 
-<div class="top">
 
 
-<input
-
-id="url"
-
-placeholder="Search or enter website..."
-
-autocomplete="off"
-
-/>
+<!-- TABS -->
 
 
-<button onclick="openSite()">
+<div class="tabs" id="tabs">
 
-GO
 
+<div class="tab active">
+Tab 1
+</div>
+
+
+<button class="newtab" onclick="newTab()">
++
 </button>
 
 
@@ -217,57 +501,181 @@ GO
 
 
 
-<div class="controls">
 
 
-<button onclick="backPage()">⬅</button>
 
-<button onclick="forwardPage()">➡</button>
 
-<button onclick="reloadPage()">🔄</button>
+<!-- MAIN -->
 
-<button onclick="homePage()">🏠</button>
 
-<button onclick="toggleFullscreen()">⛶</button>
+<div class="main">
+
+
+
+<div class="sidebar">
+
+
+<h3>
+Apps
+</h3>
+
+
+<button class="appbutton" onclick="openApp('https://youtube.com')">
+🎬 YouTube
+</button>
+
+
+<button class="appbutton" onclick="openApp('https://tiktok.com')">
+🎵 TikTok
+</button>
+
+
+<button class="appbutton" onclick="openApp('https://poki.com')">
+🎮 Poki
+</button>
+
+
+<button class="appbutton" onclick="home()">
+🔎 Search
+</button>
+
+
+
+<hr>
+
+
+<button class="appbutton" onclick="openHistory()">
+🕘 History
+</button>
+
+
+<button class="appbutton" onclick="openBookmarks()">
+⭐ Bookmarks
+</button>
+
 
 
 </div>
 
 
 
-<div class="loading" id="loading">
 
+
+<div class="viewer">
+
+
+<iframe id="frame"></iframe>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+<div class="bottom">
+
+
+<div>
+MUSABX v2 🚀
+</div>
+
+
+<div id="clock">
+</div>
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+<div id="loading">
 Loading...
-
-</div>
-
-
-
-<iframe id="viewer"></iframe>
-
-
-
 </div>
 
 
 
 
 
-<script>
+<div class="panel" id="settings">
+
+<h2>
+Settings
+</h2>
 
 
-// YOUR CLOUDFLARE WORKER
+<button onclick="toggleTheme()">
+🌙 Toggle Theme
+</button>
+
+
+</div>
+
+
+
+
+
+<div class="panel" id="history">
+
+<h2>
+History
+</h2>
+
+
+<div id="historyList">
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="panel" id="bookmarks">
+
+<h2>
+Bookmarks
+</h2>
+
+
+<div id="bookmarkList">
+</div>
+
+
+</div>
+  
+  <script>
+
+
+// =========================
+// MUSABX SETTINGS
+// =========================
+
 
 const WORKER_URL =
 "https://musabx-proxy.muqimh.workers.dev";
 
 
-
 const frame =
-document.getElementById("viewer");
+document.getElementById("frame");
 
 
-const input =
+const url =
 document.getElementById("url");
 
 
@@ -275,17 +683,86 @@ const loading =
 document.getElementById("loading");
 
 
-const box =
-document.getElementById("browserBox");
+
+let historyData =
+JSON.parse(
+localStorage.getItem("musabx_history")
+) || [];
+
+
+
+let bookmarks =
+JSON.parse(
+localStorage.getItem("musabx_bookmarks")
+) || [];
+
+
+
+let tabs = [
+"https://html.duckduckgo.com/html/"
+];
+
+
+let currentTab = 0;
 
 
 
 
 
-function openSite(){
+// =========================
+// PAGE LOADING
+// =========================
 
 
-let value=input.value.trim();
+function loadPage(site){
+
+
+loading.style.display="block";
+
+
+frame.src =
+WORKER_URL +
+"/proxy?url=" +
+encodeURIComponent(site);
+
+
+
+historyData.push(site);
+
+
+localStorage.setItem(
+"musabx_history",
+JSON.stringify(historyData)
+);
+
+
+
+setTimeout(()=>{
+
+loading.style.display="none";
+
+},3000);
+
+
+
+}
+
+
+
+
+
+
+// =========================
+// SEARCH / URL BAR
+// =========================
+
+
+function go(){
+
+
+let value =
+url.value.trim();
+
 
 
 if(value==="") return;
@@ -309,7 +786,8 @@ if(
 !value.startsWith("https://")
 ){
 
-value="https://"+value;
+value =
+"https://" + value;
 
 }
 
@@ -330,8 +808,12 @@ target =
 +
 encodeURIComponent(value);
 
+
 }
 
+
+
+tabs[currentTab]=target;
 
 
 loadPage(target);
@@ -343,43 +825,18 @@ loadPage(target);
 
 
 
-function loadPage(target){
 
-
-loading.style.display="block";
-
-
-frame.src =
-WORKER_URL
-+
-"/proxy?url="
-+
-encodeURIComponent(target);
-
-
-
-frame.onload=function(){
-
-loading.style.display="none";
-
-};
-
-
-}
-
-
-
-
-
-input.addEventListener(
+url.addEventListener(
 "keydown",
 function(e){
 
+
 if(e.key==="Enter"){
 
-openSite();
+go();
 
 }
+
 
 });
 
@@ -388,7 +845,12 @@ openSite();
 
 
 
-function backPage(){
+// =========================
+// BROWSER BUTTONS
+// =========================
+
+
+function back(){
 
 try{
 
@@ -398,11 +860,12 @@ frame.contentWindow.history.back();
 
 catch(e){}
 
+
 }
 
 
 
-function forwardPage(){
+function forward(){
 
 try{
 
@@ -412,11 +875,12 @@ frame.contentWindow.history.forward();
 
 catch(e){}
 
+
 }
 
 
 
-function reloadPage(){
+function reload(){
 
 frame.src=frame.src;
 
@@ -425,10 +889,10 @@ frame.src=frame.src;
 
 
 
-function homePage(){
+function home(){
 
 loadPage(
-"https://duckduckgo.com"
+"https://html.duckduckgo.com/html/"
 );
 
 }
@@ -437,29 +901,784 @@ loadPage(
 
 
 
+function openApp(site){
+
+loadPage(site);
+
+}
+
+
+
+
+
+
+
+// =========================
+// TABS
+// =========================
+
+
+function newTab(){
+
+
+tabs.push(
+"https://html.duckduckgo.com/html/"
+);
+
+
+currentTab =
+tabs.length-1;
+
+
+
+createTabs();
+
+
+
+home();
+
+
+}
+
+
+
+
+
+function createTabs(){
+
+
+const container =
+document.getElementById("tabs");
+
+
+
+container.innerHTML="";
+
+
+
+tabs.forEach(
+(t,index)=>{
+
+
+let tab =
+document.createElement("div");
+
+
+tab.className =
+"tab " +
+(index===currentTab ? "active":"");
+
+
+
+tab.innerHTML =
+"Tab " + (index+1);
+
+
+
+tab.onclick=function(){
+
+
+currentTab=index;
+
+
+loadPage(
+tabs[index]
+);
+
+
+createTabs();
+
+
+};
+
+
+
+container.appendChild(tab);
+
+
+});
+
+
+
+let add =
+document.createElement("button");
+
+
+add.className="newtab";
+
+
+add.innerHTML="+";
+
+
+add.onclick=newTab;
+
+
+container.appendChild(add);
+
+
+
+}
+
+
+
+
+
+
+
+// =========================
+// HISTORY
+// =========================
+
+
+function openHistory(){
+
+
+closePanels();
+
+
+let panel =
+document.getElementById("history");
+
+
+panel.style.display="block";
+
+
+let list =
+document.getElementById("historyList");
+
+
+list.innerHTML="";
+
+
+
+historyData
+.slice(-20)
+.reverse()
+.forEach(site=>{
+
+
+let div =
+document.createElement("div");
+
+
+div.className="item";
+
+
+div.innerHTML=site;
+
+
+div.onclick=function(){
+
+loadPage(site);
+
+};
+
+
+list.appendChild(div);
+
+
+
+});
+
+
+}
+
+
+
+
+
+
+
+
+// =========================
+// BOOKMARKS
+// =========================
+
+
+function addBookmark(){
+
+
+let current =
+frame.src;
+
+
+
+bookmarks.push(current);
+
+
+
+localStorage.setItem(
+"musabx_bookmarks",
+JSON.stringify(bookmarks)
+);
+
+
+
+}
+
+
+
+function openBookmarks(){
+
+
+closePanels();
+
+
+
+let panel =
+document.getElementById("bookmarks");
+
+
+panel.style.display="block";
+
+
+let list =
+document.getElementById("bookmarkList");
+
+
+list.innerHTML="";
+
+
+
+bookmarks.forEach(site=>{
+
+
+let div =
+document.createElement("div");
+
+
+div.className="item";
+
+
+div.innerHTML=site;
+
+
+div.onclick=function(){
+
+loadPage(site);
+
+};
+
+
+list.appendChild(div);
+
+
+
+});
+
+
+
+}
+
+
+
+
+
+
+
+// =========================
+// SETTINGS
+// =========================
+
+
+function openSettings(){
+
+
+closePanels();
+
+
+document
+.getElementById("settings")
+.style.display="block";
+
+
+}
+
+
+
+
+
+function closePanels(){
+
+
+document
+.querySelectorAll(".panel")
+.forEach(p=>{
+
+
+p.style.display="none";
+
+
+});
+
+
+}
+
+
+
+
+
+
+
+// =========================
+// FULLSCREEN
+// =========================
+
+
 function toggleFullscreen(){
 
 
 if(!document.fullscreenElement){
 
-box.requestFullscreen();
+
+document
+.getElementById("app")
+.requestFullscreen();
+
 
 }
 
 else{
 
+
 document.exitFullscreen();
 
+
 }
 
 
 }
+
+
+
+
+
+
+
+// =========================
+// THEME
+// =========================
+
+
+function toggleTheme(){
+
+
+document.body.classList.toggle(
+"light"
+);
+
+
+}
+
+
+
+
+
+
+
+// =========================
+// CLOCK
+// =========================
+
+
+function updateClock(){
+
+
+document.getElementById("clock")
+.innerHTML =
+new Date()
+.toLocaleTimeString();
+
+
+}
+
+
+
+setInterval(
+updateClock,
+1000
+);
+
+
+
+updateClock();
+
+
+
+
+
+
+// START PAGE
+
+loadPage(
+"https://html.duckduckgo.com/html/"
+);
+
+
+createTabs();
 
 
 
 </script>
 
-
 </body>
 
 </html>
+<style>
+
+/* =========================
+   MUSABX V2 EXTRA STYLE
+========================= */
+
+
+.tab{
+transition:.2s;
+}
+
+
+.tab:hover{
+
+transform:translateY(-2px);
+
+background:#38bdf8;
+
+color:black;
+
+}
+
+
+
+button{
+
+transition:.2s;
+
+}
+
+
+
+button:active{
+
+transform:scale(.95);
+
+}
+
+
+
+.sidebar{
+
+overflow-y:auto;
+
+}
+
+
+
+.light{
+
+background:white;
+
+color:black;
+
+}
+
+
+
+.light .topbar,
+.light .sidebar,
+.light .bottom,
+.light .panel{
+
+background:#e5e7eb;
+
+color:black;
+
+}
+
+
+
+.light input{
+
+background:white;
+
+color:black;
+
+}
+
+
+
+
+/* APP CARDS */
+
+
+.appbutton{
+
+font-size:15px;
+
+transition:.25s;
+
+}
+
+
+.appbutton:hover{
+
+transform:translateX(5px);
+
+}
+
+
+
+
+/* LOADING ANIMATION */
+
+
+#loading{
+
+animation:pulse 1s infinite;
+
+}
+
+
+@keyframes pulse{
+
+0%{
+opacity:.4;
+}
+
+50%{
+opacity:1;
+}
+
+100%{
+opacity:.4;
+}
+
+}
+
+
+
+</style>
+
+<script>
+
+
+// =========================
+// KEYBOARD SHORTCUTS
+// =========================
+
+
+document.addEventListener(
+"keydown",
+function(e){
+
+
+
+// CTRL + L
+if(
+e.ctrlKey &&
+e.key==="l"
+){
+
+e.preventDefault();
+
+url.focus();
+
+
+}
+
+
+
+// ENTER
+if(
+e.key==="Enter" &&
+document.activeElement===url
+){
+
+go();
+
+}
+
+
+
+// ALT LEFT
+
+if(
+e.altKey &&
+e.key==="ArrowLeft"
+){
+
+back();
+
+}
+
+
+
+// ALT RIGHT
+
+if(
+e.altKey &&
+e.key==="ArrowRight"
+){
+
+forward();
+
+}
+
+
+
+});
+
+
+
+
+
+
+// =========================
+// SAVE CURRENT PAGE
+// =========================
+
+
+function saveCurrent(){
+
+
+let page =
+frame.src;
+
+
+bookmarks.push(page);
+
+
+
+localStorage.setItem(
+"musabx_bookmarks",
+JSON.stringify(bookmarks)
+);
+
+
+
+alert(
+"Saved to bookmarks ⭐"
+);
+
+
+}
+
+
+
+
+
+
+// =========================
+// ADD SAVE BUTTON
+// =========================
+
+
+let saveButton =
+document.createElement("button");
+
+
+saveButton.innerHTML =
+"⭐ Save";
+
+
+saveButton.onclick =
+saveCurrent;
+
+
+
+document
+.querySelector(".controls")
+.appendChild(saveButton);
+
+
+
+
+
+
+
+// =========================
+// SEARCH PLACEHOLDER ROTATION
+// =========================
+
+
+let examples=[
+
+"Search anything...",
+
+"Try youtube",
+
+"Try poki games",
+
+"Try wikipedia",
+
+"Enter a website"
+
+];
+
+
+let index=0;
+
+
+
+setInterval(()=>{
+
+
+url.placeholder =
+examples[index];
+
+
+index++;
+
+
+if(index>=examples.length){
+
+index=0;
+
+}
+
+
+},3000);
+
+
+
+
+
+
+
+
+// =========================
+// WELCOME MESSAGE
+// =========================
+
+
+setTimeout(()=>{
+
+
+console.log(
+"MUSABX v2 loaded 🚀"
+);
+
+
+},1000);
+
+
+
+
+
+
+// =========================
+// PREVENT EMPTY FRAME
+// =========================
+
+
+frame.onload=function(){
+
+
+loading.style.display="none";
+
+
+};
+
+
+
+
+
+</script>
