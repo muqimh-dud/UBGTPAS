@@ -8,11 +8,13 @@
 
 <title>MUSABX v2</title>
 
+
 <style>
 
 /* =========================
-   MUSABX GLOBAL STYLE
+   MUSABX CORE STYLE
 ========================= */
+
 
 *{
     box-sizing:border-box;
@@ -23,7 +25,6 @@
 body{
 
     margin:0;
-
     height:100vh;
 
     background:
@@ -39,12 +40,10 @@ body{
 
 #app{
 
+    height:100vh;
     width:100%;
 
-    height:100%;
-
     display:flex;
-
     flex-direction:column;
 
 }
@@ -52,7 +51,7 @@ body{
 
 
 /* =========================
-        TOP BAR
+   TOP BAR
 ========================= */
 
 
@@ -60,15 +59,15 @@ body{
 
     height:65px;
 
-    background:#111827;
-
     display:flex;
 
     align-items:center;
 
+    gap:10px;
+
     padding:10px;
 
-    gap:10px;
+    background:#111827;
 
     box-shadow:0 5px 20px black;
 
@@ -83,8 +82,6 @@ body{
     font-weight:bold;
 
     color:#38bdf8;
-
-    white-space:nowrap;
 
 }
 
@@ -126,11 +123,11 @@ input{
 
 button{
 
+    padding:10px 14px;
+
     border:none;
 
     border-radius:10px;
-
-    padding:10px 14px;
 
     background:#38bdf8;
 
@@ -154,7 +151,7 @@ button:hover{
 
 
 /* =========================
-          TABS
+   TABS
 ========================= */
 
 
@@ -162,15 +159,15 @@ button:hover{
 
     height:45px;
 
-    background:#020617;
-
     display:flex;
-
-    align-items:center;
 
     gap:8px;
 
+    align-items:center;
+
     padding:5px;
+
+    background:#020617;
 
 }
 
@@ -208,8 +205,10 @@ button:hover{
 
 
 
+
+
 /* =========================
-        CONTENT
+   MAIN AREA
 ========================= */
 
 
@@ -257,8 +256,6 @@ button:hover{
 
     flex:1;
 
-    background:white;
-
 }
 
 
@@ -271,6 +268,8 @@ iframe{
 
     border:none;
 
+    background:white;
+
 }
 
 
@@ -278,15 +277,13 @@ iframe{
 
 
 /* =========================
-       BOTTOM BAR
+   BOTTOM
 ========================= */
 
 
 .bottom{
 
     height:40px;
-
-    background:#111827;
 
     display:flex;
 
@@ -296,7 +293,7 @@ iframe{
 
     padding:10px;
 
-    font-size:14px;
+    background:#111827;
 
 }
 
@@ -305,7 +302,7 @@ iframe{
 
 
 /* =========================
-        PANELS
+   PANELS
 ========================= */
 
 
@@ -313,29 +310,21 @@ iframe{
 
     position:fixed;
 
-    top:70px;
+    top:80px;
 
     right:20px;
 
     width:300px;
 
+    padding:20px;
+
     background:#111827;
 
     border-radius:15px;
 
-    padding:20px;
-
-    display:none;
-
     box-shadow:0 0 30px black;
 
-}
-
-
-
-.panel h2{
-
-    margin-top:0;
+    display:none;
 
 }
 
@@ -343,9 +332,9 @@ iframe{
 
 .item{
 
-    padding:10px;
-
     background:#1f2937;
+
+    padding:10px;
 
     border-radius:10px;
 
@@ -355,8 +344,10 @@ iframe{
 
 
 
+
+
 /* =========================
-        LOADING
+   LOADING
 ========================= */
 
 
@@ -385,40 +376,94 @@ iframe{
 
 
 
-
 /* =========================
-        FULLSCREEN
+   EXTRA EFFECTS
 ========================= */
 
 
-.fullscreen{
+button{
 
-    position:fixed;
-
-    inset:0;
-
-    z-index:9999;
+    transition:.2s;
 
 }
 
 
 
+button:active{
+
+    transform:scale(.95);
+
+}
+
+
+
+.tab{
+
+    transition:.2s;
+
+}
+
+
+
+.tab:hover{
+
+    transform:translateY(-2px);
+
+}
+
+
+
+.light{
+
+    background:white;
+
+    color:black;
+
+}
+
+
+
+.light .topbar,
+.light .sidebar,
+.light .bottom,
+.light .panel{
+
+    background:#e5e7eb;
+
+}
+
+
+
+@keyframes pulse{
+
+    50%{
+
+        opacity:.5;
+
+    }
+
+}
+
+
+
+#loading{
+
+    animation:pulse 1s infinite;
+
+}
+
 
 </style>
 
-</head>
 
+</head>
 
 
 <body>
 
 
-
 <div id="app">
 
-
-
-<!-- TOP BAR -->
 
 <div class="topbar">
 
@@ -431,7 +476,6 @@ iframe{
 
 <div class="urlbar">
 
-
 <input
 id="url"
 placeholder="Search or enter website..."
@@ -443,8 +487,8 @@ GO
 </button>
 
 
-
 </div>
+
 
 
 <button onclick="back()">
@@ -462,11 +506,9 @@ GO
 </button>
 
 
-
 <button onclick="toggleFullscreen()">
 ⛶
 </button>
-
 
 
 <button onclick="openSettings()">
@@ -474,18 +516,11 @@ GO
 </button>
 
 
-
 </div>
 
 
 
-
-
-<!-- TABS -->
-
-
 <div class="tabs" id="tabs">
-
 
 <div class="tab active">
 Tab 1
@@ -500,16 +535,7 @@ Tab 1
 </div>
 
 
-
-
-
-
-
-<!-- MAIN -->
-
-
 <div class="main">
-
 
 
 <div class="sidebar">
@@ -540,7 +566,6 @@ Apps
 </button>
 
 
-
 <hr>
 
 
@@ -554,52 +579,32 @@ Apps
 </button>
 
 
-
 </div>
-
-
-
 
 
 <div class="viewer">
 
-
 <iframe id="frame"></iframe>
 
-
 </div>
 
 
-
 </div>
-
-
-
-
 
 
 <div class="bottom">
-
 
 <div>
 MUSABX v2 🚀
 </div>
 
-
 <div id="clock">
 </div>
 
-
 </div>
 
 
-
-
-
 </div>
-
-
-
 
 
 
@@ -609,23 +614,17 @@ Loading...
 
 
 
-
-
 <div class="panel" id="settings">
 
 <h2>
 Settings
 </h2>
 
-
 <button onclick="toggleTheme()">
 🌙 Toggle Theme
 </button>
 
-
 </div>
-
-
 
 
 
@@ -635,14 +634,10 @@ Settings
 History
 </h2>
 
-
 <div id="historyList">
 </div>
 
-
 </div>
-
-
 
 
 
@@ -652,18 +647,16 @@ History
 Bookmarks
 </h2>
 
-
 <div id="bookmarkList">
 </div>
 
-
 </div>
-  
-  <script>
+
+   <script>
 
 
 // =========================
-// MUSABX SETTINGS
+// MUSABX CONFIG
 // =========================
 
 
@@ -709,8 +702,9 @@ let currentTab = 0;
 
 
 
+
 // =========================
-// PAGE LOADING
+// LOAD WEBSITE
 // =========================
 
 
@@ -730,6 +724,7 @@ encodeURIComponent(site);
 historyData.push(site);
 
 
+
 localStorage.setItem(
 "musabx_history",
 JSON.stringify(historyData)
@@ -744,7 +739,6 @@ loading.style.display="none";
 },3000);
 
 
-
 }
 
 
@@ -752,8 +746,9 @@ loading.style.display="none";
 
 
 
+
 // =========================
-// SEARCH / URL BAR
+// SEARCH BAR
 // =========================
 
 
@@ -765,7 +760,11 @@ url.value.trim();
 
 
 
-if(value==="") return;
+if(value===""){
+
+return;
+
+}
 
 
 
@@ -773,7 +772,7 @@ let target;
 
 
 
-// Website
+// Website detection
 
 if(
 value.includes(".") &&
@@ -845,12 +844,14 @@ go();
 
 
 
+
 // =========================
-// BROWSER BUTTONS
+// CONTROLS
 // =========================
 
 
 function back(){
+
 
 try{
 
@@ -865,7 +866,9 @@ catch(e){}
 
 
 
+
 function forward(){
+
 
 try{
 
@@ -880,20 +883,28 @@ catch(e){}
 
 
 
+
+
 function reload(){
 
-frame.src=frame.src;
+
+frame.src =
+frame.src;
+
 
 }
 
 
 
 
+
 function home(){
+
 
 loadPage(
 "https://html.duckduckgo.com/html/"
 );
+
 
 }
 
@@ -906,6 +917,7 @@ function openApp(site){
 loadPage(site);
 
 }
+
 
 
 
@@ -944,24 +956,27 @@ home();
 
 
 
+
+
 function createTabs(){
 
 
-const container =
+const box =
 document.getElementById("tabs");
 
 
 
-container.innerHTML="";
+box.innerHTML="";
 
 
 
 tabs.forEach(
-(t,index)=>{
+(site,index)=>{
 
 
 let tab =
 document.createElement("div");
+
 
 
 tab.className =
@@ -986,6 +1001,7 @@ tabs[index]
 );
 
 
+
 createTabs();
 
 
@@ -993,10 +1009,12 @@ createTabs();
 
 
 
-container.appendChild(tab);
+box.appendChild(tab);
+
 
 
 });
+
 
 
 
@@ -1004,16 +1022,19 @@ let add =
 document.createElement("button");
 
 
-add.className="newtab";
+add.className =
+"newtab";
 
 
 add.innerHTML="+";
 
 
-add.onclick=newTab;
+add.onclick =
+newTab;
 
 
-container.appendChild(add);
+
+box.appendChild(add);
 
 
 
@@ -1036,15 +1057,19 @@ function openHistory(){
 closePanels();
 
 
+
 let panel =
 document.getElementById("history");
+
 
 
 panel.style.display="block";
 
 
+
 let list =
 document.getElementById("historyList");
+
 
 
 list.innerHTML="";
@@ -1057,24 +1082,27 @@ historyData
 .forEach(site=>{
 
 
-let div =
+let item =
 document.createElement("div");
 
 
-div.className="item";
+item.className="item";
 
 
-div.innerHTML=site;
+item.innerHTML =
+site;
 
 
-div.onclick=function(){
+
+item.onclick=function(){
 
 loadPage(site);
 
 };
 
 
-list.appendChild(div);
+
+list.appendChild(item);
 
 
 
@@ -1089,21 +1117,20 @@ list.appendChild(div);
 
 
 
-
 // =========================
 // BOOKMARKS
 // =========================
 
 
-function addBookmark(){
+function saveBookmark(){
 
 
-let current =
+let page =
 frame.src;
 
 
 
-bookmarks.push(current);
+bookmarks.push(page);
 
 
 
@@ -1114,7 +1141,14 @@ JSON.stringify(bookmarks)
 
 
 
+alert(
+"Saved ⭐"
+);
+
+
 }
+
+
 
 
 
@@ -1129,11 +1163,14 @@ let panel =
 document.getElementById("bookmarks");
 
 
+
 panel.style.display="block";
+
 
 
 let list =
 document.getElementById("bookmarkList");
+
 
 
 list.innerHTML="";
@@ -1143,29 +1180,31 @@ list.innerHTML="";
 bookmarks.forEach(site=>{
 
 
-let div =
+let item =
 document.createElement("div");
 
 
-div.className="item";
+item.className="item";
 
 
-div.innerHTML=site;
+item.innerHTML =
+site;
 
 
-div.onclick=function(){
+
+item.onclick=function(){
 
 loadPage(site);
 
 };
 
 
-list.appendChild(div);
+
+list.appendChild(item);
 
 
 
 });
-
 
 
 }
@@ -1187,6 +1226,7 @@ function openSettings(){
 closePanels();
 
 
+
 document
 .getElementById("settings")
 .style.display="block";
@@ -1203,16 +1243,33 @@ function closePanels(){
 
 document
 .querySelectorAll(".panel")
-.forEach(p=>{
+.forEach(panel=>{
 
 
-p.style.display="none";
+panel.style.display="none";
 
 
 });
 
 
 }
+
+
+
+
+
+
+
+function toggleTheme(){
+
+
+document.body.classList.toggle(
+"light"
+);
+
+
+}
+
 
 
 
@@ -1256,27 +1313,6 @@ document.exitFullscreen();
 
 
 // =========================
-// THEME
-// =========================
-
-
-function toggleTheme(){
-
-
-document.body.classList.toggle(
-"light"
-);
-
-
-}
-
-
-
-
-
-
-
-// =========================
 // CLOCK
 // =========================
 
@@ -1308,158 +1344,6 @@ updateClock();
 
 
 
-// START PAGE
-
-loadPage(
-"https://html.duckduckgo.com/html/"
-);
-
-
-createTabs();
-
-
-
-</script>
-
-</body>
-
-</html>
-<style>
-
-/* =========================
-   MUSABX V2 EXTRA STYLE
-========================= */
-
-
-.tab{
-transition:.2s;
-}
-
-
-.tab:hover{
-
-transform:translateY(-2px);
-
-background:#38bdf8;
-
-color:black;
-
-}
-
-
-
-button{
-
-transition:.2s;
-
-}
-
-
-
-button:active{
-
-transform:scale(.95);
-
-}
-
-
-
-.sidebar{
-
-overflow-y:auto;
-
-}
-
-
-
-.light{
-
-background:white;
-
-color:black;
-
-}
-
-
-
-.light .topbar,
-.light .sidebar,
-.light .bottom,
-.light .panel{
-
-background:#e5e7eb;
-
-color:black;
-
-}
-
-
-
-.light input{
-
-background:white;
-
-color:black;
-
-}
-
-
-
-
-/* APP CARDS */
-
-
-.appbutton{
-
-font-size:15px;
-
-transition:.25s;
-
-}
-
-
-.appbutton:hover{
-
-transform:translateX(5px);
-
-}
-
-
-
-
-/* LOADING ANIMATION */
-
-
-#loading{
-
-animation:pulse 1s infinite;
-
-}
-
-
-@keyframes pulse{
-
-0%{
-opacity:.4;
-}
-
-50%{
-opacity:1;
-}
-
-100%{
-opacity:.4;
-}
-
-}
-
-
-
-</style>
-
-<script>
-
-
 // =========================
 // KEYBOARD SHORTCUTS
 // =========================
@@ -1470,8 +1354,6 @@ document.addEventListener(
 function(e){
 
 
-
-// CTRL + L
 if(
 e.ctrlKey &&
 e.key==="l"
@@ -1481,24 +1363,9 @@ e.preventDefault();
 
 url.focus();
 
-
 }
 
 
-
-// ENTER
-if(
-e.key==="Enter" &&
-document.activeElement===url
-){
-
-go();
-
-}
-
-
-
-// ALT LEFT
 
 if(
 e.altKey &&
@@ -1510,8 +1377,6 @@ back();
 }
 
 
-
-// ALT RIGHT
 
 if(
 e.altKey &&
@@ -1531,43 +1396,58 @@ forward();
 
 
 
-// =========================
-// SAVE CURRENT PAGE
-// =========================
+// START MUSABX
 
 
-function saveCurrent(){
+createTabs();
 
 
-let page =
-frame.src;
-
-
-bookmarks.push(page);
-
-
-
-localStorage.setItem(
-"musabx_bookmarks",
-JSON.stringify(bookmarks)
+loadPage(
+"https://html.duckduckgo.com/html/"
 );
 
 
 
-alert(
-"Saved to bookmarks ⭐"
-);
+</script>
+<style>
 
+/* =========================
+   FINAL MUSABX POLISH
+========================= */
+
+
+.appbutton{
+
+transition:.25s;
 
 }
 
 
 
+.appbutton:hover{
 
+transform:translateX(8px);
+
+}
+
+
+
+#loading{
+
+font-weight:bold;
+
+}
+
+
+
+</style>
+
+
+<script>
 
 
 // =========================
-// ADD SAVE BUTTON
+// SAVE BUTTON
 // =========================
 
 
@@ -1580,12 +1460,12 @@ saveButton.innerHTML =
 
 
 saveButton.onclick =
-saveCurrent;
+saveBookmark;
 
 
 
 document
-.querySelector(".controls")
+.querySelector(".topbar")
 .appendChild(saveButton);
 
 
@@ -1593,28 +1473,27 @@ document
 
 
 
-
 // =========================
-// SEARCH PLACEHOLDER ROTATION
+// PLACEHOLDER ROTATION
 // =========================
 
 
-let examples=[
+let tips = [
 
 "Search anything...",
 
-"Try youtube",
+"Try YouTube",
 
-"Try poki games",
+"Try TikTok",
 
-"Try wikipedia",
+"Try Poki games",
 
 "Enter a website"
 
 ];
 
 
-let index=0;
+let tipIndex=0;
 
 
 
@@ -1622,17 +1501,20 @@ setInterval(()=>{
 
 
 url.placeholder =
-examples[index];
+tips[tipIndex];
 
 
-index++;
+
+tipIndex++;
 
 
-if(index>=examples.length){
 
-index=0;
+if(tipIndex>=tips.length){
+
+tipIndex=0;
 
 }
+
 
 
 },3000);
@@ -1642,30 +1524,8 @@ index=0;
 
 
 
-
-
 // =========================
-// WELCOME MESSAGE
-// =========================
-
-
-setTimeout(()=>{
-
-
-console.log(
-"MUSABX v2 loaded 🚀"
-);
-
-
-},1000);
-
-
-
-
-
-
-// =========================
-// PREVENT EMPTY FRAME
+// FRAME LOADING
 // =========================
 
 
@@ -1681,4 +1541,62 @@ loading.style.display="none";
 
 
 
+
+// =========================
+// MOBILE SUPPORT
+// =========================
+
+
+function mobileCheck(){
+
+
+if(window.innerWidth < 700){
+
+
+document.querySelector(".sidebar")
+.style.width="120px";
+
+
+
+document.querySelector(".logo")
+.style.fontSize="20px";
+
+
+}
+
+
+}
+
+
+
+window.addEventListener(
+"resize",
+mobileCheck
+);
+
+
+
+mobileCheck();
+
+
+
+
+
+
+// =========================
+// WELCOME MESSAGE
+// =========================
+
+
+console.log(
+"MUSABX v2 READY 🚀"
+);
+
+
+
 </script>
+
+
+</body>
+
+</html>
