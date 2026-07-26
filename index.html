@@ -7,27 +7,22 @@
 <title>MUSABX Proxy</title>
 
 <style>
-
 :root {
     color-scheme: dark;
-    --bg: #080f1f;
-    --card: #111827;
-    --accent: #38bdf8;
-    --text: #e5e7eb;
-    --button: #38bdf8;
+    --accent:#38bdf8;
+    --text:#e5e7eb;
 }
 
 * {
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
 body {
-    margin: 0;
-    min-height: 100vh;
-    background:
-    radial-gradient(circle at top,#1e3a8a,#080f1f 50%);
-    color: var(--text);
+    margin:0;
+    min-height:100vh;
+    background:radial-gradient(circle at top,#1e3a8a,#080f1f 50%);
+    color:var(--text);
     display:flex;
     justify-content:center;
     align-items:center;
@@ -36,10 +31,10 @@ body {
 .container {
     width:95%;
     max-width:900px;
-    background:rgba(17,24,39,.95);
+    background:#111827;
     padding:30px;
     border-radius:25px;
-    box-shadow:0 0 40px rgba(0,0,0,.7);
+    box-shadow:0 0 40px black;
 }
 
 .logo {
@@ -68,7 +63,6 @@ input {
     background:#1f2937;
     color:white;
     font-size:16px;
-    outline:none;
 }
 
 button {
@@ -76,7 +70,7 @@ button {
     border:none;
     border-radius:12px;
     cursor:pointer;
-    background:var(--button);
+    background:#38bdf8;
     color:black;
     font-weight:bold;
 }
@@ -87,27 +81,26 @@ button:hover {
 
 .controls {
     display:flex;
+    flex-wrap:wrap;
     gap:10px;
     margin-top:15px;
-    flex-wrap:wrap;
 }
 
 iframe {
     width:100%;
     height:500px;
     margin-top:20px;
-    border-radius:15px;
     border:none;
+    border-radius:15px;
     background:white;
 }
 
 .footer {
     text-align:center;
     margin-top:20px;
-    font-size:13px;
     opacity:.6;
+    font-size:13px;
 }
-
 </style>
 
 </head>
@@ -121,16 +114,15 @@ iframe {
 </div>
 
 <div class="subtitle">
-Fast Web Viewer
+Cloudflare Proxy Browser
 </div>
 
 
 <div class="search">
 
-<input
+<input 
 id="url"
 placeholder="Enter website (example.com)"
-autocomplete="off"
 >
 
 <button onclick="openSite()">
@@ -142,21 +134,13 @@ OPEN
 
 <div class="controls">
 
-<button onclick="backPage()">
-⬅ Back
-</button>
+<button onclick="backPage()">⬅ Back</button>
 
-<button onclick="forwardPage()">
-Forward ➡
-</button>
+<button onclick="forwardPage()">Forward ➡</button>
 
-<button onclick="reloadPage()">
-🔄 Reload
-</button>
+<button onclick="reloadPage()">🔄 Reload</button>
 
-<button onclick="homePage()">
-🏠 Home
-</button>
+<button onclick="homePage()">🏠 Home</button>
 
 </div>
 
@@ -165,7 +149,7 @@ Forward ➡
 
 
 <div class="footer">
-MUSABX Proxy • Cloudflare Worker Edition
+MUSABX Proxy • Powered by Cloudflare Worker
 </div>
 
 
@@ -178,7 +162,7 @@ const frame = document.getElementById("browser");
 const input = document.getElementById("url");
 
 
-// Cloudflare Worker URL
+// YOUR CLOUDFLARE WORKER
 const WORKER_URL = "https://musabx-proxy.muqimh.workers.dev";
 
 
@@ -210,11 +194,9 @@ function openSite(){
 
 
 
-input.addEventListener(
-"keydown",
-function(event){
+input.addEventListener("keydown", function(e){
 
-    if(event.key === "Enter"){
+    if(e.key === "Enter"){
         openSite();
     }
 
@@ -246,10 +228,7 @@ function forwardPage(){
 
 function reloadPage(){
 
-    try{
-        frame.contentWindow.location.reload();
-    }
-    catch(e){}
+    frame.src = frame.src;
 
 }
 
@@ -260,9 +239,10 @@ function homePage(){
     frame.src =
     WORKER_URL +
     "/proxy?url=" +
-    encodeURIComponent("https://www.google.com");
+    encodeURIComponent("https://example.com");
 
 }
+
 
 </script>
 
