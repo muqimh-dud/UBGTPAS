@@ -9,32 +9,21 @@
 
 <style>
 
-:root {
-    --bg:#080f1f;
-    --card:#111827;
-    --accent:#38bdf8;
-    --text:#e5e7eb;
-}
-
 *{
     box-sizing:border-box;
-    font-family:Arial,Helvetica,sans-serif;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
 body{
-
     margin:0;
     height:100vh;
-
     background:
     radial-gradient(circle at top,#1e3a8a,#080f1f 60%);
-
-    color:var(--text);
+    color:white;
 
     display:flex;
     justify-content:center;
     align-items:center;
-
 }
 
 
@@ -42,9 +31,8 @@ body{
 
     width:95%;
     height:95vh;
-    max-width:1200px;
 
-    background:var(--card);
+    background:#111827;
 
     border-radius:25px;
 
@@ -56,9 +44,26 @@ body{
 
 
 
+.logo{
+
+    text-align:center;
+
+    font-size:38px;
+
+    font-weight:bold;
+
+    color:#38bdf8;
+
+    margin-bottom:15px;
+
+}
+
+
+
 .top{
 
     display:flex;
+
     gap:10px;
 
 }
@@ -81,19 +86,21 @@ input{
 
     font-size:16px;
 
+    outline:none;
+
 }
 
 
 
 button{
 
+    padding:12px 16px;
+
     border:none;
 
     border-radius:12px;
 
-    padding:12px 15px;
-
-    background:var(--accent);
+    background:#38bdf8;
 
     color:black;
 
@@ -102,6 +109,7 @@ button{
     cursor:pointer;
 
 }
+
 
 
 button:hover{
@@ -114,45 +122,13 @@ button:hover{
 
 .controls{
 
-    margin-top:10px;
-
     display:flex;
 
     gap:10px;
 
     flex-wrap:wrap;
 
-}
-
-
-
-iframe{
-
-    width:100%;
-
-    height:calc(100% - 150px);
-
-    margin-top:15px;
-
-    border:none;
-
-    border-radius:15px;
-
-    background:white;
-
-}
-
-
-
-.logo{
-
-    text-align:center;
-
-    font-size:32px;
-
-    font-weight:bold;
-
-    color:var(--accent);
+    margin-top:12px;
 
 }
 
@@ -164,24 +140,47 @@ iframe{
 
     text-align:center;
 
-    margin-top:5px;
+    color:#38bdf8;
+
+    margin:10px;
 
 }
+
+
+
+iframe{
+
+    width:100%;
+
+    height:calc(100% - 170px);
+
+    margin-top:10px;
+
+    border:none;
+
+    border-radius:15px;
+
+    background:white;
+
+}
+
 
 
 .fullscreen{
 
     position:fixed;
 
-    inset:0;
+    top:0;
 
-    width:100%;
+    left:0;
 
-    height:100%;
+    width:100vw;
+
+    height:100vh;
+
+    z-index:9999;
 
     border-radius:0;
-
-    z-index:999;
 
 }
 
@@ -202,18 +201,15 @@ iframe{
 </div>
 
 
+
 <div class="top">
 
 
 <input
-
 id="url"
-
 placeholder="Search or enter website..."
-
 autocomplete="off"
-
-/>
+>
 
 
 <button onclick="openSite()">
@@ -222,6 +218,7 @@ GO
 
 
 </div>
+
 
 
 <div class="controls">
@@ -252,17 +249,14 @@ GO
 </button>
 
 
-<button onclick="toggleDark()">
-🌙
-</button>
-
-
 </div>
+
 
 
 <div class="loading" id="loading">
 Loading...
 </div>
+
 
 
 <iframe id="viewer"></iframe>
@@ -309,7 +303,11 @@ input.value.trim();
 
 
 
-if(value==="") return;
+if(value===""){
+
+return;
+
+}
 
 
 
@@ -317,42 +315,47 @@ let target;
 
 
 
-// Website detection
+// Open websites directly
 
 if(
 value.includes(".") &&
 !value.includes(" ")
 ){
 
-    if(
-    !value.startsWith("http://") &&
-    !value.startsWith("https://")
-    ){
 
-        value="https://"+value;
+if(
+!value.startsWith("http://") &&
+!value.startsWith("https://")
+){
 
-    }
+value =
+"https://" + value;
+
+}
 
 
-    target=value;
+target=value;
 
 
 }
+
+
+// Search normal words
 
 else{
 
 
-    target =
-    "https://www.google.com/search?q="
-    +
-    encodeURIComponent(value);
+target =
+"https://www.google.com/search?q="
++
+encodeURIComponent(value);
 
 
 }
 
 
 
-load(target);
+loadPage(target);
 
 
 }
@@ -361,10 +364,11 @@ load(target);
 
 
 
-function load(url){
+function loadPage(target){
 
 
 loading.style.display="block";
+
 
 
 frame.src =
@@ -372,7 +376,7 @@ WORKER_URL
 +
 "/proxy?url="
 +
-encodeURIComponent(url);
+encodeURIComponent(target);
 
 
 
@@ -393,11 +397,13 @@ input.addEventListener(
 "keydown",
 function(e){
 
+
 if(e.key==="Enter"){
 
 openSite();
 
 }
+
 
 });
 
@@ -411,9 +417,12 @@ try{
 
 frame.contentWindow.history.back();
 
-}catch(e){}
+}
+
+catch(e){}
 
 }
+
 
 
 
@@ -423,9 +432,12 @@ try{
 
 frame.contentWindow.history.forward();
 
-}catch(e){}
+}
+
+catch(e){}
 
 }
+
 
 
 
@@ -437,9 +449,11 @@ frame.src=frame.src;
 
 
 
+
+
 function homePage(){
 
-load("https://www.google.com");
+loadPage("https://www.google.com");
 
 }
 
@@ -464,19 +478,6 @@ document.exitFullscreen();
 
 
 }
-
-
-
-
-function toggleDark(){
-
-
-document.body.classList.toggle("light");
-
-
-}
-
-
 
 
 
