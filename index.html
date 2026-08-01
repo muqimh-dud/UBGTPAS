@@ -1,1602 +1,278 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>MUSABX v2</title>
-
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="MUSABX District Game Hub - polished browser games in one self-contained page." />
+<title>MUSABX v3 — Browser & Game Hub</title>
 <style>
-
-/* =========================
-   MUSABX CORE STYLE
-========================= */
-
-
-*{
-    box-sizing:border-box;
-    font-family:Arial,Helvetica,sans-serif;
+:root{
+  --bg:#07111f; --bg2:#0c1b31; --panel:rgba(13,28,50,.82); --panel2:#132744;
+  --text:#f8fbff; --muted:#9fb2cc; --accent:#67e8f9; --accent2:#8b5cf6;
+  --good:#34d399; --warn:#fbbf24; --danger:#fb7185; --line:rgba(255,255,255,.10);
+  --shadow:0 22px 70px rgba(0,0,0,.42); --radius:22px;
 }
-
-
-body{
-
-    margin:0;
-    height:100vh;
-
-    background:
-    radial-gradient(circle at top,#2563eb,#020617);
-
-    color:white;
-
-    overflow:hidden;
-
-}
-
-
-
-#app{
-
-    height:100vh;
-    width:100%;
-
-    display:flex;
-    flex-direction:column;
-
-}
-
-
-
-/* =========================
-   TOP BAR
-========================= */
-
-
-.topbar{
-
-    height:65px;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    padding:10px;
-
-    background:#111827;
-
-    box-shadow:0 5px 20px black;
-
-}
-
-
-
-.logo{
-
-    font-size:28px;
-
-    font-weight:bold;
-
-    color:#38bdf8;
-
-}
-
-
-
-.urlbar{
-
-    flex:1;
-
-    display:flex;
-
-    gap:8px;
-
-}
-
-
-
-input{
-
-    flex:1;
-
-    padding:12px;
-
-    border-radius:12px;
-
-    border:none;
-
-    outline:none;
-
-    background:#1f2937;
-
-    color:white;
-
-    font-size:16px;
-
-}
-
-
-
-button{
-
-    padding:10px 14px;
-
-    border:none;
-
-    border-radius:10px;
-
-    background:#38bdf8;
-
-    color:black;
-
-    font-weight:bold;
-
-    cursor:pointer;
-
-}
-
-
-
-button:hover{
-
-    opacity:.8;
-
-}
-
-
-
-
-/* =========================
-   TABS
-========================= */
-
-
-.tabs{
-
-    height:45px;
-
-    display:flex;
-
-    gap:8px;
-
-    align-items:center;
-
-    padding:5px;
-
-    background:#020617;
-
-}
-
-
-
-.tab{
-
-    background:#1f2937;
-
-    padding:8px 15px;
-
-    border-radius:10px;
-
-    cursor:pointer;
-
-}
-
-
-
-.tab.active{
-
-    background:#38bdf8;
-
-    color:black;
-
-}
-
-
-
-.newtab{
-
-    background:#22c55e;
-
-}
-
-
-
-
-
-/* =========================
-   MAIN AREA
-========================= */
-
-
-.main{
-
-    flex:1;
-
-    display:flex;
-
-}
-
-
-
-.sidebar{
-
-    width:220px;
-
-    background:#111827;
-
-    padding:15px;
-
-}
-
-
-
-.sidebar h3{
-
-    margin-top:0;
-
-}
-
-
-
-.appbutton{
-
-    width:100%;
-
-    margin-bottom:10px;
-
-}
-
-
-
-.viewer{
-
-    flex:1;
-
-}
-
-
-
-iframe{
-
-    width:100%;
-
-    height:100%;
-
-    border:none;
-
-    background:white;
-
-}
-
-
-
-
-
-/* =========================
-   BOTTOM
-========================= */
-
-
-.bottom{
-
-    height:40px;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    padding:10px;
-
-    background:#111827;
-
-}
-
-
-
-
-
-/* =========================
-   PANELS
-========================= */
-
-
-.panel{
-
-    position:fixed;
-
-    top:80px;
-
-    right:20px;
-
-    width:300px;
-
-    padding:20px;
-
-    background:#111827;
-
-    border-radius:15px;
-
-    box-shadow:0 0 30px black;
-
-    display:none;
-
-}
-
-
-
-.item{
-
-    background:#1f2937;
-
-    padding:10px;
-
-    border-radius:10px;
-
-    margin-bottom:8px;
-
-}
-
-
-
-
-
-/* =========================
-   LOADING
-========================= */
-
-
-#loading{
-
-    position:fixed;
-
-    top:50%;
-
-    left:50%;
-
-    transform:translate(-50%,-50%);
-
-    background:#111827;
-
-    padding:20px;
-
-    border-radius:15px;
-
-    display:none;
-
-    z-index:999;
-
-}
-
-
-
-
-/* =========================
-   EXTRA EFFECTS
-========================= */
-
-
-button{
-
-    transition:.2s;
-
-}
-
-
-
-button:active{
-
-    transform:scale(.95);
-
-}
-
-
-
-.tab{
-
-    transition:.2s;
-
-}
-
-
-
-.tab:hover{
-
-    transform:translateY(-2px);
-
-}
-
-
-
-.light{
-
-    background:white;
-
-    color:black;
-
-}
-
-
-
-.light .topbar,
-.light .sidebar,
-.light .bottom,
-.light .panel{
-
-    background:#e5e7eb;
-
-}
-
-
-
-@keyframes pulse{
-
-    50%{
-
-        opacity:.5;
-
-    }
-
-}
-
-
-
-#loading{
-
-    animation:pulse 1s infinite;
-
-}
-
+body.theme-sunset{--bg:#26101b;--bg2:#5a2035;--panel:rgba(56,20,38,.86);--panel2:#7a2948;--accent:#ffd166;--accent2:#ff6b6b;--good:#7ee787;--muted:#e8b7c6}
+body.theme-forest{--bg:#071b17;--bg2:#123c2f;--panel:rgba(9,45,35,.86);--panel2:#165a42;--accent:#86efac;--accent2:#2dd4bf;--good:#facc15;--muted:#b7d9cb}
+body.theme-light{--bg:#eaf4ff;--bg2:#cde3fb;--panel:rgba(255,255,255,.88);--panel2:#fff;--text:#10233d;--muted:#56708e;--accent:#0ea5e9;--accent2:#7c3aed;--line:rgba(18,47,78,.12);--shadow:0 22px 60px rgba(35,74,110,.18)}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg)}
+body{overflow-x:hidden;background:
+ radial-gradient(circle at 15% 10%,color-mix(in srgb,var(--accent) 26%,transparent),transparent 32%),
+ radial-gradient(circle at 85% 0%,color-mix(in srgb,var(--accent2) 28%,transparent),transparent 30%),
+ linear-gradient(145deg,var(--bg),var(--bg2));transition:background .35s,color .35s}
+button,input{font:inherit}
+button{border:0;cursor:pointer}
+.app-shell{min-height:100vh;display:grid;grid-template-columns:250px 1fr}
+.sidebar{position:sticky;top:0;height:100vh;padding:22px 18px;background:rgba(5,13,25,.74);backdrop-filter:blur(18px);border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:20}
+.brand{display:flex;gap:12px;align-items:center;padding:8px 8px 20px}
+.brand-mark{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;font-size:24px;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 12px 30px color-mix(in srgb,var(--accent) 25%,transparent)}
+.brand strong{font-size:19px;letter-spacing:.4px}.brand small{display:block;color:var(--muted);margin-top:2px}
+.nav{display:grid;gap:9px}.nav-btn{width:100%;padding:13px 14px;border-radius:14px;color:var(--muted);background:transparent;text-align:left;display:flex;gap:11px;align-items:center;font-weight:750;transition:.2s}
+.nav-btn:hover,.nav-btn.active{background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 17%,transparent),color-mix(in srgb,var(--accent2) 13%,transparent));color:var(--text);transform:translateX(3px)}
+.sidebar-note{margin-top:auto;padding:14px;border-radius:16px;background:var(--panel);border:1px solid var(--line);color:var(--muted);font-size:12px;line-height:1.45}.sidebar-note b{color:var(--text)}
+.main{min-width:0;padding:24px 28px 36px}
+.topbar{display:flex;align-items:center;gap:14px;margin-bottom:24px}.search{flex:1;display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:0 14px;box-shadow:var(--shadow)}
+.search input{width:100%;border:0;outline:0;color:var(--text);background:transparent;padding:14px 0}.search input::placeholder{color:var(--muted)}
+.icon-btn{width:46px;height:46px;border-radius:15px;background:var(--panel);color:var(--text);border:1px solid var(--line);display:grid;place-items:center;transition:.2s}.icon-btn:hover{transform:translateY(-2px);border-color:var(--accent)}
+.view{display:none;animation:fade .28s ease}.view.active{display:block}@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.hero{position:relative;overflow:hidden;border-radius:30px;padding:38px;min-height:320px;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;background:
+ linear-gradient(115deg,rgba(5,15,30,.94),rgba(23,43,78,.72)),
+ radial-gradient(circle at 85% 30%,var(--accent2),transparent 36%);border:1px solid var(--line);box-shadow:var(--shadow)}
+body.theme-light .hero{background:linear-gradient(115deg,rgba(255,255,255,.96),rgba(221,238,255,.82)),radial-gradient(circle at 85% 30%,var(--accent2),transparent 36%)}
+.hero h1{font-size:clamp(36px,5vw,68px);line-height:.96;margin:0 0 16px;letter-spacing:-2.6px}.hero h1 span{background:linear-gradient(90deg,var(--accent),#fff,var(--accent2));-webkit-background-clip:text;color:transparent}
+body.theme-light .hero h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;color:transparent}.hero p{max-width:620px;color:var(--muted);font-size:17px;line-height:1.65}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}.primary,.secondary{padding:13px 19px;border-radius:14px;font-weight:850;transition:.2s}.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#061321}.secondary{background:rgba(255,255,255,.08);color:var(--text);border:1px solid var(--line)}.primary:hover,.secondary:hover{transform:translateY(-2px)}
+.hero-art{position:relative;height:250px}.planet{position:absolute;right:10%;top:6%;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 3%,#86e7ff 7%,#3566d9 43%,#1e2b6b 71%);box-shadow:0 0 80px color-mix(in srgb,var(--accent) 48%,transparent)}
+.planet:after{content:"";position:absolute;inset:42% -38%;border:12px solid rgba(255,255,255,.55);border-left-color:transparent;border-right-color:transparent;border-radius:50%;transform:rotate(-14deg)}
+.ship{position:absolute;left:9%;bottom:24px;width:170px;height:80px;filter:drop-shadow(0 16px 18px rgba(0,0,0,.38));animation:float 3s ease-in-out infinite}.ship:before{content:"";position:absolute;inset:18px 15px;background:linear-gradient(90deg,#d9f7ff,#72c5ff 55%,#6b5cff);clip-path:polygon(0 51%,64% 0,100% 48%,65% 100%);border-radius:40%}.ship:after{content:"";position:absolute;left:-35px;top:31px;width:64px;height:17px;background:linear-gradient(90deg,transparent,#ffd166,#ff6b6b);filter:blur(2px);clip-path:polygon(0 50%,100% 0,100% 100%)}
+@keyframes float{50%{transform:translateY(-12px) rotate(-2deg)}}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin:30px 0 16px}.section-head h2{font-size:28px;margin:0}.section-head p{margin:5px 0 0;color:var(--muted)}
+.games-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}.game-card{position:relative;overflow:hidden;border-radius:23px;background:var(--panel);border:1px solid var(--line);box-shadow:0 16px 40px rgba(0,0,0,.22);transition:.24s}.game-card:hover{transform:translateY(-7px);border-color:color-mix(in srgb,var(--accent) 60%,transparent)}
+.cover{height:170px;position:relative;overflow:hidden;background:#13233e}.cover svg{width:100%;height:100%;display:block}.card-body{padding:16px}.game-card h3{margin:0 0 7px}.game-card p{margin:0 0 14px;color:var(--muted);font-size:13px;line-height:1.5}.meta{display:flex;justify-content:space-between;align-items:center}.badge{font-size:11px;font-weight:900;padding:6px 9px;border-radius:999px;background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent)}
+.play-btn{padding:9px 13px;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--accent2));font-weight:900;color:#061321}.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}.stat{padding:18px;border-radius:19px;background:var(--panel);border:1px solid var(--line)}.stat b{font-size:28px;display:block}.stat span{color:var(--muted);font-size:13px}
+.panel{padding:24px;border-radius:24px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow)}
+.theme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.theme-card{padding:18px;border-radius:19px;border:2px solid transparent;background:var(--panel2);color:var(--text);text-align:left}.theme-card.active{border-color:var(--accent)}.swatches{display:flex;gap:7px;margin-top:14px}.swatch{width:25px;height:25px;border-radius:50%}
+.game-screen{display:none;position:fixed;inset:0;z-index:100;background:rgba(2,8,18,.92);backdrop-filter:blur(12px);padding:18px}.game-screen.open{display:flex;flex-direction:column}.game-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}.game-title{font-size:20px;font-weight:900}.game-stage-wrap{flex:1;min-height:0;display:grid;place-items:center}.game-stage{position:relative;width:min(1100px,96vw);height:min(680px,82vh);border-radius:24px;overflow:hidden;background:#07111f;border:1px solid rgba(255,255,255,.14);box-shadow:0 35px 100px rgba(0,0,0,.6)}canvas{display:block;width:100%;height:100%}.game-hud{position:absolute;left:18px;right:18px;top:18px;display:flex;justify-content:space-between;pointer-events:none}.hud-pill{padding:9px 13px;border-radius:999px;background:rgba(5,13,25,.72);border:1px solid rgba(255,255,255,.18);font-weight:900;backdrop-filter:blur(8px)}
+.overlay-card{position:absolute;inset:0;display:grid;place-items:center;background:rgba(3,9,18,.62);backdrop-filter:blur(5px)}.overlay-card.hidden{display:none}.overlay-inner{width:min(460px,88%);padding:28px;border-radius:25px;text-align:center;background:rgba(12,28,49,.94);border:1px solid rgba(255,255,255,.15);box-shadow:0 28px 80px rgba(0,0,0,.5)}.overlay-inner h2{font-size:34px;margin:0 0 10px}.overlay-inner p{color:#b9c7da;line-height:1.55}.controls{font-size:12px;color:#9fb2cc;margin-top:12px}
+.memory-board{height:100%;padding:76px 24px 24px;display:grid;grid-template-columns:repeat(4,minmax(90px,1fr));gap:14px;background:linear-gradient(135deg,#10243e,#261d54)}.memory-card{position:relative;border:0;background:transparent;perspective:900px}.memory-inner{position:absolute;inset:0;transition:transform .45s;transform-style:preserve-3d}.memory-card.flipped .memory-inner,.memory-card.matched .memory-inner{transform:rotateY(180deg)}.memory-face{position:absolute;inset:0;border-radius:18px;backface-visibility:hidden;display:grid;place-items:center}.memory-back{background:linear-gradient(145deg,#1d4ed8,#7c3aed);border:2px solid rgba(255,255,255,.26);font-size:34px}.memory-front{transform:rotateY(180deg);background:linear-gradient(145deg,#f8fbff,#cde7ff);color:#10233d;border:2px solid white;font-size:52px}.memory-card.matched{filter:drop-shadow(0 0 16px #34d399)}
+.toast{position:fixed;right:22px;bottom:22px;z-index:200;padding:13px 17px;border-radius:14px;background:#0e2038;color:white;border:1px solid rgba(255,255,255,.15);transform:translateY(20px);opacity:0;pointer-events:none;transition:.25s}.toast.show{transform:none;opacity:1}
+@media(max-width:1050px){.games-grid{grid-template-columns:repeat(2,1fr)}.hero{grid-template-columns:1fr}.hero-art{display:none}.theme-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.app-shell{grid-template-columns:1fr}.sidebar{position:fixed;left:0;right:0;bottom:0;top:auto;height:72px;padding:8px 10px;border-right:0;border-top:1px solid var(--line);z-index:60}.brand,.sidebar-note{display:none}.nav{grid-template-columns:repeat(4,1fr);gap:5px}.nav-btn{justify-content:center;flex-direction:column;gap:2px;font-size:10px;padding:7px}.main{padding:16px 14px 94px}.topbar{margin-bottom:16px}.hero{padding:25px;min-height:280px}.hero h1{font-size:42px}.games-grid{grid-template-columns:1fr}.stats-grid{grid-template-columns:1fr}.theme-grid{grid-template-columns:1fr}.game-screen{padding:7px}.game-stage{height:84vh}.memory-board{grid-template-columns:repeat(3,1fr);padding:70px 10px 10px;gap:8px}.memory-front{font-size:38px}}
+
+
+/* Integrated proxy browser */
+.browser-view{height:calc(100vh - 90px);min-height:650px}.browser-view .section-head{margin-top:0}
+.browser-shell{height:calc(100% - 82px);min-height:560px;display:flex;flex-direction:column;overflow:hidden;border-radius:24px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow)}
+.browser-toolbar{display:flex;align-items:center;gap:8px;padding:11px;background:color-mix(in srgb,var(--panel2) 86%,#020617);border-bottom:1px solid var(--line)}
+.browser-icon,.browser-go{height:42px;min-width:42px;border-radius:12px;background:rgba(255,255,255,.08);color:var(--text);border:1px solid var(--line);font-weight:900}.browser-icon:hover{border-color:var(--accent);transform:translateY(-1px)}
+.browser-go{padding:0 18px;min-width:64px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#061321}
+.browser-address{flex:1;display:flex;align-items:center;gap:9px;height:42px;padding:0 13px;border-radius:13px;background:rgba(2,8,18,.58);border:1px solid var(--line)}
+.browser-address input{width:100%;border:0;outline:0;background:transparent;color:var(--text)}
+.browser-tabs{display:flex;align-items:center;gap:7px;min-height:42px;padding:6px 10px;background:rgba(2,8,18,.48);overflow-x:auto;border-bottom:1px solid var(--line)}
+.browser-tab{display:flex;align-items:center;gap:8px;max-width:210px;padding:8px 11px;border-radius:10px;background:rgba(255,255,255,.07);color:var(--muted);white-space:nowrap}.browser-tab.active{background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--text)}.browser-tab-title{overflow:hidden;text-overflow:ellipsis}.browser-tab-close{background:transparent;color:inherit;padding:0;font-size:16px}.browser-add-tab{padding:7px 12px;border-radius:9px;background:var(--good);color:#052315;font-weight:900}
+.browser-content{flex:1;min-height:0;display:grid;grid-template-columns:190px 1fr}.browser-side{padding:12px;background:rgba(2,8,18,.42);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:9px}.browser-side>button{padding:12px;border-radius:12px;text-align:left;background:rgba(255,255,255,.07);color:var(--text);font-weight:750}.browser-side>button:hover{background:color-mix(in srgb,var(--accent) 15%,transparent)}.browser-tip{margin-top:auto;padding:12px;border-radius:13px;background:rgba(255,255,255,.06);color:var(--muted);font-size:11px;line-height:1.5}.browser-tip b{color:var(--text)}
+.browser-frame-wrap{position:relative;min-width:0;min-height:0;background:white}.browser-frame-wrap iframe{width:100%;height:100%;border:0;background:white}.browser-loading{display:none;position:absolute;inset:0;z-index:4;place-items:center;align-content:center;gap:13px;background:rgba(4,13,28,.82);color:white}.browser-loading.show{display:grid}.browser-loading span{width:44px;height:44px;border-radius:50%;border:4px solid rgba(255,255,255,.2);border-top-color:var(--accent);animation:browserSpin .8s linear infinite}@keyframes browserSpin{to{transform:rotate(360deg)}}
+.browser-panel{display:none;position:absolute;z-index:6;inset:18px 18px 18px auto;width:min(390px,90%);padding:15px;overflow:auto;border-radius:19px;background:rgba(9,22,40,.97);color:white;border:1px solid rgba(255,255,255,.15);box-shadow:0 25px 80px rgba(0,0,0,.55)}.browser-panel.open{display:block}.browser-panel-head{display:flex;justify-content:space-between;align-items:center}.browser-panel-head h3{margin:0}.browser-panel-head button{font-size:25px;background:transparent;color:white}.browser-list-item{display:block;width:100%;margin-top:9px;padding:11px;border-radius:11px;text-align:left;background:rgba(255,255,255,.07);color:white;word-break:break-word}.browser-list-item:hover{background:rgba(103,232,249,.15)}.browser-empty{padding:24px 5px;color:#9fb2cc;text-align:center}
+@media(max-width:760px){.nav{grid-template-columns:repeat(5,1fr)}.browser-view{height:auto;min-height:720px}.browser-shell{height:650px}.browser-toolbar{flex-wrap:wrap}.browser-address{order:2;flex-basis:calc(100% - 72px)}.browser-go{order:2}.browser-content{grid-template-columns:1fr}.browser-side{display:grid;grid-template-columns:repeat(4,1fr);border-right:0;border-bottom:1px solid var(--line)}.browser-side>button{text-align:center;font-size:11px;padding:10px 4px}.browser-tip{display:none}}
 
 </style>
-
-
 </head>
-
-
 <body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">✦</div><div><strong>MUSABX</strong><small>Browser & Game Hub</small></div></div>
+    <nav class="nav">
+      <button class="nav-btn active" data-view="home"><span>⌂</span> Home</button>
+      <button class="nav-btn" data-view="browser"><span>🌐</span> Browser</button>
+      <button class="nav-btn" data-view="library"><span>🎮</span> Game Library</button>
+      <button class="nav-btn" data-view="achievements"><span>🏆</span> Achievements</button>
+      <button class="nav-btn" data-view="settings"><span>⚙</span> Themes</button>
+    </nav>
+    <div class="sidebar-note"><b>MUSABX all-in-one</b><br>The original proxy browser remains available, while games run directly inside this file. No app shortcut buttons.</div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="search"><span>⌕</span><input id="searchInput" aria-label="Search games" placeholder="Search the game library..." /></div>
+      <button class="icon-btn" id="soundBtn" title="Toggle sound">🔊</button>
+      <button class="icon-btn" id="fullBtn" title="Fullscreen">⛶</button>
+    </header>
+
+    <section id="home" class="view active">
+      <div class="hero">
+        <div>
+          <div class="badge">MUSABX ORIGINALS</div>
+          <h1>Play. Improve. <span>Level Up.</span></h1>
+          <p>A polished district-ready portal combining the original MUSABX proxy browser with colorful games built directly into the site. Browse and play from one clean interface.</p>
+          <div class="hero-actions"><button class="primary" onclick="launchGame('drift')">Play Featured Game</button><button class="secondary" onclick="switchView('browser')">Open Browser</button><button class="secondary" onclick="switchView('library')">Browse Games</button></div>
+        </div>
+        <div class="hero-art"><div class="planet"></div><div class="ship"></div></div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat"><b id="gamesPlayed">0</b><span>Games played</span></div>
+        <div class="stat"><b id="bestScore">0</b><span>Highest score</span></div>
+        <div class="stat"><b id="achievementCount">0/8</b><span>Achievements earned</span></div>
+      </div>
+      <div class="section-head"><div><h2>Featured games</h2><p>Original games designed for quick sessions and replay value.</p></div></div>
+      <div class="games-grid" id="featuredGrid"></div>
+    </section>
 
 
-<div id="app">
+    <section id="browser" class="view browser-view">
+      <div class="section-head"><div><h2>MUSABX Browser</h2><p>The original proxy browser, rebuilt inside the new interface.</p></div><span class="badge" id="browserStatus">READY</span></div>
+      <div class="browser-shell">
+        <div class="browser-toolbar">
+          <button class="browser-icon" onclick="browserBack()" title="Back">←</button>
+          <button class="browser-icon" onclick="browserForward()" title="Forward">→</button>
+          <button class="browser-icon" onclick="browserReload()" title="Reload">↻</button>
+          <button class="browser-icon" onclick="browserHome()" title="Home">⌂</button>
+          <div class="browser-address"><span>🔒</span><input id="browserUrl" aria-label="Browser address" placeholder="Search or enter a website..." autocomplete="off"></div>
+          <button class="browser-go" onclick="browserGo()">GO</button>
+          <button class="browser-icon" onclick="saveBrowserBookmark()" title="Bookmark">☆</button>
+          <button class="browser-icon" onclick="browserFullscreen()" title="Fullscreen">⛶</button>
+        </div>
+        <div class="browser-tabs" id="browserTabs"></div>
+        <div class="browser-content">
+          <aside class="browser-side">
+            <button onclick="browserHome()">🔎 Search Home</button>
+            <button onclick="showBrowserPanel('history')">🕘 History</button>
+            <button onclick="showBrowserPanel('bookmarks')">⭐ Bookmarks</button>
+            <button onclick="newBrowserTab()">＋ New Tab</button>
+            <div class="browser-tip"><b>Proxy note</b><br>Some websites block iframes, scripts, sign-ins, or video playback even through a proxy. Search pages and simpler sites work best.</div>
+          </aside>
+          <div class="browser-frame-wrap">
+            <div class="browser-loading" id="browserLoading"><span></span><b>Loading page…</b></div>
+            <iframe id="browserFrame" title="MUSABX proxied browser" referrerpolicy="no-referrer"></iframe>
+            <div class="browser-panel" id="browserPanel"><div class="browser-panel-head"><h3 id="browserPanelTitle">History</h3><button onclick="closeBrowserPanel()">×</button></div><div id="browserPanelList"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <section id="library" class="view">
+      <div class="section-head"><div><h2>Game library</h2><p>Choose a game and start instantly.</p></div><span class="badge">4 GAMES</span></div>
+      <div class="games-grid" id="libraryGrid"></div>
+    </section>
 
-<div class="topbar">
+    <section id="achievements" class="view">
+      <div class="section-head"><div><h2>Achievements</h2><p>Progress is stored on this device.</p></div></div>
+      <div class="panel"><div id="achievementGrid" class="games-grid"></div></div>
+    </section>
 
-
-<div class="logo">
-🚀 MUSABX
+    <section id="settings" class="view">
+      <div class="section-head"><div><h2>Themes and display</h2><p>Personalize the experience without changing the games.</p></div></div>
+      <div class="panel"><div class="theme-grid">
+        <button class="theme-card" data-theme="default"><b>Midnight Space</b><div class="swatches"><i class="swatch" style="background:#07111f"></i><i class="swatch" style="background:#67e8f9"></i><i class="swatch" style="background:#8b5cf6"></i></div></button>
+        <button class="theme-card" data-theme="sunset"><b>Sunset Arcade</b><div class="swatches"><i class="swatch" style="background:#26101b"></i><i class="swatch" style="background:#ffd166"></i><i class="swatch" style="background:#ff6b6b"></i></div></button>
+        <button class="theme-card" data-theme="forest"><b>Emerald Quest</b><div class="swatches"><i class="swatch" style="background:#071b17"></i><i class="swatch" style="background:#86efac"></i><i class="swatch" style="background:#2dd4bf"></i></div></button>
+        <button class="theme-card" data-theme="light"><b>Clean Campus</b><div class="swatches"><i class="swatch" style="background:#eaf4ff"></i><i class="swatch" style="background:#0ea5e9"></i><i class="swatch" style="background:#7c3aed"></i></div></button>
+      </div></div>
+    </section>
+  </main>
 </div>
 
-
-
-<div class="urlbar">
-
-<input
-id="url"
-placeholder="Search or enter website..."
->
-
-
-<button onclick="go()">
-GO
-</button>
-
-
+<div class="game-screen" id="gameScreen">
+  <div class="game-top"><button class="icon-btn" onclick="closeGame()">←</button><div class="game-title" id="gameTitle">Game</div><div style="flex:1"></div><button class="icon-btn" onclick="restartCurrentGame()">↻</button></div>
+  <div class="game-stage-wrap"><div class="game-stage" id="gameStage"><canvas id="gameCanvas" width="1100" height="680"></canvas><div class="game-hud"><div class="hud-pill" id="hudLeft">Score: 0</div><div class="hud-pill" id="hudRight">Best: 0</div></div><div class="overlay-card" id="gameOverlay"><div class="overlay-inner"><h2 id="overlayTitle">Ready?</h2><p id="overlayText"></p><button class="primary" id="overlayButton">Start Game</button><div class="controls" id="overlayControls"></div></div></div></div></div>
 </div>
-
-
-
-<button onclick="back()">
-⬅
-</button>
-
-
-<button onclick="forward()">
-➡
-</button>
-
-
-<button onclick="reload()">
-🔄
-</button>
-
-
-<button onclick="toggleFullscreen()">
-⛶
-</button>
-
-
-<button onclick="openSettings()">
-⚙
-</button>
-
-
-</div>
-
-
-
-<div class="tabs" id="tabs">
-
-<div class="tab active">
-Tab 1
-</div>
-
-
-<button class="newtab" onclick="newTab()">
-+
-</button>
-
-
-</div>
-
-
-<div class="main">
-
-
-<div class="sidebar">
-
-
-<h3>
-Apps
-</h3>
-
-
-<button class="appbutton" onclick="openApp('https://youtube.com')">
-🎬 YouTube
-</button>
-
-
-<button class="appbutton" onclick="openApp('https://tiktok.com')">
-🎵 TikTok
-</button>
-
-
-<button class="appbutton" onclick="openApp('https://poki.com')">
-🎮 Poki
-</button>
-
-
-<button class="appbutton" onclick="home()">
-🔎 Search
-</button>
-
-
-<hr>
-
-
-<button class="appbutton" onclick="openHistory()">
-🕘 History
-</button>
-
-
-<button class="appbutton" onclick="openBookmarks()">
-⭐ Bookmarks
-</button>
-
-
-</div>
-
-
-<div class="viewer">
-
-<iframe id="frame"></iframe>
-
-</div>
-
-
-</div>
-
-
-<div class="bottom">
-
-<div>
-MUSABX v2 🚀
-</div>
-
-<div id="clock">
-</div>
-
-</div>
-
-
-</div>
-
-
-
-<div id="loading">
-Loading...
-</div>
-
-
-
-<div class="panel" id="settings">
-
-<h2>
-Settings
-</h2>
-
-<button onclick="toggleTheme()">
-🌙 Toggle Theme
-</button>
-
-</div>
-
-
-
-<div class="panel" id="history">
-
-<h2>
-History
-</h2>
-
-<div id="historyList">
-</div>
-
-</div>
-
-
-
-<div class="panel" id="bookmarks">
-
-<h2>
-Bookmarks
-</h2>
-
-<div id="bookmarkList">
-</div>
-
-</div>
-
-   <script>
-
-
-// =========================
-// MUSABX CONFIG
-// =========================
-
-
-const WORKER_URL =
-"https://musabx-proxy.muqimh.workers.dev";
-
-
-const frame =
-document.getElementById("frame");
-
-
-const url =
-document.getElementById("url");
-
-
-const loading =
-document.getElementById("loading");
-
-
-
-let historyData =
-JSON.parse(
-localStorage.getItem("musabx_history")
-) || [];
-
-
-
-let bookmarks =
-JSON.parse(
-localStorage.getItem("musabx_bookmarks")
-) || [];
-
-
-
-let tabs = [
-"https://html.duckduckgo.com/html/"
-];
-
-
-let currentTab = 0;
-
-
-
-
-
-
-// =========================
-// LOAD WEBSITE
-// =========================
-
-
-function loadPage(site){
-
-
-loading.style.display="block";
-
-
-frame.src =
-WORKER_URL +
-"/proxy?url=" +
-encodeURIComponent(site);
-
-
-
-historyData.push(site);
-
-
-
-localStorage.setItem(
-"musabx_history",
-JSON.stringify(historyData)
-);
-
-
-
-setTimeout(()=>{
-
-loading.style.display="none";
-
-},3000);
-
-
-}
-
-
-
-
-
-
-
-// =========================
-// SEARCH BAR
-// =========================
-
-
-function go(){
-
-
-let value =
-url.value.trim();
-
-
-
-if(value===""){
-
-return;
-
-}
-
-
-
-let target;
-
-
-
-// Website detection
-
-if(
-value.includes(".") &&
-!value.includes(" ")
-){
-
-
-if(
-!value.startsWith("http://") &&
-!value.startsWith("https://")
-){
-
-value =
-"https://" + value;
-
-}
-
-
-target=value;
-
-
-}
-
-
-// Search
-
-else{
-
-
-target =
-"https://html.duckduckgo.com/html/?q="
-+
-encodeURIComponent(value);
-
-
-}
-
-
-
-tabs[currentTab]=target;
-
-
-loadPage(target);
-
-
-}
-
-
-
-
-
-
-url.addEventListener(
-"keydown",
-function(e){
-
-
-if(e.key==="Enter"){
-
-go();
-
-}
-
-
-});
-
-
-
-
-
-
-
-// =========================
-// CONTROLS
-// =========================
-
-
-function back(){
-
-
-try{
-
-frame.contentWindow.history.back();
-
-}
-
-catch(e){}
-
-
-}
-
-
-
-
-function forward(){
-
-
-try{
-
-frame.contentWindow.history.forward();
-
-}
-
-catch(e){}
-
-
-}
-
-
-
-
-
-function reload(){
-
-
-frame.src =
-frame.src;
-
-
-}
-
-
-
-
-
-function home(){
-
-
-loadPage(
-"https://html.duckduckgo.com/html/"
-);
-
-
-}
-
-
-
-
-
-function openApp(site){
-
-loadPage(site);
-
-}
-
-
-
-
-
-
-
-
-// =========================
-// TABS
-// =========================
-
-
-function newTab(){
-
-
-tabs.push(
-"https://html.duckduckgo.com/html/"
-);
-
-
-currentTab =
-tabs.length-1;
-
-
-
-createTabs();
-
-
-
-home();
-
-
-}
-
-
-
-
-
-
-
-function createTabs(){
-
-
-const box =
-document.getElementById("tabs");
-
-
-
-box.innerHTML="";
-
-
-
-tabs.forEach(
-(site,index)=>{
-
-
-let tab =
-document.createElement("div");
-
-
-
-tab.className =
-"tab " +
-(index===currentTab ? "active":"");
-
-
-
-tab.innerHTML =
-"Tab " + (index+1);
-
-
-
-tab.onclick=function(){
-
-
-currentTab=index;
-
-
-loadPage(
-tabs[index]
-);
-
-
-
-createTabs();
-
-
-};
-
-
-
-box.appendChild(tab);
-
-
-
-});
-
-
-
-
-let add =
-document.createElement("button");
-
-
-add.className =
-"newtab";
-
-
-add.innerHTML="+";
-
-
-add.onclick =
-newTab;
-
-
-
-box.appendChild(add);
-
-
-
-}
-
-
-
-
-
-
-
-// =========================
-// HISTORY
-// =========================
-
-
-function openHistory(){
-
-
-closePanels();
-
-
-
-let panel =
-document.getElementById("history");
-
-
-
-panel.style.display="block";
-
-
-
-let list =
-document.getElementById("historyList");
-
-
-
-list.innerHTML="";
-
-
-
-historyData
-.slice(-20)
-.reverse()
-.forEach(site=>{
-
-
-let item =
-document.createElement("div");
-
-
-item.className="item";
-
-
-item.innerHTML =
-site;
-
-
-
-item.onclick=function(){
-
-loadPage(site);
-
-};
-
-
-
-list.appendChild(item);
-
-
-
-});
-
-
-}
-
-
-
-
-
-
-
-// =========================
-// BOOKMARKS
-// =========================
-
-
-function saveBookmark(){
-
-
-let page =
-frame.src;
-
-
-
-bookmarks.push(page);
-
-
-
-localStorage.setItem(
-"musabx_bookmarks",
-JSON.stringify(bookmarks)
-);
-
-
-
-alert(
-"Saved ⭐"
-);
-
-
-}
-
-
-
-
-
-function openBookmarks(){
-
-
-closePanels();
-
-
-
-let panel =
-document.getElementById("bookmarks");
-
-
-
-panel.style.display="block";
-
-
-
-let list =
-document.getElementById("bookmarkList");
-
-
-
-list.innerHTML="";
-
-
-
-bookmarks.forEach(site=>{
-
-
-let item =
-document.createElement("div");
-
-
-item.className="item";
-
-
-item.innerHTML =
-site;
-
-
-
-item.onclick=function(){
-
-loadPage(site);
-
-};
-
-
-
-list.appendChild(item);
-
-
-
-});
-
-
-}
-
-
-
-
-
-
-
-// =========================
-// SETTINGS
-// =========================
-
-
-function openSettings(){
-
-
-closePanels();
-
-
-
-document
-.getElementById("settings")
-.style.display="block";
-
-
-}
-
-
-
-
-
-function closePanels(){
-
-
-document
-.querySelectorAll(".panel")
-.forEach(panel=>{
-
-
-panel.style.display="none";
-
-
-});
-
-
-}
-
-
-
-
-
-
-
-function toggleTheme(){
-
-
-document.body.classList.toggle(
-"light"
-);
-
-
-}
-
-
-
-
-
-
-
-
-// =========================
-// FULLSCREEN
-// =========================
-
-
-function toggleFullscreen(){
-
-
-if(!document.fullscreenElement){
-
-
-document
-.getElementById("app")
-.requestFullscreen();
-
-
-}
-
-else{
-
-
-document.exitFullscreen();
-
-
-}
-
-
-}
-
-
-
-
-
-
-
-// =========================
-// CLOCK
-// =========================
-
-
-function updateClock(){
-
-
-document.getElementById("clock")
-.innerHTML =
-new Date()
-.toLocaleTimeString();
-
-
-}
-
-
-
-setInterval(
-updateClock,
-1000
-);
-
-
-
-updateClock();
-
-
-
-
-
-
-// =========================
-// KEYBOARD SHORTCUTS
-// =========================
-
-
-document.addEventListener(
-"keydown",
-function(e){
-
-
-if(
-e.ctrlKey &&
-e.key==="l"
-){
-
-e.preventDefault();
-
-url.focus();
-
-}
-
-
-
-if(
-e.altKey &&
-e.key==="ArrowLeft"
-){
-
-back();
-
-}
-
-
-
-if(
-e.altKey &&
-e.key==="ArrowRight"
-){
-
-forward();
-
-}
-
-
-
-});
-
-
-
-
-
-
-// START MUSABX
-
-
-createTabs();
-
-
-loadPage(
-"https://html.duckduckgo.com/html/"
-);
-
-
-
-</script>
-<style>
-
-/* =========================
-   FINAL MUSABX POLISH
-========================= */
-
-
-.appbutton{
-
-transition:.25s;
-
-}
-
-
-
-.appbutton:hover{
-
-transform:translateX(8px);
-
-}
-
-
-
-#loading{
-
-font-weight:bold;
-
-}
-
-
-
-</style>
-
-
+<div class="toast" id="toast"></div>
 <script>
-
-
-// =========================
-// SAVE BUTTON
-// =========================
-
-
-let saveButton =
-document.createElement("button");
-
-
-saveButton.innerHTML =
-"⭐ Save";
-
-
-saveButton.onclick =
-saveBookmark;
-
-
-
-document
-.querySelector(".topbar")
-.appendChild(saveButton);
-
-
-
-
-
-
-// =========================
-// PLACEHOLDER ROTATION
-// =========================
-
-
-let tips = [
-
-"Search anything...",
-
-"Try YouTube",
-
-"Try TikTok",
-
-"Try Poki games",
-
-"Enter a website"
-
+const gameData=[
+ {id:'drift',title:'Neon Drift',genre:'Arcade Racing',desc:'Dodge traffic, collect energy cores, and survive an increasingly fast neon highway.',cover:'drift'},
+ {id:'space',title:'Star Defender',genre:'Space Action',desc:'Protect the orbital station from crystal meteors with smooth movement and rapid laser fire.',cover:'space'},
+ {id:'memory',title:'Jungle Match',genre:'Memory Puzzle',desc:'Match beautifully illustrated jungle icons before the timer runs out.',cover:'memory'},
+ {id:'goal',title:'Goal Rush',genre:'Sports Skill',desc:'Aim your shots past a moving goalkeeper and chase a high-scoring streak.',cover:'goal'}
 ];
-
-
-let tipIndex=0;
-
-
-
-setInterval(()=>{
-
-
-url.placeholder =
-tips[tipIndex];
-
-
-
-tipIndex++;
-
-
-
-if(tipIndex>=tips.length){
-
-tipIndex=0;
-
-}
-
-
-
-},3000);
-
-
-
-
-
-
-// =========================
-// FRAME LOADING
-// =========================
-
-
-frame.onload=function(){
-
-
-loading.style.display="none";
-
-
+const covers={
+ drift:`<svg viewBox="0 0 500 240"><defs><linearGradient id="d1" x2="1" y2="1"><stop stop-color="#08162f"/><stop offset="1" stop-color="#5b21b6"/></linearGradient><linearGradient id="road" x2="0" y2="1"><stop stop-color="#18233c"/><stop offset="1" stop-color="#030712"/></linearGradient></defs><rect width="500" height="240" fill="url(#d1)"/><circle cx="420" cy="48" r="60" fill="#67e8f9" opacity=".2"/><path d="M150 240L225 75h50l80 165" fill="url(#road)" stroke="#818cf8" stroke-width="3"/><path d="M250 220V90" stroke="#fff" stroke-width="6" stroke-dasharray="20 16" opacity=".8"/><g transform="translate(172 145)"><path d="M0 42l18-38h78l25 38-7 38H8z" fill="#19d3ff"/><path d="M28 8h54l16 27H14z" fill="#bff7ff" opacity=".85"/><circle cx="25" cy="77" r="14" fill="#05070d"/><circle cx="98" cy="77" r="14" fill="#05070d"/><rect x="20" y="42" width="78" height="13" rx="6" fill="#09213d"/></g><g fill="#ff4d8d"><rect x="80" y="80" width="7" height="90"/><rect x="405" y="72" width="7" height="98"/></g></svg>`,
+ space:`<svg viewBox="0 0 500 240"><defs><radialGradient id="s1"><stop stop-color="#4527a0"/><stop offset="1" stop-color="#050816"/></radialGradient></defs><rect width="500" height="240" fill="url(#s1)"/><g fill="#fff">${Array.from({length:30},(_,i)=>`<circle cx="${(i*83)%500}" cy="${(i*47)%220}" r="${i%3+1}" opacity=".${i%8+2}"/>`).join('')}</g><circle cx="415" cy="60" r="44" fill="#4fd1c5"/><circle cx="400" cy="48" r="10" fill="#1f6d7a" opacity=".5"/><g transform="translate(175 90)"><path d="M70 0l22 52 66 23-66 22-22 58-22-58-66-22 66-23z" fill="#e5f8ff" stroke="#60a5fa" stroke-width="5"/><ellipse cx="70" cy="75" rx="30" ry="18" fill="#172554"/><path d="M18 75H-20M122 75h38" stroke="#ff5ea8" stroke-width="8"/></g></svg>`,
+ memory:`<svg viewBox="0 0 500 240"><defs><linearGradient id="m1" x2="1" y2="1"><stop stop-color="#064e3b"/><stop offset="1" stop-color="#0f766e"/></linearGradient></defs><rect width="500" height="240" fill="url(#m1)"/><circle cx="75" cy="48" r="90" fill="#86efac" opacity=".13"/><g transform="translate(75 34)"><rect width="145" height="170" rx="22" fill="#e7fff5" transform="rotate(-8 72 85)"/><text x="72" y="112" text-anchor="middle" font-size="78">🦜</text></g><g transform="translate(280 38)"><rect width="145" height="170" rx="22" fill="#fff5d9" transform="rotate(7 72 85)"/><text x="72" y="112" text-anchor="middle" font-size="78">🐯</text></g></svg>`,
+ goal:`<svg viewBox="0 0 500 240"><defs><linearGradient id="g1" y2="1"><stop stop-color="#75d5ff"/><stop offset=".55" stop-color="#b5ecff"/><stop offset=".56" stop-color="#2f9f52"/><stop offset="1" stop-color="#0b5f2d"/></linearGradient></defs><rect width="500" height="240" fill="url(#g1)"/><path d="M85 180V70h330v110M85 70h330" fill="none" stroke="#fff" stroke-width="9"/><g stroke="#fff" opacity=".45"><path d="M105 75v105m35-105v105m35-105v105m35-105v105m35-105v105m35-105v105m35-105v105m35-105v105m35-105v105M90 100h320M90 130h320M90 160h320"/></g><circle cx="250" cy="188" r="31" fill="#fff"/><path d="M250 160l14 10-5 17h-18l-5-17zM220 179l14-9M280 179l-14-9M231 211l10-24M269 211l-10-24" stroke="#111827" stroke-width="7" fill="#111827"/></svg>`
 };
+const achievements=[
+ {id:'first',name:'First Launch',desc:'Play your first game.',icon:'🚀'},
+ {id:'score100',name:'Triple Digits',desc:'Score 100 points in any game.',icon:'💯'},
+ {id:'drift500',name:'Road Legend',desc:'Score 500 in Neon Drift.',icon:'🏎️'},
+ {id:'space300',name:'Star Guardian',desc:'Score 300 in Star Defender.',icon:'🛡️'},
+ {id:'memory',name:'Sharp Memory',desc:'Finish Jungle Match.',icon:'🧠'},
+ {id:'goal10',name:'Top Striker',desc:'Score 10 goals in Goal Rush.',icon:'⚽'},
+ {id:'played10',name:'Game Regular',desc:'Play 10 total games.',icon:'🎟️'},
+ {id:'all',name:'MUSABX Master',desc:'Try every game.',icon:'👑'}
+];
+let progress=JSON.parse(localStorage.getItem('musabxGameProgress')||'null')||{played:0,best:0,scores:{},achievements:[],tried:[]};
+let soundOn=true,currentGame=null,raf=0,cleanupFns=[];
+const canvas=document.getElementById('gameCanvas'),ctx=canvas.getContext('2d'),stage=document.getElementById('gameStage');
+function saveProgress(){localStorage.setItem('musabxGameProgress',JSON.stringify(progress));updateStats();renderAchievements()}
+function unlock(id){if(!progress.achievements.includes(id)){progress.achievements.push(id);toast('Achievement unlocked: '+achievements.find(a=>a.id===id).name);saveProgress()}}
+function recordPlay(id){progress.played++;if(!progress.tried.includes(id))progress.tried.push(id);unlock('first');if(progress.played>=10)unlock('played10');if(progress.tried.length===4)unlock('all');saveProgress()}
+function recordScore(id,score){score=Math.floor(score);progress.scores[id]=Math.max(progress.scores[id]||0,score);progress.best=Math.max(progress.best,score);if(score>=100)unlock('score100');if(id==='drift'&&score>=500)unlock('drift500');if(id==='space'&&score>=300)unlock('space300');saveProgress()}
+function updateStats(){gamesPlayed.textContent=progress.played;bestScore.textContent=progress.best;achievementCount.textContent=progress.achievements.length+'/8'}
+function cardHTML(g){return `<article class="game-card" data-title="${g.title.toLowerCase()} ${g.genre.toLowerCase()}"><div class="cover">${covers[g.cover]}</div><div class="card-body"><h3>${g.title}</h3><p>${g.desc}</p><div class="meta"><span class="badge">${g.genre}</span><button class="play-btn" onclick="launchGame('${g.id}')">Play</button></div></div></article>`}
+featuredGrid.innerHTML=gameData.slice(0,4).map(cardHTML).join('');libraryGrid.innerHTML=gameData.map(cardHTML).join('');
+function renderAchievements(){achievementGrid.innerHTML=achievements.map(a=>{let on=progress.achievements.includes(a.id);return `<article class="game-card" style="opacity:${on?1:.48}"><div class="card-body" style="min-height:155px"><div style="font-size:42px">${a.icon}</div><h3>${a.name}</h3><p>${a.desc}</p><span class="badge">${on?'UNLOCKED':'LOCKED'}</span></div></article>`}).join('')}
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('.nav-btn').forEach(b=>b.onclick=()=>switchView(b.dataset.view));
+searchInput.addEventListener('input',e=>{switchView('library');let q=e.target.value.toLowerCase();document.querySelectorAll('#libraryGrid .game-card').forEach(c=>c.style.display=c.dataset.title.includes(q)?'block':'none')});
+function applyTheme(t){document.body.className=t==='default'?'':'theme-'+t;localStorage.setItem('musabxTheme',t);document.querySelectorAll('.theme-card').forEach(c=>c.classList.toggle('active',c.dataset.theme===t))}
+document.querySelectorAll('.theme-card').forEach(c=>c.onclick=()=>applyTheme(c.dataset.theme));applyTheme(localStorage.getItem('musabxTheme')||'default');
+soundBtn.onclick=()=>{soundOn=!soundOn;soundBtn.textContent=soundOn?'🔊':'🔇'};fullBtn.onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
+function beep(freq=440,d=.06,type='sine'){if(!soundOn)return;try{let ac=beep.ac||(beep.ac=new AudioContext()),o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(.055,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(g).connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
+function setOverlay(title,text,button='Start Game',controls=''){overlayTitle.textContent=title;overlayText.textContent=text;overlayButton.textContent=button;overlayControls.textContent=controls;gameOverlay.classList.remove('hidden')}
+function hideOverlay(){gameOverlay.classList.add('hidden')}
+function cleanupGame(){cancelAnimationFrame(raf);cleanupFns.forEach(f=>f());cleanupFns=[];stage.querySelector('.memory-board')?.remove();canvas.style.display='block'}
+function launchGame(id){cleanupGame();currentGame=id;gameScreen.classList.add('open');let g=gameData.find(x=>x.id===id);gameTitle.textContent=g.title;recordPlay(id);if(id==='drift')setupDrift();if(id==='space')setupSpace();if(id==='memory')setupMemory();if(id==='goal')setupGoal()}
+function closeGame(){cleanupGame();gameScreen.classList.remove('open');currentGame=null}
+function restartCurrentGame(){if(currentGame)launchGame(currentGame)}
+function fitCanvas(){canvas.width=1100;canvas.height=680}
+function roundRect(x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.stroke()}}
+function setupDrift(){fitCanvas();canvas.style.display='block';let running=false,score=0,speed=7,lane=1,playerX=550,obstacles=[],cores=[],stars=[];for(let i=0;i<80;i++)stars.push({x:Math.random()*1100,y:Math.random()*680,s:Math.random()*2+1});hudLeft.textContent='Score: 0';hudRight.textContent='Best: '+(progress.scores.drift||0);setOverlay('Neon Drift','Change lanes, avoid traffic, and collect cyan energy cores. Speed increases over time.','Start Race','Controls: A / D or Left / Right arrows');
+ const key=e=>{if(!running)return;if(['ArrowLeft','a','A'].includes(e.key))lane=Math.max(0,lane-1);if(['ArrowRight','d','D'].includes(e.key))lane=Math.min(2,lane+1)};addEventListener('keydown',key);cleanupFns.push(()=>removeEventListener('keydown',key));overlayButton.onclick=()=>{hideOverlay();running=true;loop()};
+ function spawn(){let l=Math.floor(Math.random()*3);obstacles.push({lane:l,y:-150,type:Math.random()>.5?0:1});if(Math.random()>.45)cores.push({lane:Math.floor(Math.random()*3),y:-80,spin:0})}
+ function drawCar(x,y,enemy=false,type=0){ctx.save();ctx.translate(x,y);ctx.shadowBlur=22;ctx.shadowColor=enemy?(type?'#fb7185':'#fbbf24'):'#67e8f9';let color=enemy?(type?'#ef476f':'#f59e0b'):'#18c8ff';roundRect(-50,-85,100,170,24,color);roundRect(-36,-55,72,55,16,enemy?'#202638':'#dff8ff');roundRect(-36,13,72,45,12,'#172033');ctx.fillStyle='#05070d';ctx.fillRect(-59,-52,14,43);ctx.fillRect(45,-52,14,43);ctx.fillRect(-59,38,14,43);ctx.fillRect(45,38,14,43);ctx.fillStyle='#fff';ctx.fillRect(-38,-78,25,8);ctx.fillRect(13,-78,25,8);ctx.restore()}
+ function loop(){if(!running)return;score+=.18*speed;speed=Math.min(17,7+score/170);if(Math.random()<.026)spawn();playerX+=(310+lane*240-playerX)*.18;ctx.clearRect(0,0,1100,680);let bg=ctx.createLinearGradient(0,0,0,680);bg.addColorStop(0,'#07152c');bg.addColorStop(1,'#13051f');ctx.fillStyle=bg;ctx.fillRect(0,0,1100,680);stars.forEach(s=>{s.y+=speed*.22;if(s.y>680)s.y=0;ctx.fillStyle='rgba(255,255,255,.65)';ctx.fillRect(s.x,s.y,s.s,s.s)});ctx.fillStyle='#131b2b';ctx.beginPath();ctx.moveTo(180,680);ctx.lineTo(390,0);ctx.lineTo(710,0);ctx.lineTo(920,680);ctx.fill();ctx.strokeStyle='#6d5dfc';ctx.lineWidth=5;ctx.stroke();for(let y=-80;y<760;y+=120){let yy=(y+(score*6)%120);ctx.strokeStyle='rgba(255,255,255,.78)';ctx.lineWidth=7;ctx.setLineDash([38,28]);ctx.beginPath();ctx.moveTo(470,yy);ctx.lineTo(420+(yy/680)*25,yy+70);ctx.stroke();ctx.beginPath();ctx.moveTo(630,yy);ctx.lineTo(680-(yy/680)*25,yy+70);ctx.stroke()}ctx.setLineDash([]);
+ obstacles.forEach(o=>{o.y+=speed;let x=310+o.lane*240;drawCar(x,o.y,true,o.type)});cores.forEach(c=>{c.y+=speed;c.spin+=.1;let x=310+c.lane*240;ctx.save();ctx.translate(x,c.y);ctx.rotate(c.spin);ctx.shadowBlur=24;ctx.shadowColor='#67e8f9';ctx.fillStyle='#67e8f9';ctx.beginPath();ctx.moveTo(0,-25);ctx.lineTo(22,0);ctx.lineTo(0,25);ctx.lineTo(-22,0);ctx.closePath();ctx.fill();ctx.restore()});drawCar(playerX,560,false);
+ let hit=obstacles.find(o=>Math.abs((310+o.lane*240)-playerX)<72&&Math.abs(o.y-560)<125);cores=cores.filter(c=>{if(Math.abs((310+c.lane*240)-playerX)<72&&Math.abs(c.y-560)<105){score+=40;beep(760,.08,'triangle');return false}return c.y<760});obstacles=obstacles.filter(o=>o.y<820);hudLeft.textContent='Score: '+Math.floor(score);if(hit){running=false;beep(90,.3,'sawtooth');recordScore('drift',score);setOverlay('Race Over','You scored '+Math.floor(score)+' points.','Race Again','Use quick lane changes to survive at higher speeds.');overlayButton.onclick=()=>setupDrift();return}raf=requestAnimationFrame(loop)} }
+function setupSpace(){fitCanvas();let running=false,score=0,lives=3,keys={},player={x:550,y:580},shots=[],rocks=[],particles=[],stars=Array.from({length:90},()=>({x:Math.random()*1100,y:Math.random()*680,z:Math.random()*2+1}));hudLeft.textContent='Score: 0';hudRight.textContent='Lives: 3';setOverlay('Star Defender','Move the starfighter, fire lasers, and stop crystal meteors from reaching the station.','Begin Mission','Controls: WASD / arrows to move, Space to fire');let kd=e=>{keys[e.key.toLowerCase()]=true;if(e.code==='Space')e.preventDefault()},ku=e=>keys[e.key.toLowerCase()]=false;addEventListener('keydown',kd);addEventListener('keyup',ku);cleanupFns.push(()=>removeEventListener('keydown',kd),()=>removeEventListener('keyup',ku));overlayButton.onclick=()=>{hideOverlay();running=true;loop()};let fireDelay=0;
+ function ship(){ctx.save();ctx.translate(player.x,player.y);ctx.shadowBlur=25;ctx.shadowColor='#60a5fa';ctx.fillStyle='#e7f8ff';ctx.beginPath();ctx.moveTo(0,-54);ctx.lineTo(45,35);ctx.lineTo(17,27);ctx.lineTo(0,48);ctx.lineTo(-17,27);ctx.lineTo(-45,35);ctx.closePath();ctx.fill();ctx.fillStyle='#172554';ctx.beginPath();ctx.ellipse(0,-5,15,25,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#ff5ea8';ctx.fillRect(-34,34,18,22);ctx.fillRect(16,34,18,22);ctx.restore()}
+ function crystal(r){ctx.save();ctx.translate(r.x,r.y);ctx.rotate(r.a);ctx.shadowBlur=15;ctx.shadowColor='#f472b6';ctx.fillStyle='#c084fc';ctx.beginPath();for(let i=0;i<8;i++){let ang=i*Math.PI/4,rad=i%2?18:r.size;ctx.lineTo(Math.cos(ang)*rad,Math.sin(ang)*rad)}ctx.closePath();ctx.fill();ctx.strokeStyle='#f5d0fe';ctx.stroke();ctx.restore()}
+ function loop(){if(!running)return;score+=.08;if(keys.a||keys.arrowleft)player.x-=8;if(keys.d||keys.arrowright)player.x+=8;if(keys.w||keys.arrowup)player.y-=8;if(keys.s||keys.arrowdown)player.y+=8;player.x=Math.max(55,Math.min(1045,player.x));player.y=Math.max(120,Math.min(620,player.y));if(fireDelay>0)fireDelay--;if((keys[' ']||keys.space||keys.spacebar)&&fireDelay<=0){shots.push({x:player.x,y:player.y-50});fireDelay=9;beep(620,.04,'square')}if(Math.random()<.025+score/70000)rocks.push({x:60+Math.random()*980,y:-50,size:24+Math.random()*25,v:2.7+Math.random()*2.8+score/240,a:0});ctx.fillStyle='#040818';ctx.fillRect(0,0,1100,680);stars.forEach(s=>{s.y+=s.z;if(s.y>680){s.y=0;s.x=Math.random()*1100}ctx.fillStyle=`rgba(255,255,255,${.25+s.z*.25})`;ctx.fillRect(s.x,s.y,s.z,s.z)});let neb=ctx.createRadialGradient(180,200,10,180,200,270);neb.addColorStop(0,'rgba(84,46,180,.25)');neb.addColorStop(1,'transparent');ctx.fillStyle=neb;ctx.fillRect(0,0,500,500);shots.forEach(s=>s.y-=13);rocks.forEach(r=>{r.y+=r.v;r.a+=.03;crystal(r)});ctx.fillStyle='#67e8f9';ctx.shadowBlur=12;ctx.shadowColor='#67e8f9';shots.forEach(s=>ctx.fillRect(s.x-3,s.y-18,6,30));ctx.shadowBlur=0;
+ shots=shots.filter(s=>{let hit=rocks.find(r=>Math.hypot(r.x-s.x,r.y-s.y)<r.size+8);if(hit){rocks.splice(rocks.indexOf(hit),1);score+=25;beep(250,.05,'triangle');return false}return s.y>-30});rocks=rocks.filter(r=>{if(r.y>700){lives--;beep(110,.18,'sawtooth');return false}return true});ship();hudLeft.textContent='Score: '+Math.floor(score);hudRight.textContent='Lives: '+lives;if(lives<=0){running=false;recordScore('space',score);setOverlay('Mission Complete','Final score: '+Math.floor(score),'Play Again','Destroy meteors early to protect all three lives.');overlayButton.onclick=()=>setupSpace();return}raf=requestAnimationFrame(loop)} }
+function setupMemory(){canvas.style.display='none';let old=stage.querySelector('.memory-board');if(old)old.remove();let board=document.createElement('div');board.className='memory-board';stage.appendChild(board);let icons=['🦜','🐯','🐸','🦋','🦥','🐼','🦎','🌺'];let deck=[...icons,...icons].sort(()=>Math.random()-.5),first=null,lock=false,matches=0,moves=0,time=90,timer;hudLeft.textContent='Moves: 0';hudRight.textContent='Time: 90';setOverlay('Jungle Match','Find all eight matching pairs before time runs out.','Start Puzzle','Click two cards to reveal their jungle pictures.');deck.forEach((icon,i)=>{let c=document.createElement('button');c.className='memory-card';c.innerHTML=`<span class="memory-inner"><span class="memory-face memory-back">✦</span><span class="memory-face memory-front">${icon}</span></span>`;c.onclick=()=>flip(c,icon);board.appendChild(c)});overlayButton.onclick=()=>{hideOverlay();timer=setInterval(()=>{time--;hudRight.textContent='Time: '+time;if(time<=0){clearInterval(timer);finish(false)}},1000)};cleanupFns.push(()=>clearInterval(timer));function flip(c,icon){if(lock||c.classList.contains('flipped')||c.classList.contains('matched'))return;c.classList.add('flipped');beep(440,.04);if(!first){first={c,icon};return}moves++;hudLeft.textContent='Moves: '+moves;if(first.icon===icon){first.c.classList.add('matched');c.classList.add('matched');matches++;first=null;beep(750,.09,'triangle');if(matches===8)finish(true)}else{lock=true;setTimeout(()=>{first.c.classList.remove('flipped');c.classList.remove('flipped');first=null;lock=false},700)}}function finish(win){clearInterval(timer);let score=win?Math.max(100,1000-moves*20+time*5):0;if(win){unlock('memory');recordScore('memory',score)}setOverlay(win?'Jungle Cleared!':'Time Up',win?`Score ${score} with ${moves} moves.`:'Try again and remember each picture location.','Play Again','Fewer moves and more time remaining earn a higher score.');overlayButton.onclick=()=>setupMemory()}}
+function setupGoal(){fitCanvas();let running=false,score=0,shots=10,streak=0,keeperX=550,keeperDir=1,aim={x:550,y:260},ball={x:550,y:590,tx:550,ty:260,moving:false,t:0};hudLeft.textContent='Goals: 0';hudRight.textContent='Shots: 10';setOverlay('Goal Rush','Move the target and shoot around the goalkeeper. Consecutive goals build your streak.','Kick Off','Mouse: aim and click. Keyboard: arrows to aim, Space to shoot.');let move=e=>{let r=canvas.getBoundingClientRect();aim.x=(e.clientX-r.left)*canvas.width/r.width;aim.y=(e.clientY-r.top)*canvas.height/r.height},click=()=>shoot(),key=e=>{if(e.key==='ArrowLeft')aim.x-=25;if(e.key==='ArrowRight')aim.x+=25;if(e.key==='ArrowUp')aim.y-=20;if(e.key==='ArrowDown')aim.y+=20;if(e.code==='Space')shoot()};canvas.addEventListener('mousemove',move);canvas.addEventListener('click',click);addEventListener('keydown',key);cleanupFns.push(()=>canvas.removeEventListener('mousemove',move),()=>canvas.removeEventListener('click',click),()=>removeEventListener('keydown',key));overlayButton.onclick=()=>{hideOverlay();running=true;loop()};function shoot(){if(!running||ball.moving||shots<=0)return;ball.moving=true;ball.t=0;ball.tx=Math.max(160,Math.min(940,aim.x));ball.ty=Math.max(110,Math.min(395,aim.y));shots--;beep(160,.08,'square')}
+ function drawBall(x,y,r=27){ctx.save();ctx.translate(x,y);ctx.fillStyle='white';ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);ctx.fill();ctx.fillStyle='#111827';ctx.beginPath();for(let i=0;i<5;i++){let a=-Math.PI/2+i*Math.PI*2/5;ctx.lineTo(Math.cos(a)*r*.38,Math.sin(a)*r*.38)}ctx.closePath();ctx.fill();ctx.restore()}
+ function loop(){if(!running)return;keeperX+=keeperDir*4.5;if(keeperX>825||keeperX<275)keeperDir*=-1;ctx.clearRect(0,0,1100,680);let sky=ctx.createLinearGradient(0,0,0,680);sky.addColorStop(0,'#73d6ff');sky.addColorStop(.55,'#d8f5ff');sky.addColorStop(.56,'#2c9b50');sky.addColorStop(1,'#09542c');ctx.fillStyle=sky;ctx.fillRect(0,0,1100,680);for(let i=0;i<1100;i+=55){ctx.fillStyle=i%110?'rgba(255,255,255,.2)':'rgba(0,0,0,.08)';ctx.fillRect(i,380,27,300)}ctx.strokeStyle='white';ctx.lineWidth=12;ctx.strokeRect(140,95,820,330);ctx.lineWidth=2;ctx.globalAlpha=.35;for(let x=160;x<960;x+=35){ctx.beginPath();ctx.moveTo(x,100);ctx.lineTo(x,425);ctx.stroke()}for(let y=120;y<425;y+=30){ctx.beginPath();ctx.moveTo(145,y);ctx.lineTo(955,y);ctx.stroke()}ctx.globalAlpha=1;ctx.save();ctx.translate(keeperX,315);ctx.fillStyle='#ffcf56';roundRect(-28,-95,56,95,18,'#ffcf56');ctx.fillStyle='#172033';ctx.fillRect(-27,0,22,72);ctx.fillRect(5,0,22,72);ctx.strokeStyle='#ffcf56';ctx.lineWidth=18;ctx.beginPath();ctx.moveTo(-20,-65);ctx.lineTo(-75,-35);ctx.moveTo(20,-65);ctx.lineTo(75,-35);ctx.stroke();ctx.fillStyle='#f0b18a';ctx.beginPath();ctx.arc(0,-118,25,0,Math.PI*2);ctx.fill();ctx.restore();ctx.strokeStyle='#67e8f9';ctx.lineWidth=4;ctx.beginPath();ctx.arc(aim.x,aim.y,24,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.moveTo(aim.x-34,aim.y);ctx.lineTo(aim.x+34,aim.y);ctx.moveTo(aim.x,aim.y-34);ctx.lineTo(aim.x,aim.y+34);ctx.stroke();if(ball.moving){ball.t+=.035;let e=1-Math.pow(1-Math.min(ball.t,1),3),x=550+(ball.tx-550)*e,y=590+(ball.ty-590)*e-120*Math.sin(Math.PI*e),r=27-12*e;drawBall(x,y,r);if(ball.t>=1){ball.moving=false;let saved=Math.abs(ball.tx-keeperX)<92&&ball.ty>190;let goal=!saved&&ball.tx>155&&ball.tx<945&&ball.ty>100&&ball.ty<420;if(goal){score++;streak++;beep(820,.15,'triangle');if(score>=10)unlock('goal10')}else{streak=0;beep(100,.15,'sawtooth')}hudLeft.textContent='Goals: '+score+(streak>1?' • Streak '+streak:'');hudRight.textContent='Shots: '+shots;if(shots<=0){running=false;recordScore('goal',score*100);setOverlay('Final Whistle',`You scored ${score} out of 10 shots.`,'Play Again','Aim away from the moving goalkeeper.');overlayButton.onclick=()=>setupGoal();return}}}else drawBall(550,590);raf=requestAnimationFrame(loop)} }
 
+// ===== MUSABX ORIGINAL PROXY BROWSER =====
+const WORKER_URL = 'https://musabx-proxy.muqimh.workers.dev';
+const browserFrame=document.getElementById('browserFrame'),browserUrl=document.getElementById('browserUrl'),browserLoading=document.getElementById('browserLoading');
+let browserHistory=JSON.parse(localStorage.getItem('musabx_history')||'[]');
+let browserBookmarks=JSON.parse(localStorage.getItem('musabx_bookmarks')||'[]');
+let browserTabsData=JSON.parse(localStorage.getItem('musabx_tabs')||'null')||[{url:'https://html.duckduckgo.com/html/',title:'Search'}];
+let activeBrowserTab=Math.min(Number(localStorage.getItem('musabx_active_tab')||0),browserTabsData.length-1);
+function normalizeBrowserTarget(value){value=value.trim();if(!value)return null;if(/^https?:\/\//i.test(value))return value;if(value.includes('.')&&!value.includes(' '))return 'https://'+value;return 'https://html.duckduckgo.com/html/?q='+encodeURIComponent(value)}
+function browserLoad(target,{remember=true}={}){if(!target)return;closeBrowserPanel();browserLoading.classList.add('show');document.getElementById('browserStatus').textContent='LOADING';browserTabsData[activeBrowserTab].url=target;browserTabsData[activeBrowserTab].title=browserTitle(target);browserUrl.value=target;browserFrame.src=WORKER_URL+'/proxy?url='+encodeURIComponent(target);if(remember){browserHistory.push({url:target,time:Date.now()});browserHistory=browserHistory.slice(-100);localStorage.setItem('musabx_history',JSON.stringify(browserHistory))}saveBrowserTabs();renderBrowserTabs()}
+function browserTitle(url){try{let u=new URL(url);if(u.hostname.includes('duckduckgo'))return 'Search';return u.hostname.replace(/^www\./,'')}catch{return 'New Tab'}}
+function browserGo(){let t=normalizeBrowserTarget(browserUrl.value);if(t)browserLoad(t)}
+function browserHome(){browserLoad('https://html.duckduckgo.com/html/')}
+function browserReload(){browserLoading.classList.add('show');browserFrame.src=browserFrame.src}
+function browserBack(){try{browserFrame.contentWindow.history.back()}catch(e){}}
+function browserForward(){try{browserFrame.contentWindow.history.forward()}catch(e){}}
+function browserFullscreen(){let el=document.querySelector('.browser-shell');if(!document.fullscreenElement)el.requestFullscreen?.();else document.exitFullscreen?.()}
+function newBrowserTab(){browserTabsData.push({url:'https://html.duckduckgo.com/html/',title:'Search'});activeBrowserTab=browserTabsData.length-1;saveBrowserTabs();renderBrowserTabs();browserHome()}
+function selectBrowserTab(i){activeBrowserTab=i;saveBrowserTabs();renderBrowserTabs();browserLoad(browserTabsData[i].url,{remember:false})}
+function closeBrowserTab(i,event){event.stopPropagation();if(browserTabsData.length===1){browserTabsData[0]={url:'https://html.duckduckgo.com/html/',title:'Search'};activeBrowserTab=0}else{browserTabsData.splice(i,1);if(activeBrowserTab>=browserTabsData.length)activeBrowserTab=browserTabsData.length-1}saveBrowserTabs();renderBrowserTabs();browserLoad(browserTabsData[activeBrowserTab].url,{remember:false})}
+function saveBrowserTabs(){localStorage.setItem('musabx_tabs',JSON.stringify(browserTabsData));localStorage.setItem('musabx_active_tab',activeBrowserTab)}
+function renderBrowserTabs(){let box=document.getElementById('browserTabs');box.innerHTML='';browserTabsData.forEach((tab,i)=>{let b=document.createElement('button');b.className='browser-tab '+(i===activeBrowserTab?'active':'');b.onclick=()=>selectBrowserTab(i);b.innerHTML='<span>🌐</span><span class="browser-tab-title"></span><span class="browser-tab-close">×</span>';b.querySelector('.browser-tab-title').textContent=tab.title||browserTitle(tab.url);b.querySelector('.browser-tab-close').onclick=e=>closeBrowserTab(i,e);box.appendChild(b)});let add=document.createElement('button');add.className='browser-add-tab';add.textContent='＋';add.onclick=newBrowserTab;box.appendChild(add)}
+function saveBrowserBookmark(){let target=browserTabsData[activeBrowserTab]?.url;if(!target)return;if(!browserBookmarks.some(x=>(typeof x==='string'?x:x.url)===target))browserBookmarks.push({url:target,time:Date.now()});localStorage.setItem('musabx_bookmarks',JSON.stringify(browserBookmarks));toast('Bookmark saved ⭐')}
+function showBrowserPanel(type){let panel=document.getElementById('browserPanel'),title=document.getElementById('browserPanelTitle'),list=document.getElementById('browserPanelList');panel.classList.add('open');title.textContent=type==='history'?'History':'Bookmarks';let data=type==='history'?[...browserHistory].reverse():[...browserBookmarks].reverse();list.innerHTML='';if(!data.length){list.innerHTML='<div class="browser-empty">Nothing saved yet.</div>';return}data.slice(0,60).forEach(entry=>{let u=typeof entry==='string'?entry:entry.url,b=document.createElement('button');b.className='browser-list-item';b.textContent=u;b.onclick=()=>browserLoad(u);list.appendChild(b)})}
+function closeBrowserPanel(){document.getElementById('browserPanel').classList.remove('open')}
+browserFrame.addEventListener('load',()=>{browserLoading.classList.remove('show');document.getElementById('browserStatus').textContent='READY'});
+browserUrl.addEventListener('keydown',e=>{if(e.key==='Enter')browserGo()});
+renderBrowserTabs();browserLoad(browserTabsData[activeBrowserTab].url,{remember:false});
 
-
-
-
-
-// =========================
-// MOBILE SUPPORT
-// =========================
-
-
-function mobileCheck(){
-
-
-if(window.innerWidth < 700){
-
-
-document.querySelector(".sidebar")
-.style.width="120px";
-
-
-
-document.querySelector(".logo")
-.style.fontSize="20px";
-
-
-}
-
-
-}
-
-
-
-window.addEventListener(
-"resize",
-mobileCheck
-);
-
-
-
-mobileCheck();
-
-
-
-
-
-
-// =========================
-// WELCOME MESSAGE
-// =========================
-
-
-console.log(
-"MUSABX v2 READY 🚀"
-);
-
-
-
+updateStats();renderAchievements();
 </script>
-
-
 </body>
-
 </html>
