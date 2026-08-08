@@ -20,7 +20,7 @@ content="#050611"
 
 <meta
 name="description"
-content="MUSABX Browser - Browse the web"
+content="MUSABX Browser - Browse the web inside MUSABX"
 
 >
 
@@ -58,8 +58,6 @@ aria-label="Open navigation"
   id="sidebar"
 >
 
-  <!-- BRAND -->
-
 <a
 href="index.html"
 class="logo"
@@ -86,8 +84,6 @@ class="logo"
 
   </a>
 
-  <!-- MAIN -->
-
   <div class="nav-label">
     MAIN
   </div>
@@ -95,9 +91,7 @@ class="logo"
   <nav class="nav">
 
 ```
-<a
-  href="index.html"
->
+<a href="index.html">
 
   <span class="nav-icon">
     🏠
@@ -126,9 +120,7 @@ class="logo"
 </a>
 
 
-<a
-  href="games.html"
->
+<a href="games.html">
 
   <span class="nav-icon">
     🎮
@@ -141,9 +133,7 @@ class="logo"
 </a>
 
 
-<a
-  href="library.html"
->
+<a href="library.html">
 
   <span class="nav-icon">
     📚
@@ -156,9 +146,7 @@ class="logo"
 </a>
 
 
-<a
-  href="achievements.html"
->
+<a href="achievements.html">
 
   <span class="nav-icon">
     🏆
@@ -173,8 +161,6 @@ class="logo"
 
   </nav>
 
-  <!-- SYSTEM -->
-
   <div class="nav-label">
     SYSTEM
   </div>
@@ -182,9 +168,7 @@ class="logo"
   <nav class="nav">
 
 ```
-<a
-  href="settings.html"
->
+<a href="settings.html">
 
   <span class="nav-icon">
     ⚙️
@@ -199,18 +183,14 @@ class="logo"
 
   </nav>
 
-  <!-- SIDEBAR STATUS -->
-
   <div class="sidebar-bottom">
 
 ```
 <div class="panel sidebar-status">
 
-
   <div class="sidebar-status-title">
     BROWSER STATUS
   </div>
-
 
   <div class="sidebar-status-row">
 
@@ -222,11 +202,9 @@ class="logo"
 
   </div>
 
-
   <div class="sidebar-version">
-    MUSABX Web Engine
+    MUSABX Web
   </div>
-
 
 </div>
 ```
@@ -242,7 +220,7 @@ class="logo"
 <main class="main">
 
   <!-- =======================================================
-       TOP BAR
+       TOPBAR
        ======================================================= -->
 
   <header class="topbar">
@@ -250,11 +228,9 @@ class="logo"
 ```
 <div class="topbar-left">
 
-
   <div class="mobile-page-title">
     Browser
   </div>
-
 
 </div>
 
@@ -274,6 +250,16 @@ class="logo"
 
 
   <a
+    href="library.html"
+    class="icon-btn"
+    title="Library"
+    aria-label="Library"
+  >
+    📚
+  </a>
+
+
+  <a
     href="settings.html"
     class="icon-btn"
     title="Settings"
@@ -289,7 +275,7 @@ class="logo"
   </header>
 
   <!-- =======================================================
-       PAGE CONTENT
+       CONTENT
        ======================================================= -->
 
   <div class="content">
@@ -304,19 +290,16 @@ class="logo"
 
   <div class="badge">
 
-
     <span class="status-dot"></span>
 
-
     MUSABX BROWSER
-
 
   </div>
 
 
   <h1>
 
-    Explore the
+    Browse the
 
     <span>
       web.
@@ -328,8 +311,8 @@ class="logo"
   <p>
 
     Search the internet, open websites,
-    and explore from inside your MUSABX
-    web hub.
+    and keep your browsing experience
+    inside MUSABX.
 
   </p>
 
@@ -338,45 +321,49 @@ class="logo"
 
 
 <!-- =====================================================
-     BROWSER SEARCH AREA
+     BROWSER SEARCH
      ===================================================== -->
 
-<section class="browser-search-section">
+<section>
 
 
-  <div class="browser-search-panel">
+  <div class="browser-panel">
 
 
-    <div class="browser-search-header">
+    <div class="browser-panel-top">
 
 
-      <div class="browser-window-dots">
-
-
-        <span></span>
-
+      <div class="browser-dots">
 
         <span></span>
-
-
         <span></span>
-
+        <span></span>
 
       </div>
 
 
-      <div class="browser-window-title">
+      <div class="browser-tab">
 
-        MUSABX Browser
+        <span>
+          🌐
+        </span>
+
+        <span>
+          MUSABX Browser
+        </span>
 
       </div>
 
 
-      <div class="browser-window-status">
+      <div class="browser-panel-actions">
 
-        <span class="status-dot"></span>
-
-        Online
+        <button
+          type="button"
+          id="browserRefresh"
+          title="Refresh"
+        >
+          ↻
+        </button>
 
       </div>
 
@@ -384,19 +371,14 @@ class="logo"
     </div>
 
 
-    <form
-      class="browser-search-form"
-      id="searchForm"
-      autocomplete="off"
-    >
+    <div class="browser-toolbar">
 
 
       <button
         type="button"
-        class="browser-control"
-        id="backButton"
+        class="browser-nav-btn"
+        id="browserBack"
         title="Back"
-        aria-label="Back"
       >
         ←
       </button>
@@ -404,10 +386,9 @@ class="logo"
 
       <button
         type="button"
-        class="browser-control"
-        id="forwardButton"
+        class="browser-nav-btn"
+        id="browserForward"
         title="Forward"
-        aria-label="Forward"
       >
         →
       </button>
@@ -415,56 +396,63 @@ class="logo"
 
       <button
         type="button"
-        class="browser-control"
-        id="reloadButton"
-        title="Reload"
-        aria-label="Reload"
+        class="browser-nav-btn"
+        id="browserHome"
+        title="Home"
       >
-        ↻
+        ⌂
       </button>
 
 
-      <div class="address-wrapper">
+      <form
+        class="browser-address"
+        id="browserForm"
+        autocomplete="off"
+      >
 
 
-        <span class="address-lock">
+        <span class="address-icon">
           🔒
         </span>
 
 
         <input
-          id="searchInput"
-          class="address-input"
           type="text"
-          placeholder="Search or enter a website address..."
+          id="browserInput"
+          placeholder="Search DuckDuckGo or enter a URL..."
           autocomplete="off"
           spellcheck="false"
-          aria-label="Website address"
         >
 
 
         <button
-          type="button"
-          class="address-clear"
-          id="clearAddress"
-          aria-label="Clear"
+          type="submit"
+          title="Go"
         >
-          ×
+          →
         </button>
 
 
-      </div>
+      </form>
 
 
-      <button
-        class="primary-btn browser-go"
-        type="submit"
-      >
-        Go
-      </button>
+    </div>
 
 
-    </form>
+    <div class="browser-status">
+
+
+      <span
+        class="status-dot"
+      ></span>
+
+
+      <span id="browserStatusText">
+        Ready
+      </span>
+
+
+    </div>
 
 
   </div>
@@ -474,7 +462,7 @@ class="logo"
 
 
 <!-- =====================================================
-     SEARCH SUGGESTIONS
+     QUICK SEARCH
      ===================================================== -->
 
 <section>
@@ -490,7 +478,7 @@ class="logo"
       </h2>
 
       <p>
-        Start with one of these
+        Search the web instantly
       </p>
 
     </div>
@@ -499,20 +487,162 @@ class="logo"
   </div>
 
 
-  <div class="quick-search-grid">
+  <div class="search-engines">
 
 
     <button
-      class="quick-search-card"
       type="button"
-      data-search="YouTube"
+      class="search-engine active"
+      data-engine="duckduckgo"
     >
 
+      <span class="search-engine-icon">
+        🦆
+      </span>
 
-      <div class="quick-search-icon">
+      <span>
+
+        <strong>
+          DuckDuckGo
+        </strong>
+
+        <small>
+          Private search
+        </small>
+
+      </span>
+
+    </button>
+
+
+    <button
+      type="button"
+      class="search-engine"
+      data-engine="google"
+    >
+
+      <span class="search-engine-icon">
+        🔎
+      </span>
+
+      <span>
+
+        <strong>
+          Google
+        </strong>
+
+        <small>
+          Web search
+        </small>
+
+      </span>
+
+    </button>
+
+
+    <button
+      type="button"
+      class="search-engine"
+      data-engine="bing"
+    >
+
+      <span class="search-engine-icon">
+        🌐
+      </span>
+
+      <span>
+
+        <strong>
+          Bing
+        </strong>
+
+        <small>
+          Microsoft search
+        </small>
+
+      </span>
+
+    </button>
+
+
+    <button
+      type="button"
+      class="search-engine"
+      data-engine="wikipedia"
+    >
+
+      <span class="search-engine-icon">
+        📖
+      </span>
+
+      <span>
+
+        <strong>
+          Wikipedia
+        </strong>
+
+        <small>
+          Encyclopedia
+        </small>
+
+      </span>
+
+    </button>
+
+
+  </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     FAVORITE WEBSITES
+     ===================================================== -->
+
+<section>
+
+
+  <div class="section-header">
+
+
+    <div>
+
+      <h2>
+        Quick Access
+      </h2>
+
+      <p>
+        Frequently used websites
+      </p>
+
+    </div>
+
+
+    <a
+      href="library.html"
+      class="section-link"
+    >
+      Open Library →
+    </a>
+
+
+  </div>
+
+
+  <div class="website-grid">
+
+
+    <a
+      href="https://www.youtube.com"
+      target="_blank"
+      rel="noopener"
+      class="website-card"
+    >
+
+      <div class="website-icon">
         ▶️
       </div>
-
 
       <div>
 
@@ -521,31 +651,28 @@ class="logo"
         </strong>
 
         <span>
-          Search YouTube
+          youtube.com
         </span>
 
       </div>
 
-
-      <span class="quick-arrow">
+      <span class="website-arrow">
         →
       </span>
 
+    </a>
 
-    </button>
 
-
-    <button
-      class="quick-search-card"
-      type="button"
-      data-search="Google"
+    <a
+      href="https://www.google.com"
+      target="_blank"
+      rel="noopener"
+      class="website-card"
     >
 
-
-      <div class="quick-search-icon">
+      <div class="website-icon">
         🔎
       </div>
-
 
       <div>
 
@@ -554,64 +681,28 @@ class="logo"
         </strong>
 
         <span>
-          Search Google
+          google.com
         </span>
 
       </div>
 
-
-      <span class="quick-arrow">
+      <span class="website-arrow">
         →
       </span>
 
+    </a>
 
-    </button>
 
-
-    <button
-      class="quick-search-card"
-      type="button"
-      data-search="Wikipedia"
+    <a
+      href="https://github.com"
+      target="_blank"
+      rel="noopener"
+      class="website-card"
     >
 
-
-      <div class="quick-search-icon">
-        📖
-      </div>
-
-
-      <div>
-
-        <strong>
-          Wikipedia
-        </strong>
-
-        <span>
-          Search Wikipedia
-        </span>
-
-      </div>
-
-
-      <span class="quick-arrow">
-        →
-      </span>
-
-
-    </button>
-
-
-    <button
-      class="quick-search-card"
-      type="button"
-      data-search="GitHub"
-    >
-
-
-      <div class="quick-search-icon">
+      <div class="website-icon">
         💻
       </div>
-
 
       <div>
 
@@ -620,31 +711,58 @@ class="logo"
         </strong>
 
         <span>
-          Explore GitHub
+          github.com
         </span>
 
       </div>
 
-
-      <span class="quick-arrow">
+      <span class="website-arrow">
         →
       </span>
 
+    </a>
 
-    </button>
 
-
-    <button
-      class="quick-search-card"
-      type="button"
-      data-search="Reddit"
+    <a
+      href="https://www.wikipedia.org"
+      target="_blank"
+      rel="noopener"
+      class="website-card"
     >
 
-
-      <div class="quick-search-icon">
-        💬
+      <div class="website-icon">
+        📖
       </div>
 
+      <div>
+
+        <strong>
+          Wikipedia
+        </strong>
+
+        <span>
+          wikipedia.org
+        </span>
+
+      </div>
+
+      <span class="website-arrow">
+        →
+      </span>
+
+    </a>
+
+
+    <a
+      href="https://www.reddit.com"
+      target="_blank"
+      rel="noopener"
+      class="website-card"
+    >
+
+      <div class="website-icon">
+        💬
+      </div>
 
       <div>
 
@@ -653,51 +771,111 @@ class="logo"
         </strong>
 
         <span>
-          Search Reddit
+          reddit.com
         </span>
 
       </div>
 
-
-      <span class="quick-arrow">
+      <span class="website-arrow">
         →
       </span>
 
+    </a>
 
-    </button>
 
-
-    <button
-      class="quick-search-card"
-      type="button"
-      data-search="news"
+    <a
+      href="https://www.roblox.com"
+      target="_blank"
+      rel="noopener"
+      class="website-card"
     >
 
-
-      <div class="quick-search-icon">
-        📰
+      <div class="website-icon">
+        🟥
       </div>
-
 
       <div>
 
         <strong>
-          News
+          Roblox
         </strong>
 
         <span>
-          Find the latest news
+          roblox.com
         </span>
 
       </div>
 
-
-      <span class="quick-arrow">
+      <span class="website-arrow">
         →
       </span>
 
+    </a>
 
+
+  </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     RECENT SEARCHES
+     ===================================================== -->
+
+<section>
+
+
+  <div class="section-header">
+
+
+    <div>
+
+      <h2>
+        Recent Searches
+      </h2>
+
+      <p>
+        Your latest browser activity
+      </p>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="section-button"
+      id="clearHistory"
+    >
+      Clear History
     </button>
+
+
+  </div>
+
+
+  <div
+    class="browser-history"
+    id="browserHistory"
+  >
+
+
+    <div class="history-empty">
+
+      <div>
+        🕘
+      </div>
+
+      <h3>
+        No recent searches
+      </h3>
+
+      <p>
+        Searches you make will appear
+        here.
+      </p>
+
+    </div>
 
 
   </div>
@@ -723,7 +901,7 @@ class="logo"
       </h2>
 
       <p>
-        Built into MUSABX
+        Built into your MUSABX experience
       </p>
 
     </div>
@@ -735,61 +913,7 @@ class="logo"
   <div class="feature-grid">
 
 
-    <div class="feature">
-
-
-      <div class="feature-icon">
-        🔎
-      </div>
-
-
-      <div class="badge">
-        SEARCH
-      </div>
-
-
-      <h2>
-        Search anything
-      </h2>
-
-
-      <p>
-
-        Enter a search query or
-        website address. MUSABX
-        handles the rest.
-
-      </p>
-
-
-      <div class="feature-list">
-
-
-        <div>
-          <span>✓</span>
-          Search engine support
-        </div>
-
-
-        <div>
-          <span>✓</span>
-          Direct URL navigation
-        </div>
-
-
-        <div>
-          <span>✓</span>
-          Automatic URL detection
-        </div>
-
-
-      </div>
-
-
-    </div>
-
-
-    <div class="feature">
+    <div class="feature-card">
 
 
       <div class="feature-icon">
@@ -797,101 +921,81 @@ class="logo"
       </div>
 
 
-      <div class="badge">
-        FAST
-      </div>
-
-
-      <h2>
-        Quick access
-      </h2>
+      <h3>
+        Fast Search
+      </h3>
 
 
       <p>
-
-        Keep frequently used websites
-        close with quick links and
-        saved destinations.
-
+        Quickly search the web without
+        leaving your MUSABX dashboard.
       </p>
-
-
-      <div class="feature-list">
-
-
-        <div>
-          <span>✓</span>
-          Quick search buttons
-        </div>
-
-
-        <div>
-          <span>✓</span>
-          Browser shortcuts
-        </div>
-
-
-        <div>
-          <span>✓</span>
-          Easy navigation
-        </div>
-
-
-      </div>
 
 
     </div>
 
 
-    <div class="feature">
+    <div class="feature-card">
 
 
       <div class="feature-icon">
-        🔒
+        🔗
       </div>
 
 
-      <div class="badge">
-        CONTROL
-      </div>
-
-
-      <h2>
-        Your preferences
-      </h2>
+      <h3>
+        Quick Links
+      </h3>
 
 
       <p>
-
-        Configure search and browser
-        behavior from your MUSABX
-        settings page.
-
+        Keep your favorite destinations
+        close and easy to reach.
       </p>
 
 
-      <div class="feature-list">
+    </div>
 
 
-        <div>
-          <span>✓</span>
-          Search engine selection
-        </div>
+    <div class="feature-card">
 
 
-        <div>
-          <span>✓</span>
-          New-tab preferences
-        </div>
-
-
-        <div>
-          <span>✓</span>
-          Local preferences
-        </div>
-
-
+      <div class="feature-icon">
+        🕘
       </div>
+
+
+      <h3>
+        Search History
+      </h3>
+
+
+      <p>
+        Quickly return to searches
+        you've recently made.
+      </p>
+
+
+    </div>
+
+
+    <div class="feature-card">
+
+
+      <div class="feature-icon">
+        🛡️
+      </div>
+
+
+      <h3>
+        Simple & Private
+      </h3>
+
+
+      <p>
+        MUSABX keeps browser preferences
+        stored locally in your browser.
+      </p>
 
 
     </div>
@@ -904,7 +1008,7 @@ class="logo"
 
 
 <!-- =====================================================
-     POPULAR SITES
+     SHORTCUTS
      ===================================================== -->
 
 <section>
@@ -916,220 +1020,11 @@ class="logo"
     <div>
 
       <h2>
-        Popular Websites
+        Keyboard Shortcuts
       </h2>
 
       <p>
-        Jump somewhere useful
-      </p>
-
-    </div>
-
-
-    <span>
-      External sites
-    </span>
-
-
-  </div>
-
-
-  <div class="grid">
-
-
-    <a
-      href="https://www.youtube.com"
-      target="_blank"
-      rel="noopener"
-      class="card website-card"
-    >
-
-
-      <div class="card-top">
-
-
-        <div class="card-icon">
-          ▶️
-        </div>
-
-
-        <span class="card-arrow">
-          ↗
-        </span>
-
-
-      </div>
-
-
-      <h3>
-        YouTube
-      </h3>
-
-
-      <p>
-        Videos, music, creators,
-        and more.
-      </p>
-
-
-      <span class="website-domain">
-        youtube.com
-      </span>
-
-
-    </a>
-
-
-    <a
-      href="https://www.google.com"
-      target="_blank"
-      rel="noopener"
-      class="card website-card"
-    >
-
-
-      <div class="card-top">
-
-
-        <div class="card-icon">
-          🔎
-        </div>
-
-
-        <span class="card-arrow">
-          ↗
-        </span>
-
-
-      </div>
-
-
-      <h3>
-        Google
-      </h3>
-
-
-      <p>
-        Search the world's information.
-      </p>
-
-
-      <span class="website-domain">
-        google.com
-      </span>
-
-
-    </a>
-
-
-    <a
-      href="https://github.com"
-      target="_blank"
-      rel="noopener"
-      class="card website-card"
-    >
-
-
-      <div class="card-top">
-
-
-        <div class="card-icon">
-          💻
-        </div>
-
-
-        <span class="card-arrow">
-          ↗
-        </span>
-
-
-      </div>
-
-
-      <h3>
-        GitHub
-      </h3>
-
-
-      <p>
-        Code, repositories, and projects.
-      </p>
-
-
-      <span class="website-domain">
-        github.com
-      </span>
-
-
-    </a>
-
-
-    <a
-      href="https://www.wikipedia.org"
-      target="_blank"
-      rel="noopener"
-      class="card website-card"
-    >
-
-
-      <div class="card-top">
-
-
-        <div class="card-icon">
-          📚
-        </div>
-
-
-        <span class="card-arrow">
-          ↗
-        </span>
-
-
-      </div>
-
-
-      <h3>
-        Wikipedia
-      </h3>
-
-
-      <p>
-        The free online encyclopedia.
-      </p>
-
-
-      <span class="website-domain">
-        wikipedia.org
-      </span>
-
-
-    </a>
-
-
-  </div>
-
-
-</section>
-
-
-<!-- =====================================================
-     BROWSER HELP
-     ===================================================== -->
-
-<section>
-
-
-  <div class="section-header">
-
-
-    <div>
-
-      <h2>
-        How to use MUSABX Browser
-      </h2>
-
-      <p>
-        Three simple steps
+        Navigate faster
       </p>
 
     </div>
@@ -1138,174 +1033,35 @@ class="logo"
   </div>
 
 
-  <div class="steps">
+  <div class="shortcut-grid">
 
 
-    <div class="step">
+    <div class="shortcut">
 
-
-      <div class="step-number">
-        01
+      <div class="shortcut-key">
+        /
       </div>
-
-
-      <div class="step-icon">
-        🔎
-      </div>
-
-
-      <div>
-
-        <h3>
-          Enter your search
-        </h3>
-
-        <p>
-
-          Type a search phrase,
-          website name, or complete
-          web address.
-
-        </p>
-
-      </div>
-
-
-    </div>
-
-
-    <div class="step">
-
-
-      <div class="step-number">
-        02
-      </div>
-
-
-      <div class="step-icon">
-        ⚡
-      </div>
-
-
-      <div>
-
-        <h3>
-          Press Go
-        </h3>
-
-        <p>
-
-          MUSABX detects whether
-          you're searching or opening
-          a website.
-
-        </p>
-
-      </div>
-
-
-    </div>
-
-
-    <div class="step">
-
-
-      <div class="step-number">
-        03
-      </div>
-
-
-      <div class="step-icon">
-        🌐
-      </div>
-
-
-      <div>
-
-        <h3>
-          Explore
-        </h3>
-
-        <p>
-
-          Continue browsing using
-          the browser tools and
-          navigation controls.
-
-        </p>
-
-      </div>
-
-
-    </div>
-
-
-  </div>
-
-
-</section>
-
-
-<!-- =====================================================
-     STATUS
-     ===================================================== -->
-
-<section>
-
-
-  <div class="section-header">
-
-
-    <div>
-
-      <h2>
-        Browser Status
-      </h2>
-
-      <p>
-        Current browser information
-      </p>
-
-    </div>
-
-
-  </div>
-
-
-  <div class="status-grid">
-
-
-    <div class="status-card">
-
-
-      <div class="status-card-icon">
-        🟢
-      </div>
-
 
       <div>
 
         <strong>
-          Browser
+          Focus Search
         </strong>
 
         <span>
-          Ready
+          Jump to the address bar
         </span>
 
       </div>
 
-
     </div>
 
 
-    <div class="status-card">
+    <div class="shortcut">
 
-
-      <div class="status-card-icon">
-        🔎
+      <div class="shortcut-key">
+        Enter
       </div>
-
 
       <div>
 
@@ -1314,59 +1070,52 @@ class="logo"
         </strong>
 
         <span>
-          Available
+          Open your search
         </span>
 
       </div>
-
 
     </div>
 
 
-    <div class="status-card">
+    <div class="shortcut">
 
-
-      <div class="status-card-icon">
-        ⚡
+      <div class="shortcut-key">
+        Alt ←
       </div>
-
 
       <div>
 
         <strong>
-          Navigation
+          Go Back
         </strong>
 
         <span>
-          Ready
+          Return to the previous page
         </span>
 
       </div>
-
 
     </div>
 
 
-    <div class="status-card">
+    <div class="shortcut">
 
-
-      <div class="status-card-icon">
-        💾
+      <div class="shortcut-key">
+        Ctrl L
       </div>
-
 
       <div>
 
         <strong>
-          Preferences
+          Address Bar
         </strong>
 
         <span>
-          Local
+          Focus the browser input
         </span>
 
       </div>
-
 
     </div>
 
@@ -1378,7 +1127,7 @@ class="logo"
 
 
 <!-- =====================================================
-     FINAL BROWSER CTA
+     BROWSER CTA
      ===================================================== -->
 
 <section class="final-cta">
@@ -1391,23 +1140,25 @@ class="logo"
 
 
     <div class="badge">
-      READY
+      MUSABX BROWSER
     </div>
 
 
     <h2>
 
-      Where do you want
-      to go <span>next?</span>
+      The web is
+
+      <span>
+        one search away.
+      </span>
 
     </h2>
 
 
     <p>
 
-      Search for something new
-      or open one of your favorite
-      destinations.
+      Search, explore, and jump
+      wherever you want to go.
 
     </p>
 
@@ -1417,18 +1168,18 @@ class="logo"
 
       <button
         type="button"
-        class="primary-btn cta-button"
-        id="focusSearch"
+        class="primary-btn"
+        id="focusBrowserSearch"
       >
-        Start Searching
+        🔎 Start Searching
       </button>
 
 
       <a
-        href="index.html"
+        href="games.html"
         class="secondary-btn"
       >
-        Back Home
+        🎮 Play Games
       </a>
 
 
@@ -1481,31 +1232,25 @@ class="logo"
     Home
   </a>
 
-
   <a href="browser.html">
     Browser
   </a>
-
 
   <a href="games.html">
     Games
   </a>
 
-
   <a href="library.html">
     Library
   </a>
-
 
   <a href="achievements.html">
     Achievements
   </a>
 
-
   <a href="settings.html">
     Settings
   </a>
-
 
 </div>
 
@@ -1520,19 +1265,19 @@ class="logo"
 </main>
 
 <!-- =========================================================
-     SHARED SCRIPT
+     SHARED JAVASCRIPT
      ========================================================= -->
 
 <script src="script.js"></script>
 
 <!-- =========================================================
-     EXISTING BROWSER SCRIPT
+     EXISTING BROWSER JAVASCRIPT
      ========================================================= -->
 
 <script src="browser.js"></script>
 
 <!-- =========================================================
-     BROWSER PAGE CONTROLS
+     EXTRA BROWSER UI
      ========================================================= -->
 
 <script>
@@ -1542,53 +1287,60 @@ document.addEventListener(
   () => {
 
 
-    const input =
-      document.getElementById(
-        "searchInput"
-      );
-
-
-    const clearButton =
-      document.getElementById(
-        "clearAddress"
-      );
-
-
-    const focusButton =
-      document.getElementById(
-        "focusSearch"
-      );
-
-
-    const quickSearches =
-      document.querySelectorAll(
-        "[data-search]"
-      );
-
-
     /*
-     * QUICK SEARCH
+     * SEARCH ENGINE SETTINGS
      */
 
-    quickSearches.forEach(
-      (button) => {
+    const engines =
+      document.querySelectorAll(
+        ".search-engine"
+      );
 
 
-        button.addEventListener(
+    const browserInput =
+      document.getElementById(
+        "browserInput"
+      );
+
+
+    let selectedEngine =
+      "duckduckgo";
+
+
+    engines.forEach(
+      (engine) => {
+
+
+        engine.addEventListener(
           "click",
           () => {
 
 
-            if (!input) {
-              return;
+            engines.forEach(
+              (item) => {
+
+                item.classList.remove(
+                  "active"
+                );
+
+              }
+            );
+
+
+            engine.classList.add(
+              "active"
+            );
+
+
+            selectedEngine =
+              engine.dataset.engine;
+
+
+            if (browserInput) {
+
+              browserInput.focus();
+
             }
-
-
-            input.value =
-              button.dataset.search;
-
-
-            input.focus();
 
 
           }
@@ -1600,27 +1352,356 @@ document.addEventListener(
 
 
     /*
-     * CLEAR ADDRESS
+     * SEARCH ENGINE FORM
      */
 
-    if (clearButton) {
+    const browserForm =
+      document.getElementById(
+        "browserForm"
+      );
 
 
-      clearButton.addEventListener(
-        "click",
-        () => {
+    if (browserForm) {
 
 
-          if (!input) {
+      browserForm.addEventListener(
+        "submit",
+        (event) => {
+
+
+          /*
+           * browser.js can take over
+           * if it already handles this.
+           */
+
+          if (
+            typeof window.searchWeb ===
+            "function"
+          ) {
+
+
+            return;
+
+          }
+
+
+          event.preventDefault();
+
+
+          const value =
+            browserInput.value.trim();
+
+
+          if (!value) {
             return;
           }
 
 
-          input.value =
-            "";
+          let destination = "";
 
 
-          input.focus();
+          if (
+            /^https?:\/\//i.test(
+              value
+            )
+          ) {
+
+
+            destination =
+              value;
+
+
+          } else if (
+            /^[\w-]+\.[\w.-]+/.test(
+              value
+            )
+          ) {
+
+
+            destination =
+              "https://" + value;
+
+
+          } else {
+
+
+            if (
+              selectedEngine ===
+              "google"
+            ) {
+
+
+              destination =
+                "https://www.google.com/search?q=" +
+                encodeURIComponent(
+                  value
+                );
+
+
+            } else if (
+              selectedEngine ===
+              "bing"
+            ) {
+
+
+              destination =
+                "https://www.bing.com/search?q=" +
+                encodeURIComponent(
+                  value
+                );
+
+
+            } else if (
+              selectedEngine ===
+              "wikipedia"
+            ) {
+
+
+              destination =
+                "https://en.wikipedia.org/wiki/Special:Search?search=" +
+                encodeURIComponent(
+                  value
+                );
+
+
+            } else {
+
+
+              destination =
+                "https://duckduckgo.com/?q=" +
+                encodeURIComponent(
+                  value
+                );
+
+
+            }
+
+
+          }
+
+
+          window.open(
+            destination,
+            "_blank",
+            "noopener"
+          );
+
+
+          /*
+           * SAVE HISTORY
+           */
+
+          let history =
+            JSON.parse(
+              localStorage.getItem(
+                "musabx-browser-history"
+              ) || "[]"
+            );
+
+
+          history =
+            history.filter(
+              (item) =>
+                item !== value
+            );
+
+
+          history.unshift(
+            value
+          );
+
+
+          history =
+            history.slice(
+              0,
+              15
+            );
+
+
+          localStorage.setItem(
+            "musabx-browser-history",
+            JSON.stringify(
+              history
+            )
+          );
+
+
+          renderHistory();
+
+
+        }
+      );
+
+
+    }
+
+
+    /*
+     * HISTORY
+     */
+
+    const historyContainer =
+      document.getElementById(
+        "browserHistory"
+      );
+
+
+    function renderHistory() {
+
+
+      if (!historyContainer) {
+        return;
+      }
+
+
+      const history =
+        JSON.parse(
+          localStorage.getItem(
+            "musabx-browser-history"
+          ) || "[]"
+        );
+
+
+      if (
+        history.length === 0
+      ) {
+
+
+        historyContainer.innerHTML = `
+
+          <div class="history-empty">
+
+            <div>
+              🕘
+            </div>
+
+            <h3>
+              No recent searches
+            </h3>
+
+            <p>
+              Searches you make will appear here.
+            </p>
+
+          </div>
+
+        `;
+
+
+        return;
+
+      }
+
+
+      historyContainer.innerHTML =
+        "";
+
+
+      history.forEach(
+        (item) => {
+
+
+          const row =
+            document.createElement(
+              "div"
+            );
+
+
+          row.className =
+            "history-item";
+
+
+          row.innerHTML = `
+
+            <div class="history-icon">
+              🕘
+            </div>
+
+            <div class="history-text">
+
+              <strong>
+                ${item}
+              </strong>
+
+              <span>
+                Recent search
+              </span>
+
+            </div>
+
+            <button
+              type="button"
+              class="history-search"
+              title="Search again"
+            >
+              →
+            </button>
+
+          `;
+
+
+          row
+            .querySelector(
+              ".history-search"
+            )
+            .addEventListener(
+              "click",
+              () => {
+
+
+                if (browserInput) {
+
+                  browserInput.value =
+                    item;
+
+                  browserInput.focus();
+
+                }
+
+
+              }
+            );
+
+
+          historyContainer.appendChild(
+            row
+          );
+
+
+        }
+      );
+
+
+    }
+
+
+    renderHistory();
+
+
+    /*
+     * CLEAR HISTORY
+     */
+
+    const clearHistory =
+      document.getElementById(
+        "clearHistory"
+      );
+
+
+    if (clearHistory) {
+
+
+      clearHistory.addEventListener(
+        "click",
+        () => {
+
+
+          localStorage.removeItem(
+            "musabx-browser-history"
+          );
+
+
+          renderHistory();
 
 
         }
@@ -1634,6 +1715,12 @@ document.addEventListener(
      * FOCUS SEARCH
      */
 
+    const focusButton =
+      document.getElementById(
+        "focusBrowserSearch"
+      );
+
+
     if (focusButton) {
 
 
@@ -1642,95 +1729,17 @@ document.addEventListener(
         () => {
 
 
-          if (!input) {
-            return;
-          }
+          if (browserInput) {
 
 
-          input.focus();
+            browserInput.focus();
 
 
-          window.scrollTo(
-            {
-              top: 0,
-              behavior: "smooth"
-            }
-          );
-
-
-        }
-      );
-
-
-    }
-
-
-    /*
-     * ADDRESS INPUT SHORTCUT
-     */
-
-    if (input) {
-
-
-      input.addEventListener(
-        "keydown",
-        (event) => {
-
-
-          if (
-            event.key === "Escape"
-          ) {
-
-
-            input.value =
-              "";
-
-
-          }
-
-
-        }
-      );
-
-
-    }
-
-
-    /*
-     * BROWSER CONTROL FEEDBACK
-     *
-     * These only provide fallback
-     * behavior if browser.js does
-     * not already handle them.
-     */
-
-    const reloadButton =
-      document.getElementById(
-        "reloadButton"
-      );
-
-
-    if (reloadButton) {
-
-
-      reloadButton.addEventListener(
-        "click",
-        () => {
-
-
-          try {
-
-
-            window.location.reload();
-
-
-          } catch (
-            error
-          ) {
-
-
-            console.log(
-              "Reload unavailable."
+            browserInput.scrollIntoView(
+              {
+                behavior: "smooth",
+                block: "center"
+              }
             );
 
 
@@ -1745,27 +1754,125 @@ document.addEventListener(
 
 
     /*
-     * ANIMATE QUICK SEARCH CARDS
+     * SLASH SHORTCUT
      */
 
-    const cards =
-      document.querySelectorAll(
-        ".quick-search-card"
-      );
+    document.addEventListener(
+      "keydown",
+      (event) => {
 
 
-    cards.forEach(
-      (card, index) => {
+        if (
+          event.key === "/" &&
+          document.activeElement.tagName !==
+          "INPUT"
+        ) {
 
 
-        card.style.setProperty(
-          "--delay",
-          `${index * 50}ms`
-        );
+          event.preventDefault();
+
+
+          if (browserInput) {
+
+            browserInput.focus();
+
+          }
+
+
+        }
+
+
+        /*
+         * CTRL + L
+         */
+
+        if (
+          event.ctrlKey &&
+          event.key.toLowerCase() ===
+          "l"
+        ) {
+
+
+          event.preventDefault();
+
+
+          if (browserInput) {
+
+            browserInput.focus();
+
+            browserInput.select();
+
+          }
+
+
+        }
 
 
       }
     );
+
+
+    /*
+     * HOME BUTTON
+     */
+
+    const browserHome =
+      document.getElementById(
+        "browserHome"
+      );
+
+
+    if (browserHome) {
+
+
+      browserHome.addEventListener(
+        "click",
+        () => {
+
+
+          if (browserInput) {
+
+            browserInput.value =
+              "";
+
+            browserInput.focus();
+
+          }
+
+
+        }
+      );
+
+
+    }
+
+
+    /*
+     * REFRESH BUTTON
+     */
+
+    const browserRefresh =
+      document.getElementById(
+        "browserRefresh"
+      );
+
+
+    if (browserRefresh) {
+
+
+      browserRefresh.addEventListener(
+        "click",
+        () => {
+
+
+          window.location.reload();
+
+
+        }
+      );
+
+
+    }
 
 
   }
