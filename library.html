@@ -1,339 +1,1383 @@
-```html
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <meta
-    name="theme-color"
-    content="#050816"
-  >
-
-  <title>MUSABX Library</title>
-
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050611">
+  <meta name="description" content="MUSABX Library - Your saved content and favorites">
+  <title>MUSABX — Library</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <div class="page">
+<button class="mobile-menu" id="mobileMenu" type="button" aria-label="Open navigation">
+  ☰
+</button>
 
-    <!-- HEADER -->
+<aside class="sidebar" id="sidebar">
 
-    <header class="site-header">
+  <a href="index.html" class="logo">
+    <div class="logo-mark">M</div>
 
-      <a
-        class="brand"
-        href="index.html"
+```
+<div class="logo-text">
+  <strong>MUSABX</strong>
+  <span>Your web hub</span>
+</div>
+```
+
+  </a>
+
+  <div class="nav-label">MAIN</div>
+
+  <nav class="nav">
+
+```
+<a href="index.html">
+  <span class="nav-icon">🏠</span>
+  <span>Home</span>
+</a>
+
+<a href="browser.html">
+  <span class="nav-icon">🌐</span>
+  <span>Browser</span>
+</a>
+
+<a href="games.html">
+  <span class="nav-icon">🎮</span>
+  <span>Games</span>
+</a>
+
+<a href="library.html" class="active">
+  <span class="nav-icon">📚</span>
+  <span>Library</span>
+</a>
+
+<a href="achievements.html">
+  <span class="nav-icon">🏆</span>
+  <span>Achievements</span>
+</a>
+```
+
+  </nav>
+
+  <div class="nav-label">SYSTEM</div>
+
+  <nav class="nav">
+
+```
+<a href="settings.html">
+  <span class="nav-icon">⚙️</span>
+  <span>Settings</span>
+</a>
+```
+
+  </nav>
+
+  <div class="sidebar-bottom">
+
+```
+<div class="panel sidebar-status">
+
+  <div class="sidebar-status-title">
+    LIBRARY STATUS
+  </div>
+
+  <div class="sidebar-status-row">
+    <span class="status-dot"></span>
+    <span>Library ready</span>
+  </div>
+
+  <div class="sidebar-version">
+    MUSABX Library
+  </div>
+
+</div>
+```
+
+  </div>
+
+</aside>
+
+<main class="main">
+
+  <header class="topbar">
+
+```
+<div class="topbar-left">
+  <div class="mobile-page-title">
+    Library
+  </div>
+</div>
+
+<div class="top-actions">
+
+  <button
+    class="icon-btn"
+    id="fullscreenButton"
+    type="button"
+    title="Fullscreen"
+    aria-label="Fullscreen"
+  >
+    ⛶
+  </button>
+
+  <a
+    href="settings.html"
+    class="icon-btn"
+    title="Settings"
+    aria-label="Settings"
+  >
+    ⚙
+  </a>
+
+</div>
+```
+
+  </header>
+
+  <div class="content">
+
+```
+<!-- HERO -->
+
+<section class="hero">
+
+  <div class="badge">
+    <span class="status-dot"></span>
+    MUSABX LIBRARY
+  </div>
+
+  <h1>
+    Everything you
+    <span>save.</span>
+  </h1>
+
+  <p>
+    Keep your favorite games, websites,
+    links, and content organized in one
+    place.
+  </p>
+
+</section>
+
+
+<!-- LIBRARY STATS -->
+
+<section>
+
+  <div class="section-header">
+
+    <div>
+      <h2>Library Overview</h2>
+      <p>Your saved MUSABX content</p>
+    </div>
+
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+
+      <div class="stat-icon">⭐</div>
+
+      <div
+        class="stat-value"
+        id="favoriteCount"
       >
-
-        <div class="brand-logo">
-          M
-        </div>
-
-        <div class="brand-name">
-          MUSABX
-        </div>
-
-      </a>
-
-
-      <div class="header-actions">
-
-        <a
-          class="btn"
-          href="index.html"
-        >
-          Home
-        </a>
-
-        <a
-          class="btn"
-          href="browser.html"
-        >
-          Browser
-        </a>
-
+        0
       </div>
 
-    </header>
+      <div class="stat-label">
+        Favorites
+      </div>
+
+      <div class="stat-change">
+        Saved locally
+      </div>
+
+    </div>
 
 
-    <!-- MAIN -->
+    <div class="stat">
 
-    <main class="page-content">
+      <div class="stat-icon">🎮</div>
 
-      <section class="hero">
+      <div
+        class="stat-value"
+        id="gameCount"
+      >
+        0
+      </div>
 
-        <h1>Library</h1>
+      <div class="stat-label">
+        Saved Games
+      </div>
 
-        <p>
-          Your saved MUSABX pages, games, and favorites
-          in one place.
-        </p>
+      <div class="stat-change">
+        From Game Center
+      </div>
 
-      </section>
-
-
-      <!-- SEARCH -->
-
-      <section class="section">
-
-        <div class="search-box">
-
-          <input
-            id="librarySearch"
-            type="search"
-            placeholder="Search your library..."
-            autocomplete="off"
-          >
-
-        </div>
-
-      </section>
+    </div>
 
 
-      <!-- LIBRARY -->
+    <div class="stat">
 
-      <section class="section">
+      <div class="stat-icon">🌐</div>
 
-        <div class="section-title">
+      <div
+        class="stat-value"
+        id="siteCount"
+      >
+        0
+      </div>
 
-          <h2>
-            Your Library
-          </h2>
+      <div class="stat-label">
+        Saved Websites
+      </div>
 
-          <span id="libraryCount">
-            0 items
-          </span>
+      <div class="stat-change">
+        Quick access
+      </div>
 
-        </div>
-
-
-        <div
-          class="library-grid"
-          id="libraryGrid"
-        >
-
-          <!-- Items are loaded by JavaScript -->
-
-        </div>
+    </div>
 
 
-        <div
-          class="empty"
-          id="emptyState"
-        >
+    <div class="stat">
 
-          <div class="empty-icon">
-            📚
-          </div>
+      <div class="stat-icon">📁</div>
 
-          <strong>
-            Your library is empty
-          </strong>
+      <div
+        class="stat-value"
+        id="totalCount"
+      >
+        0
+      </div>
 
-          <p>
-            Saved items will appear here.
-          </p>
+      <div class="stat-label">
+        Total Items
+      </div>
 
-        </div>
+      <div class="stat-change">
+        In your library
+      </div>
 
-      </section>
+    </div>
 
-    </main>
+  </div>
+
+</section>
 
 
-    <footer>
-      MUSABX Library
-    </footer>
+<!-- LIBRARY SEARCH -->
+
+<section>
+
+  <div class="library-search-panel">
+
+    <div>
+
+      <div class="badge">
+        LIBRARY SEARCH
+      </div>
+
+      <h2>
+        Find something quickly.
+      </h2>
+
+      <p>
+        Search through your saved
+        content.
+      </p>
+
+    </div>
+
+    <div class="library-search">
+
+      <span>🔎</span>
+
+      <input
+        type="search"
+        id="librarySearch"
+        placeholder="Search your library..."
+        autocomplete="off"
+      >
+
+      <button
+        type="button"
+        id="clearLibrarySearch"
+      >
+        ×
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- FILTERS -->
+
+<section>
+
+  <div class="section-header">
+
+    <div>
+      <h2>Your Collection</h2>
+      <p>Organize your saved content</p>
+    </div>
+
+  </div>
+
+  <div class="library-filters">
+
+    <button
+      class="library-filter active"
+      data-library-filter="all"
+      type="button"
+    >
+      Everything
+    </button>
+
+    <button
+      class="library-filter"
+      data-library-filter="games"
+      type="button"
+    >
+      🎮 Games
+    </button>
+
+    <button
+      class="library-filter"
+      data-library-filter="websites"
+      type="button"
+    >
+      🌐 Websites
+    </button>
+
+    <button
+      class="library-filter"
+      data-library-filter="favorites"
+      type="button"
+    >
+      ⭐ Favorites
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- SAVED GAMES -->
+
+<section
+  id="savedGamesSection"
+  data-library-type="games"
+>
+
+  <div class="section-header">
+
+    <div>
+
+      <h2>Saved Games</h2>
+
+      <p>
+        Your favorite games from MUSABX
+      </p>
+
+    </div>
+
+    <a
+      href="games.html"
+      class="section-link"
+    >
+      Browse Games →
+    </a>
 
   </div>
 
 
-  <script>
+  <div
+    class="library-grid"
+    id="savedGamesGrid"
+  >
 
-    /*
+    <div class="library-empty">
+
+      <div class="library-empty-icon">
+        🎮
+      </div>
+
+      <h3>
+        No saved games yet
+      </h3>
+
+      <p>
+        Favorite games from the Games
+        page and they'll appear here.
+      </p>
+
+      <a
+        href="games.html"
+        class="primary-btn"
+      >
+        Browse Games
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- SAVED WEBSITES -->
+
+<section
+  id="savedWebsitesSection"
+  data-library-type="websites"
+>
+
+  <div class="section-header">
+
+    <div>
+
+      <h2>Saved Websites</h2>
+
+      <p>
+        Your frequently used destinations
+      </p>
+
+    </div>
+
+    <a
+      href="browser.html"
+      class="section-link"
+    >
+      Open Browser →
+    </a>
+
+  </div>
+
+
+  <div
+    class="library-grid"
+    id="savedWebsitesGrid"
+  >
+
+
+    <article
+      class="library-card"
+      data-library-item="website"
+      data-name="YouTube"
+    >
+
+      <div class="library-card-icon">
+        ▶️
+      </div>
+
+      <div class="library-card-content">
+
+        <span class="library-card-type">
+          WEBSITE
+        </span>
+
+        <h3>
+          YouTube
+        </h3>
+
+        <p>
+          Videos, music, creators,
+          and entertainment.
+        </p>
+
+      </div>
+
+      <a
+        href="https://www.youtube.com"
+        target="_blank"
+        rel="noopener"
+        class="library-open"
+      >
+        Open →
+      </a>
+
+    </article>
+
+
+    <article
+      class="library-card"
+      data-library-item="website"
+      data-name="Google"
+    >
+
+      <div class="library-card-icon">
+        🔎
+      </div>
+
+      <div class="library-card-content">
+
+        <span class="library-card-type">
+          WEBSITE
+        </span>
+
+        <h3>
+          Google
+        </h3>
+
+        <p>
+          Search the web quickly.
+        </p>
+
+      </div>
+
+      <a
+        href="https://www.google.com"
+        target="_blank"
+        rel="noopener"
+        class="library-open"
+      >
+        Open →
+      </a>
+
+    </article>
+
+
+    <article
+      class="library-card"
+      data-library-item="website"
+      data-name="GitHub"
+    >
+
+      <div class="library-card-icon">
+        💻
+      </div>
+
+      <div class="library-card-content">
+
+        <span class="library-card-type">
+          WEBSITE
+        </span>
+
+        <h3>
+          GitHub
+        </h3>
+
+        <p>
+          Explore code and projects.
+        </p>
+
+      </div>
+
+      <a
+        href="https://github.com"
+        target="_blank"
+        rel="noopener"
+        class="library-open"
+      >
+        Open →
+      </a>
+
+    </article>
+
+
+    <article
+      class="library-card"
+      data-library-item="website"
+      data-name="Wikipedia"
+    >
+
+      <div class="library-card-icon">
+        📖
+      </div>
+
+      <div class="library-card-content">
+
+        <span class="library-card-type">
+          WEBSITE
+        </span>
+
+        <h3>
+          Wikipedia
+        </h3>
+
+        <p>
+          Explore the free encyclopedia.
+        </p>
+
+      </div>
+
+      <a
+        href="https://www.wikipedia.org"
+        target="_blank"
+        rel="noopener"
+        class="library-open"
+      >
+        Open →
+      </a>
+
+    </article>
+
+  </div>
+
+</section>
+
+
+<!-- QUICK LINKS -->
+
+<section>
+
+  <div class="section-header">
+
+    <div>
+
+      <h2>Quick Links</h2>
+
+      <p>
+        More places inside MUSABX
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="grid">
+
+
+    <a
+      href="browser.html"
+      class="card"
+    >
+
+      <div class="card-top">
+
+        <div class="card-icon">
+          🌐
+        </div>
+
+        <span class="card-arrow">
+          →
+        </span>
+
+      </div>
+
+      <h3>
+        Browser
+      </h3>
+
+      <p>
+        Search the web and open
+        websites.
+      </p>
+
+    </a>
+
+
+    <a
+      href="games.html"
+      class="card"
+    >
+
+      <div class="card-top">
+
+        <div class="card-icon">
+          🎮
+        </div>
+
+        <span class="card-arrow">
+          →
+        </span>
+
+      </div>
+
+      <h3>
+        Games
+      </h3>
+
+      <p>
+        Play games and save your
+        favorites.
+      </p>
+
+    </a>
+
+
+    <a
+      href="achievements.html"
+      class="card"
+    >
+
+      <div class="card-top">
+
+        <div class="card-icon">
+          🏆
+        </div>
+
+        <span class="card-arrow">
+          →
+        </span>
+
+      </div>
+
+      <h3>
+        Achievements
+      </h3>
+
+      <p>
+        Track everything you've
+        unlocked.
+      </p>
+
+    </a>
+
+
+    <a
+      href="settings.html"
+      class="card"
+    >
+
+      <div class="card-top">
+
+        <div class="card-icon">
+          ⚙️
+        </div>
+
+        <span class="card-arrow">
+          →
+        </span>
+
+      </div>
+
+      <h3>
+        Settings
+      </h3>
+
+      <p>
+        Customize your MUSABX
+        experience.
+      </p>
+
+    </a>
+
+
+  </div>
+
+</section>
+
+
+<!-- STORAGE -->
+
+<section>
+
+  <div class="section-header">
+
+    <div>
+
+      <h2>
+        Local Storage
+      </h2>
+
+      <p>
+        Your library is stored in
+        this browser.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="storage-panel">
+
+
+    <div class="storage-icon">
+      💾
+    </div>
+
+
+    <div class="storage-content">
+
+      <div class="badge">
+        LOCAL DATA
+      </div>
+
+      <h2>
+        Your data stays here.
+      </h2>
+
+      <p>
+        MUSABX uses your browser's
+        local storage for preferences,
+        favorites, recent games,
+        and other local information.
+      </p>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="secondary-btn"
+      id="clearLibraryData"
+    >
+      Clear Library Data
+    </button>
+
+
+  </div>
+
+</section>
+
+
+<!-- CTA -->
+
+<section class="final-cta">
+
+  <div class="final-cta-glow"></div>
+
+  <div class="final-cta-content">
+
+    <div class="badge">
       MUSABX LIBRARY
+    </div>
 
-      The library uses localStorage.
+    <h2>
+      Build your
+      <span>collection.</span>
+    </h2>
 
-      That means saved items stay on this
-      device/browser without requiring a server.
-    */
+    <p>
+      Save your favorite games,
+      websites, and content as
+      you explore MUSABX.
+    </p>
+
+    <div class="final-cta-buttons">
+
+      <a
+        href="games.html"
+        class="primary-btn"
+      >
+        🎮 Find Games
+      </a>
+
+      <a
+        href="browser.html"
+        class="secondary-btn"
+      >
+        🌐 Browse Web
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+```
+
+  </div>
+
+  <!-- FOOTER -->
+
+  <footer class="footer">
+
+```
+<div class="footer-brand">
+
+  <div class="footer-logo">
+    M
+  </div>
+
+  <div>
+    <strong>MUSABX</strong>
+    <span>Your web hub</span>
+  </div>
+
+</div>
 
 
-    const libraryGrid =
-      document.getElementById("libraryGrid");
+<div class="footer-links">
 
-    const emptyState =
-      document.getElementById("emptyState");
+  <a href="index.html">
+    Home
+  </a>
 
-    const librarySearch =
-      document.getElementById("librarySearch");
+  <a href="browser.html">
+    Browser
+  </a>
 
-    const libraryCount =
-      document.getElementById("libraryCount");
+  <a href="games.html">
+    Games
+  </a>
+
+  <a href="library.html">
+    Library
+  </a>
+
+  <a href="achievements.html">
+    Achievements
+  </a>
+
+  <a href="settings.html">
+    Settings
+  </a>
+
+</div>
 
 
-    let libraryItems =
-      JSON.parse(
-        localStorage.getItem("musabxLibrary")
-      ) || [];
+<div class="footer-copy">
+  MUSABX • Built for the web
+</div>
+```
+
+  </footer>
+
+</main>
+
+<script src="script.js"></script>
+
+<script>
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+
+    const search =
+      document.getElementById(
+        "librarySearch"
+      );
+
+
+    const clearSearch =
+      document.getElementById(
+        "clearLibrarySearch"
+      );
+
+
+    const filters =
+      document.querySelectorAll(
+        ".library-filter"
+      );
+
+
+    const sections =
+      document.querySelectorAll(
+        "[data-library-type]"
+      );
 
 
     /*
-      Example starter items are NOT automatically
-      added. The library starts empty.
-    */
+     * LOAD FAVORITES
+     */
+
+    const favorites =
+      JSON.parse(
+        localStorage.getItem(
+          "musabx-favorite-games"
+        ) || "[]"
+      );
 
 
-    function renderLibrary(searchTerm = "") {
-
-      libraryGrid.innerHTML = "";
-
-
-      const filtered =
-        libraryItems.filter(item => {
-
-          const text =
-            (
-              (item.title || "") +
-              " " +
-              (item.description || "") +
-              " " +
-              (item.type || "")
-            ).toLowerCase();
-
-          return text.includes(
-            searchTerm.toLowerCase()
-          );
-
-        });
+    const favoriteCount =
+      document.getElementById(
+        "favoriteCount"
+      );
 
 
-      libraryCount.textContent =
-        `${filtered.length} ${
-          filtered.length === 1
-            ? "item"
-            : "items"
-        }`;
+    const gameCount =
+      document.getElementById(
+        "gameCount"
+      );
 
 
-      if (filtered.length === 0) {
-
-        emptyState.style.display = "block";
-
-        return;
-
-      }
+    const totalCount =
+      document.getElementById(
+        "totalCount"
+      );
 
 
-      emptyState.style.display = "none";
+    if (favoriteCount) {
 
-
-      filtered.forEach(item => {
-
-        const card =
-          document.createElement("article");
-
-        card.className =
-          "library-item";
-
-
-        const icon =
-          document.createElement("div");
-
-        icon.className =
-          "card-icon";
-
-        icon.textContent =
-          item.icon || "📄";
-
-
-        const title =
-          document.createElement("h3");
-
-        title.textContent =
-          item.title || "Saved item";
-
-
-        const description =
-          document.createElement("p");
-
-        description.textContent =
-          item.description ||
-          item.url ||
-          "Saved in MUSABX";
-
-
-        card.appendChild(icon);
-        card.appendChild(title);
-        card.appendChild(description);
-
-
-        if (item.url) {
-
-          const open =
-            document.createElement("a");
-
-          open.className =
-            "btn btn-primary";
-
-          open.style.display =
-            "inline-flex";
-
-          open.style.marginTop =
-            "14px";
-
-          open.style.textDecoration =
-            "none";
-
-          open.textContent =
-            "Open";
-
-
-          open.href =
-            item.url;
-
-
-          card.appendChild(open);
-
-        }
-
-
-        libraryGrid.appendChild(card);
-
-      });
+      favoriteCount.textContent =
+        favorites.length;
 
     }
 
 
-    librarySearch.addEventListener(
-      "input",
-      () => {
+    if (gameCount) {
 
-        renderLibrary(
-          librarySearch.value
+      gameCount.textContent =
+        favorites.length;
+
+    }
+
+
+    if (totalCount) {
+
+      totalCount.textContent =
+        favorites.length + 4;
+
+    }
+
+
+    /*
+     * CREATE SAVED GAME CARDS
+     */
+
+    const gameGrid =
+      document.getElementById(
+        "savedGamesGrid"
+      );
+
+
+    if (
+      gameGrid &&
+      favorites.length > 0
+    ) {
+
+
+      gameGrid.innerHTML =
+        "";
+
+
+      favorites.forEach(
+        (gameName) => {
+
+
+          const card =
+            document.createElement(
+              "article"
+            );
+
+
+          card.className =
+            "library-card";
+
+
+          card.dataset.libraryItem =
+            "game";
+
+
+          card.dataset.name =
+            gameName;
+
+
+          card.innerHTML = `
+
+            <div class="library-card-icon">
+              🎮
+            </div>
+
+            <div class="library-card-content">
+
+              <span class="library-card-type">
+                GAME
+              </span>
+
+              <h3>
+                ${gameName}
+              </h3>
+
+              <p>
+                Saved from the MUSABX
+                Game Center.
+              </p>
+
+            </div>
+
+            <a
+              href="games.html"
+              class="library-open"
+            >
+              Play →
+            </a>
+
+          `;
+
+
+          gameGrid.appendChild(
+            card
+          );
+
+
+        }
+      );
+
+
+    }
+
+
+    /*
+     * SEARCH
+     */
+
+    function performSearch() {
+
+
+      const query =
+        (
+          search?.value || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+      const items =
+        document.querySelectorAll(
+          ".library-card"
         );
+
+
+      items.forEach(
+        (item) => {
+
+
+          const text =
+            item.textContent
+              .toLowerCase();
+
+
+          if (
+            !query ||
+            text.includes(query)
+          ) {
+
+
+            item.style.display =
+              "";
+
+
+          } else {
+
+
+            item.style.display =
+              "none";
+
+
+          }
+
+
+        }
+      );
+
+
+    }
+
+
+    if (search) {
+
+
+      search.addEventListener(
+        "input",
+        performSearch
+      );
+
+
+    }
+
+
+    if (clearSearch) {
+
+
+      clearSearch.addEventListener(
+        "click",
+        () => {
+
+
+          if (search) {
+
+            search.value =
+              "";
+
+            search.focus();
+
+            performSearch();
+
+          }
+
+
+        }
+      );
+
+
+    }
+
+
+    /*
+     * FILTERS
+     */
+
+    filters.forEach(
+      (filter) => {
+
+
+        filter.addEventListener(
+          "click",
+          () => {
+
+
+            filters.forEach(
+              (button) => {
+
+                button.classList.remove(
+                  "active"
+                );
+
+              }
+            );
+
+
+            filter.classList.add(
+              "active"
+            );
+
+
+            const selected =
+              filter.dataset.libraryFilter;
+
+
+            sections.forEach(
+              (section) => {
+
+
+                const type =
+                  section.dataset.libraryType;
+
+
+                if (
+                  selected === "all"
+                ) {
+
+
+                  section.style.display =
+                    "";
+
+
+                } else if (
+                  selected === type
+                ) {
+
+
+                  section.style.display =
+                    "";
+
+
+                } else if (
+                  selected === "favorites"
+                ) {
+
+
+                  section.style.display =
+                    type === "games"
+                      ? ""
+                      : "none";
+
+
+                } else {
+
+
+                  section.style.display =
+                    "none";
+
+
+                }
+
+
+              }
+            );
+
+
+          }
+        );
+
 
       }
     );
 
 
-    renderLibrary();
+    /*
+     * CLEAR LIBRARY DATA
+     */
 
-  </script>
+    const clearData =
+      document.getElementById(
+        "clearLibraryData"
+      );
+
+
+    if (clearData) {
+
+
+      clearData.addEventListener(
+        "click",
+        () => {
+
+
+          const confirmed =
+            confirm(
+              "Clear MUSABX library favorites and recent game data?"
+            );
+
+
+          if (!confirmed) {
+            return;
+          }
+
+
+          localStorage.removeItem(
+            "musabx-favorite-games"
+          );
+
+
+          localStorage.removeItem(
+            "musabx-recent-games"
+          );
+
+
+          localStorage.removeItem(
+            "musabx-last-game"
+          );
+
+
+          location.reload();
+
+
+        }
+      );
+
+
+    }
+
+
+    /*
+     * UPDATE WEBSITE COUNT
+     */
+
+    const siteCount =
+      document.getElementById(
+        "siteCount"
+      );
+
+
+    if (siteCount) {
+
+      siteCount.textContent =
+        document.querySelectorAll(
+          '[data-library-item="website"]'
+        ).length;
+
+    }
+
+
+  }
+);
+
+</script>
 
 </body>
 </html>
-```
-
