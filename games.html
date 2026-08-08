@@ -3,133 +3,59 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
   <meta name="theme-color" content="#040814">
-  <title>MUSABX Browser</title>
+
+  <title>MUSABX — Games</title>
 
   <link rel="stylesheet" href="style.css">
 
   <style>
-    .browser-page {
+    .games-page {
       min-height: 100vh;
-      padding: 16px;
+      padding: 20px;
     }
 
-    .browser-app {
-      min-height: calc(100vh - 32px);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,.09);
+    .games-shell {
+      width: min(1200px, 100%);
+      margin: 0 auto;
+    }
+
+    .games-header {
+      padding: 24px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(255,255,255,.08);
       border-radius: 24px;
-      background: rgba(6,11,20,.96);
-      box-shadow: 0 25px 70px rgba(0,0,0,.35);
-    }
-
-    .browser-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.04);
+      background: rgba(255,255,255,.045);
+      box-shadow: 0 20px 60px rgba(0,0,0,.28);
       backdrop-filter: blur(18px);
     }
 
-    .browser-brand {
-      flex: 0 0 auto;
-      padding: 0 10px;
+    .games-title {
+      margin: 0;
       color: #61dafb;
-      font-weight: 800;
-      letter-spacing: .12em;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: .04em;
     }
 
-    .browser-button {
-      min-width: 42px;
-      min-height: 42px;
-      border: 0;
-      border-radius: 12px;
-      background: rgba(255,255,255,.07);
-      color: #eef5ff;
-      cursor: pointer;
-      font-size: 18px;
-      transition: .2s ease;
-    }
-
-    .browser-button:hover {
-      background: rgba(97,218,251,.16);
-    }
-
-    .browser-button:active {
-      transform: scale(.96);
-    }
-
-    .tabs {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding: 8px 10px;
-      background: rgba(0,0,0,.18);
-      scrollbar-width: thin;
-    }
-
-    .tab {
-      flex: 0 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 150px;
-      max-width: 240px;
-      padding: 8px 10px;
-      border: 1px solid transparent;
-      border-radius: 12px;
-      background: rgba(255,255,255,.05);
+    .games-subtitle {
+      margin: 8px 0 0;
       color: #a6b8d7;
-      cursor: pointer;
+      line-height: 1.6;
     }
 
-    .tab.active {
-      color: #eef5ff;
-      border-color: rgba(97,218,251,.28);
-      background: rgba(97,218,251,.1);
-    }
-
-    .tab-title {
-      flex: 1;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      text-align: left;
-    }
-
-    .tab-close {
-      border: 0;
-      background: transparent;
-      color: inherit;
-      cursor: pointer;
-      font-size: 16px;
-      padding: 2px 5px;
-      border-radius: 6px;
-    }
-
-    .tab-close:hover {
-      background: rgba(255,255,255,.1);
-    }
-
-    .address-area {
+    .games-tools {
       display: flex;
-      gap: 8px;
-      padding: 10px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
     }
 
-    .address-input {
+    .game-search {
       flex: 1;
-      min-width: 0;
-      height: 44px;
+      min-width: 220px;
+      height: 46px;
       padding: 0 16px;
       border: 1px solid rgba(255,255,255,.1);
       border-radius: 14px;
@@ -139,136 +65,292 @@
       font-size: 15px;
     }
 
-    .address-input:focus {
+    .game-search:focus {
       border-color: rgba(97,218,251,.55);
     }
 
-    .browser-content {
-      position: relative;
-      flex: 1;
-      min-height: 0;
-      background: #0b1220;
+    .category-list {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 0 12px;
+      scrollbar-width: thin;
     }
 
-    .browser-frame {
-      width: 100%;
-      height: 100%;
-      min-height: 72vh;
-      display: block;
-      border: 0;
-      background: #0b1220;
+    .category-button {
+      flex: 0 0 auto;
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 999px;
+      padding: 10px 15px;
+      background: rgba(255,255,255,.05);
+      color: #a6b8d7;
+      cursor: pointer;
+      transition: .2s ease;
     }
 
-    .browser-loader {
-      position: absolute;
-      inset: 0;
-      z-index: 10;
-      display: grid;
-      place-items: center;
-      background: rgba(4,8,20,.72);
-      backdrop-filter: blur(5px);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .2s ease;
-    }
-
-    .browser-loader.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .loader-box {
-      text-align: center;
+    .category-button:hover {
+      background: rgba(97,218,251,.1);
       color: #eef5ff;
     }
 
-    .spinner {
-      width: 42px;
-      height: 42px;
-      margin: 0 auto 12px;
-      border: 4px solid rgba(255,255,255,.12);
-      border-top-color: #61dafb;
-      border-radius: 50%;
-      animation: musabx-spin .8s linear infinite;
+    .category-button.active {
+      border-color: rgba(97,218,251,.4);
+      background: rgba(97,218,251,.13);
+      color: #61dafb;
     }
 
-    @keyframes musabx-spin {
-      to {
-        transform: rotate(360deg);
-      }
+    .games-count {
+      margin: 10px 0 16px;
+      color: #8195b5;
+      font-size: 14px;
     }
 
-    /*
-      Fullscreen:
-      hide every browser control except the content.
-    */
-    .browser-app.fullscreen-ui .browser-header,
-    .browser-app.fullscreen-ui .tabs,
-    .browser-app.fullscreen-ui .address-area {
-      display: none;
+    .game-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
     }
 
-    .browser-app.fullscreen-ui,
-    .browser-app.fullscreen-ui .browser-content,
-    .browser-app.fullscreen-ui .browser-frame {
-      border-radius: 0;
+    .game-card {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 20px;
+      background: rgba(255,255,255,.045);
+      box-shadow: 0 15px 45px rgba(0,0,0,.2);
+      transition:
+        transform .2s ease,
+        border-color .2s ease;
     }
 
-    .esc-hint {
+    .game-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(97,218,251,.28);
+    }
+
+    .game-cover {
+      min-height: 135px;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background:
+        radial-gradient(
+          circle at 30% 20%,
+          rgba(97,218,251,.25),
+          transparent 50%
+        ),
+        rgba(0,0,0,.2);
+      font-size: 52px;
+    }
+
+    .game-info {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 16px;
+      flex: 1;
+    }
+
+    .game-name {
+      margin: 0;
+      color: #eef5ff;
+      font-size: 18px;
+    }
+
+    .game-description {
+      margin: 0;
+      color: #91a6c7;
+      line-height: 1.5;
+      font-size: 14px;
+      flex: 1;
+    }
+
+    .game-category {
+      color: #61dafb;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+
+    .game-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .play-button,
+    .favorite-button {
+      min-height: 42px;
+      border: 0;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .play-button {
+      flex: 1;
+      background: linear-gradient(
+        135deg,
+        #61dafb,
+        #4dd0e1
+      );
+      color: #07121d;
+    }
+
+    .favorite-button {
+      width: 44px;
+      background: rgba(255,255,255,.07);
+      color: #eef5ff;
+      font-size: 18px;
+    }
+
+    .favorite-button.active {
+      color: #61dafb;
+      background: rgba(97,218,251,.12);
+    }
+
+    .empty-games {
+      padding: 50px 20px;
+      text-align: center;
+      border: 1px dashed rgba(255,255,255,.12);
+      border-radius: 20px;
+      color: #91a6c7;
+    }
+
+    .game-modal {
       position: fixed;
-      left: 50%;
-      bottom: 18px;
-      z-index: 100;
-      transform: translateX(-50%);
-      padding: 8px 13px;
-      border-radius: 999px;
-      background: rgba(0,0,0,.7);
+      inset: 0;
+      z-index: 1000;
+      display: none;
+      padding: 15px;
+      background: rgba(0,0,0,.82);
+      backdrop-filter: blur(8px);
+    }
+
+    .game-modal.open {
+      display: grid;
+      place-items: center;
+    }
+
+    .game-window {
+      width: min(900px, 100%);
+      max-height: 95vh;
+      overflow: auto;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 22px;
+      background: #07101e;
+      box-shadow: 0 30px 100px rgba(0,0,0,.5);
+    }
+
+    .game-window-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .game-window-title {
+      margin: 0;
+      color: #eef5ff;
+    }
+
+    .close-game {
+      min-width: 42px;
+      min-height: 42px;
+      border: 0;
+      border-radius: 12px;
+      background: rgba(255,255,255,.07);
       color: #fff;
-      font-size: 13px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .2s ease;
+      cursor: pointer;
+      font-size: 18px;
     }
 
-    .esc-hint.visible {
-      opacity: 1;
+    .game-stage {
+      padding: 18px;
     }
 
-    @media (max-width: 720px) {
-      .browser-page {
-        padding: 0;
+    .game-canvas {
+      display: block;
+      width: 100%;
+      max-width: 800px;
+      height: auto;
+      margin: 0 auto;
+      border-radius: 16px;
+      background: #030711;
+      touch-action: none;
+    }
+
+    .game-help {
+      margin: 12px auto 0;
+      max-width: 800px;
+      color: #91a6c7;
+      line-height: 1.5;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .mobile-controls {
+      display: none;
+      justify-content: center;
+      gap: 10px;
+      margin: 15px auto 0;
+    }
+
+    .mobile-controls button {
+      width: 62px;
+      height: 52px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 14px;
+      background: rgba(255,255,255,.07);
+      color: #eef5ff;
+      font-size: 20px;
+      touch-action: manipulation;
+    }
+
+    @media (max-width: 700px) {
+      .games-page {
+        padding: 10px;
       }
 
-      .browser-app {
-        min-height: 100vh;
-        border-radius: 0;
+      .games-header {
+        padding: 18px;
       }
 
-      .browser-header {
-        flex-wrap: wrap;
+      .game-grid {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+        gap: 10px;
       }
 
-      .browser-brand {
-        width: 100%;
-        text-align: center;
-        padding-bottom: 4px;
+      .game-cover {
+        min-height: 100px;
+        font-size: 40px;
       }
 
-      .browser-button {
-        min-width: 40px;
-        min-height: 40px;
+      .game-info {
+        padding: 12px;
       }
 
-      .tab {
-        min-width: 130px;
+      .game-name {
+        font-size: 15px;
       }
 
-      .address-area {
-        padding: 8px;
+      .game-description {
+        font-size: 12px;
       }
 
-      .browser-frame {
-        min-height: calc(100vh - 190px);
+      .mobile-controls {
+        display: flex;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .game-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -276,115 +358,109 @@
 
 <body>
 
-  <main class="browser-page">
-    <section class="browser-app" id="browserApp">
+<main class="games-page">
+  <div class="games-shell">
 
-      <div class="browser-header">
-        <button
-          class="browser-button"
-          id="backButton"
-          type="button"
-          aria-label="Back"
-          title="Back"
-        >←</button>
+    <header class="games-header">
 
-        <button
-          class="browser-button"
-          id="forwardButton"
-          type="button"
-          aria-label="Forward"
-          title="Forward"
-        >→</button>
+      <h1 class="games-title">MUSABX GAMES</h1>
 
-        <button
-          class="browser-button"
-          id="reloadButton"
-          type="button"
-          aria-label="Reload"
-          title="Reload"
-        >↻</button>
+      <p class="games-subtitle">
+        Different games. Different challenges.
+        Pick a category and play.
+      </p>
 
-        <div class="browser-brand">MUSABX</div>
-
-        <button
-          class="browser-button"
-          id="fullscreenButton"
-          type="button"
-          aria-label="Fullscreen"
-          title="Fullscreen"
-        >⛶</button>
-
-        <button
-          class="browser-button"
-          id="homeButton"
-          type="button"
-          aria-label="Home"
-          title="DuckDuckGo Home"
-        >⌂</button>
-      </div>
-
-      <div class="tabs" id="tabs"></div>
-
-      <form class="address-area" id="searchForm" autocomplete="off">
+      <div class="games-tools">
 
         <input
-          id="searchInput"
-          class="address-input"
+          id="gameSearch"
+          class="game-search"
           type="search"
-          placeholder="Search or type a website..."
-          spellcheck="false"
+          placeholder="Search games..."
           autocomplete="off"
+          spellcheck="false"
         >
 
-        <button
-          class="browser-button"
-          type="submit"
-          aria-label="Go"
-          title="Go"
-        >→</button>
+      </div>
 
-        <button
-          class="browser-button"
-          id="newTabButton"
-          type="button"
-          aria-label="New tab"
-          title="New tab"
-        >+</button>
+      <nav
+        id="categoryList"
+        class="category-list"
+        aria-label="Game categories"
+      ></nav>
 
-      </form>
+    </header>
 
-      <section class="browser-content">
+    <div
+      id="gamesCount"
+      class="games-count"
+    ></div>
 
-        <div
-          class="browser-loader"
-          id="loader"
-          aria-hidden="true"
-        >
-          <div class="loader-box">
-            <div class="spinner"></div>
-            <div>Loading inside MUSABX...</div>
-          </div>
-        </div>
+    <section
+      id="gameGrid"
+      class="game-grid"
+      aria-live="polite"
+    ></section>
 
-        <iframe
-          id="proxyFrame"
-          class="browser-frame"
-          title="MUSABX Browser"
-          referrerpolicy="no-referrer"
-          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
-        ></iframe>
-
-      </section>
-
-    </section>
-  </main>
-
-  <div class="esc-hint" id="escHint">
-    Hold ESC to restore MUSABX controls
   </div>
+</main>
 
-  <script src="app.js"></script>
-  <script src="browser.js"></script>
+<div
+  id="gameModal"
+  class="game-modal"
+  aria-hidden="true"
+>
+  <section class="game-window">
+
+    <header class="game-window-header">
+
+      <h2
+        id="gameWindowTitle"
+        class="game-window-title"
+      >
+        Game
+      </h2>
+
+      <button
+        id="closeGame"
+        class="close-game"
+        type="button"
+        aria-label="Close game"
+      >×</button>
+
+    </header>
+
+    <div class="game-stage">
+
+      <canvas
+        id="gameCanvas"
+        class="game-canvas"
+        width="800"
+        height="500"
+      ></canvas>
+
+      <p
+        id="gameHelp"
+        class="game-help"
+      ></p>
+
+      <div
+        id="mobileControls"
+        class="mobile-controls"
+      >
+        <button type="button" data-control="left">←</button>
+        <button type="button" data-control="jump">↑</button>
+        <button type="button" data-control="right">→</button>
+        <button type="button" data-control="action">●</button>
+      </div>
+
+    </div>
+
+  </section>
+</div>
+
+<script src="app.js"></script>
+<script src="games.js"></script>
 
 </body>
 </html>
