@@ -1,377 +1,1524 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
   <meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+
+>
+
+<meta
+name="theme-color"
+content="#050611"
+
+>
+
+<meta
+name="description"
+content="MUSABX - Your personal web hub"
+
+>
+
+  <title>MUSABX — Home</title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
   >
-
-  <meta
-    name="theme-color"
-    content="#060711"
-  >
-
-  <meta
-    name="description"
-    content="MUSABX - Your personal web hub"
-  >
-
-  <title>MUSABX • Home</title>
-
-  <link rel="stylesheet" href="style.css">
 
 </head>
 
-
 <body>
 
+<!-- =========================================================
+     MOBILE MENU
+     ========================================================= -->
 
-<aside class="sidebar">
+<button
+class="mobile-menu"
+id="mobileMenu"
+type="button"
+aria-label="Open navigation"
 
-  <a href="index.html" class="logo">
+>
 
-    <div class="logo-mark">M</div>
+☰ </button>
 
-    <div class="logo-text">
+<!-- =========================================================
+     SIDEBAR
+     ========================================================= -->
 
-      <strong>MUSABX</strong>
+<aside
+  class="sidebar"
+  id="sidebar"
+>
 
-      <span>Your web hub</span>
+  <!-- LOGO -->
 
-    </div>
+<a
+href="index.html"
+class="logo"
+
+>
+
+```
+<div class="logo-mark">
+  M
+</div>
+
+<div class="logo-text">
+
+  <strong>
+    MUSABX
+  </strong>
+
+  <span>
+    Your web hub
+  </span>
+
+</div>
+```
 
   </a>
 
+  <!-- MAIN NAVIGATION -->
 
   <div class="nav-label">
     MAIN
   </div>
 
-
   <nav class="nav">
 
-    <a href="index.html" class="active">
-      <span class="nav-icon">🏠</span>
-      Home
-    </a>
-
-    <a href="browser.html">
-      <span class="nav-icon">🌐</span>
-      Browser
-    </a>
-
-    <a href="games.html">
-      <span class="nav-icon">🎮</span>
-      Games
-    </a>
-
-    <a href="library.html">
-      <span class="nav-icon">📚</span>
-      Library
-    </a>
-
-    <a href="achievements.html">
-      <span class="nav-icon">🏆</span>
-      Achievements
-    </a>
-
-  </nav>
-
-
-  <div class="nav-label">
-    SYSTEM
-  </div>
-
-
-  <nav class="nav">
-
-    <a href="settings.html">
-      <span class="nav-icon">⚙️</span>
-      Settings
-    </a>
-
-  </nav>
-
-
-  <div class="sidebar-bottom">
-
-    <div class="panel">
-
-      <div style="font-size:11px;color:#8d94ab;">
-        MUSABX STATUS
-      </div>
-
-      <div style="
-        display:flex;
-        align-items:center;
-        gap:7px;
-        margin-top:9px;
-        font-size:12px;
-      ">
-
-        <span class="status-dot"></span>
-
-        Online
-
-      </div>
-
-    </div>
-
-  </div>
-
-</aside>
-
-
-<main class="main">
-
-
-<header class="topbar">
-
-  <div class="top-actions">
-
-    <button
-      class="icon-btn"
-      id="fullscreenButton"
-      title="Fullscreen"
-    >
-      ⛶
-    </button>
-
-  </div>
-
-</header>
-
-
-<div class="content">
-
-
-<section class="hero">
-
-  <div class="badge">
-
-    <span class="status-dot"></span>
-
-    MUSABX ONLINE
-
-  </div>
-
-
-  <h1>
-    Welcome to <span>MUSABX</span>
-  </h1>
-
-
-  <p>
-    Your personal place to browse the web,
-    play games, manage your library,
-    and track your achievements.
-  </p>
-
-</section>
-
-
-<form
-  class="search-box"
-  id="searchForm"
+```
+<a
+  href="index.html"
+  class="active"
 >
 
-  <input
-    id="searchInput"
-    type="search"
-    placeholder="Search the web or enter a website..."
-    autocomplete="off"
-    spellcheck="false"
-  >
+  <span class="nav-icon">
+    🏠
+  </span>
 
-  <button
-    class="primary-btn"
-    type="submit"
-  >
-    Search
-  </button>
+  <span>
+    Home
+  </span>
 
-</form>
-
-
-<section class="feature-grid">
+</a>
 
 
 <a
   href="browser.html"
-  class="feature"
-  style="text-decoration:none;color:white;"
 >
 
-  <div class="badge">
-    🌐 BROWSER
-  </div>
+  <span class="nav-icon">
+    🌐
+  </span>
 
-  <h2>Browse the web</h2>
-
-  <p>
-    Search the internet, open websites,
-    and explore the web from inside MUSABX.
-  </p>
+  <span>
+    Browser
+  </span>
 
 </a>
 
 
 <a
   href="games.html"
-  class="feature"
-  style="text-decoration:none;color:white;"
 >
 
-  <div class="badge">
-    🎮 PLAY
+  <span class="nav-icon">
+    🎮
+  </span>
+
+  <span>
+    Games
+  </span>
+
+</a>
+
+
+<a
+  href="library.html"
+>
+
+  <span class="nav-icon">
+    📚
+  </span>
+
+  <span>
+    Library
+  </span>
+
+</a>
+
+
+<a
+  href="achievements.html"
+>
+
+  <span class="nav-icon">
+    🏆
+  </span>
+
+  <span>
+    Achievements
+  </span>
+
+</a>
+```
+
+  </nav>
+
+  <!-- SYSTEM NAVIGATION -->
+
+  <div class="nav-label">
+    SYSTEM
   </div>
 
-  <h2>Games</h2>
+  <nav class="nav">
 
-  <p>
-    Jump into your games collection.
-  </p>
+```
+<a
+  href="settings.html"
+>
 
-</a>
+  <span class="nav-icon">
+    ⚙️
+  </span>
 
-
-</section>
-
-
-<div class="section-header">
-
-  <h2>Explore MUSABX</h2>
-
-  <span>Quick access</span>
-
-</div>
-
-
-<div class="grid">
-
-
-<a href="browser.html" class="card">
-
-  <div class="card-icon">🌐</div>
-
-  <h3>Browser</h3>
-
-  <p>
-    Search and explore the web.
-  </p>
+  <span>
+    Settings
+  </span>
 
 </a>
+```
+
+  </nav>
+
+  <!-- SIDEBAR STATUS -->
+
+  <div class="sidebar-bottom">
+
+```
+<div class="panel sidebar-status">
 
 
-<a href="games.html" class="card">
-
-  <div class="card-icon">🎮</div>
-
-  <h3>Games</h3>
-
-  <p>
-    Play games and discover new ones.
-  </p>
-
-</a>
+  <div class="sidebar-status-title">
+    MUSABX STATUS
+  </div>
 
 
-<a href="library.html" class="card">
+  <div class="sidebar-status-row">
 
-  <div class="card-icon">📚</div>
+    <span class="status-dot"></span>
 
-  <h3>Library</h3>
-
-  <p>
-    Keep your favorite content together.
-  </p>
-
-</a>
-
-
-<a href="achievements.html" class="card">
-
-  <div class="card-icon">🏆</div>
-
-  <h3>Achievements</h3>
-
-  <p>
-    Track your MUSABX progress.
-  </p>
-
-</a>
-
-
-</div>
-
-
-<div class="section-header">
-
-  <h2>Your progress</h2>
-
-  <span>Getting started</span>
-
-</div>
-
-
-<div class="panel">
-
-  <div style="
-    display:flex;
-    justify-content:space-between;
-    margin-bottom:12px;
-  ">
-
-    <strong style="font-size:13px;">
-      MUSABX Explorer
-    </strong>
-
-    <span style="
-      color:#8d94ab;
-      font-size:11px;
-    ">
-      25%
+    <span>
+      All systems online
     </span>
 
   </div>
 
 
-  <div class="progress">
+  <div class="sidebar-version">
+    Web Hub • v1.0
+  </div>
 
-    <div
-      class="progress-bar"
-      style="width:25%"
-    ></div>
+
+</div>
+```
+
+  </div>
+
+</aside>
+
+<!-- =========================================================
+     MAIN APPLICATION
+     ========================================================= -->
+
+<main class="main">
+
+  <!-- =======================================================
+       TOP BAR
+       ======================================================= -->
+
+  <header class="topbar">
+
+```
+<div class="topbar-left">
+
+
+  <div class="mobile-page-title">
+    MUSABX
+  </div>
+
+
+</div>
+
+
+<div class="top-actions">
+
+
+  <button
+    class="icon-btn"
+    id="fullscreenButton"
+    type="button"
+    aria-label="Fullscreen"
+    title="Fullscreen"
+  >
+    ⛶
+  </button>
+
+
+  <a
+    href="settings.html"
+    class="icon-btn"
+    aria-label="Settings"
+    title="Settings"
+  >
+    ⚙
+  </a>
+
+
+</div>
+```
+
+  </header>
+
+  <!-- =======================================================
+       CONTENT
+       ======================================================= -->
+
+  <div class="content">
+
+```
+<!-- =====================================================
+     HERO
+     ===================================================== -->
+
+<section class="hero">
+
+
+  <div class="badge">
+
+
+    <span class="status-dot"></span>
+
+
+    MUSABX ONLINE
+
+
+  </div>
+
+
+  <h1>
+
+    Welcome to
+
+    <span>
+      MUSABX.
+    </span>
+
+  </h1>
+
+
+  <p>
+
+    Your personal web hub for browsing,
+    gaming, discovering content, managing
+    your library, and tracking your progress.
+
+  </p>
+
+
+</section>
+
+
+<!-- =====================================================
+     SEARCH
+     ===================================================== -->
+
+<section class="search-section">
+
+
+  <form
+    class="search-box"
+    id="searchForm"
+    autocomplete="off"
+  >
+
+
+    <div class="search-icon">
+      🔎
+    </div>
+
+
+    <input
+      id="searchInput"
+      type="search"
+      placeholder="Search the web or enter a website..."
+      spellcheck="false"
+      autocomplete="off"
+      aria-label="Search the web"
+    >
+
+
+    <button
+      class="primary-btn"
+      type="submit"
+    >
+      Search
+    </button>
+
+
+  </form>
+
+
+  <div class="search-hint">
+
+    <span>
+      Try:
+    </span>
+
+    <button
+      type="button"
+      class="search-suggestion"
+      data-search="YouTube"
+    >
+      YouTube
+    </button>
+
+    <button
+      type="button"
+      class="search-suggestion"
+      data-search="games"
+    >
+      games
+    </button>
+
+    <button
+      type="button"
+      class="search-suggestion"
+      data-search="weather"
+    >
+      weather
+    </button>
+
+  </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     WELCOME DASHBOARD
+     ===================================================== -->
+
+<section class="dashboard-grid">
+
+
+  <!-- LARGE CARD -->
+
+  <a
+    href="browser.html"
+    class="dashboard-feature"
+  >
+
+
+    <div class="dashboard-feature-background"></div>
+
+
+    <div class="dashboard-feature-content">
+
+
+      <div class="dashboard-icon">
+        🌐
+      </div>
+
+
+      <div class="badge">
+        BROWSER
+      </div>
+
+
+      <h2>
+        Explore the web
+      </h2>
+
+
+      <p>
+
+        Search for anything,
+        open websites, and explore
+        the internet from MUSABX.
+
+      </p>
+
+
+      <span class="feature-link">
+        Open Browser →
+      </span>
+
+
+    </div>
+
+
+  </a>
+
+
+  <!-- SIDE CARD -->
+
+  <a
+    href="games.html"
+    class="dashboard-side-card"
+  >
+
+
+    <div class="card-glow"></div>
+
+
+    <div class="dashboard-icon">
+      🎮
+    </div>
+
+
+    <div class="badge">
+      GAMES
+    </div>
+
+
+    <h3>
+      Play something
+    </h3>
+
+
+    <p>
+      Jump into your games.
+    </p>
+
+
+    <span class="feature-link">
+      Open Games →
+    </span>
+
+
+  </a>
+
+
+</section>
+
+
+<!-- =====================================================
+     QUICK ACCESS
+     ===================================================== -->
+
+<section>
+
+
+  <div class="section-header">
+
+
+    <div>
+
+      <h2>
+        Quick Access
+      </h2>
+
+      <p>
+        Jump straight into MUSABX
+      </p>
+
+    </div>
+
+
+    <span>
+      4 destinations
+    </span>
+
+
+  </div>
+
+
+  <div class="grid">
+
+
+    <!-- BROWSER -->
+
+    <a
+      href="browser.html"
+      class="card"
+    >
+
+
+      <div class="card-top">
+
+
+        <div class="card-icon">
+          🌐
+        </div>
+
+
+        <span class="card-arrow">
+          ↗
+        </span>
+
+
+      </div>
+
+
+      <h3>
+        Browser
+      </h3>
+
+
+      <p>
+        Search and explore the web.
+      </p>
+
+
+    </a>
+
+
+    <!-- GAMES -->
+
+    <a
+      href="games.html"
+      class="card"
+    >
+
+
+      <div class="card-top">
+
+
+        <div class="card-icon">
+          🎮
+        </div>
+
+
+        <span class="card-arrow">
+          ↗
+        </span>
+
+
+      </div>
+
+
+      <h3>
+        Games
+      </h3>
+
+
+      <p>
+        Play games and discover
+        something new.
+      </p>
+
+
+    </a>
+
+
+    <!-- LIBRARY -->
+
+    <a
+      href="library.html"
+      class="card"
+    >
+
+
+      <div class="card-top">
+
+
+        <div class="card-icon">
+          📚
+        </div>
+
+
+        <span class="card-arrow">
+          ↗
+        </span>
+
+
+      </div>
+
+
+      <h3>
+        Library
+      </h3>
+
+
+      <p>
+        Keep your favorite content
+        together.
+      </p>
+
+
+    </a>
+
+
+    <!-- ACHIEVEMENTS -->
+
+    <a
+      href="achievements.html"
+      class="card"
+    >
+
+
+      <div class="card-top">
+
+
+        <div class="card-icon">
+          🏆
+        </div>
+
+
+        <span class="card-arrow">
+          ↗
+        </span>
+
+
+      </div>
+
+
+      <h3>
+        Achievements
+      </h3>
+
+
+      <p>
+        Track your MUSABX progress.
+      </p>
+
+
+    </a>
+
+
+  </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     PROGRESS
+     ===================================================== -->
+
+<section>
+
+
+  <div class="section-header">
+
+
+    <div>
+
+      <h2>
+        Your Progress
+      </h2>
+
+      <p>
+        Keep exploring MUSABX
+      </p>
+
+    </div>
+
+
+    <a
+      href="achievements.html"
+      class="section-link"
+    >
+      View achievements →
+    </a>
+
+
+  </div>
+
+
+  <div class="progress-panel">
+
+
+    <div class="progress-header">
+
+
+      <div class="progress-user">
+
+
+        <div class="progress-avatar">
+          M
+        </div>
+
+
+        <div>
+
+          <strong>
+            MUSABX Explorer
+          </strong>
+
+          <span>
+            Level 1
+          </span>
+
+        </div>
+
+
+      </div>
+
+
+      <div class="progress-xp">
+
+        <strong>
+          100 XP
+        </strong>
+
+        <span>
+          / 400 XP
+        </span>
+
+      </div>
+
+
+    </div>
+
+
+    <div class="progress">
+
+
+      <div
+        class="progress-bar"
+        style="width:25%"
+      ></div>
+
+
+    </div>
+
+
+    <div class="progress-footer">
+
+
+      <span>
+        25% complete
+      </span>
+
+
+      <span>
+        300 XP until Level 2
+      </span>
+
+
+    </div>
+
+
+  </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     STATS
+     ===================================================== -->
+
+<section>
+
+
+  <div class="section-header">
+
+
+    <div>
+
+      <h2>
+        MUSABX Stats
+      </h2>
+
+      <p>
+        Your activity at a glance
+      </p>
+
+    </div>
+
+
+  </div>
+
+
+  <div class="stats">
+
+
+    <div class="stat">
+
+
+      <div class="stat-icon">
+        🌐
+      </div>
+
+
+      <div class="stat-value">
+        0
+      </div>
+
+
+      <div class="stat-label">
+        Websites Visited
+      </div>
+
+
+      <div class="stat-change">
+        Start exploring
+      </div>
+
+
+    </div>
+
+
+    <div class="stat">
+
+
+      <div class="stat-icon">
+        🎮
+      </div>
+
+
+      <div class="stat-value">
+        0
+      </div>
+
+
+      <div class="stat-label">
+        Games Played
+      </div>
+
+
+      <div class="stat-change">
+        Ready to play
+      </div>
+
+
+    </div>
+
+
+    <div class="stat">
+
+
+      <div class="stat-icon">
+        🏆
+      </div>
+
+
+      <div class="stat-value">
+        1
+      </div>
+
+
+      <div class="stat-label">
+        Achievements
+      </div>
+
+
+      <div class="stat-change">
+        Welcome unlocked
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     RECENT / DISCOVER
+     ===================================================== -->
+
+<section>
+
+
+  <div class="section-header">
+
+
+    <div>
+
+      <h2>
+        Discover
+      </h2>
+
+      <p>
+        Things you can do in MUSABX
+      </p>
+
+    </div>
+
+
+  </div>
+
+
+  <div class="discover-grid">
+
+
+    <a
+      href="browser.html"
+      class="discover-card"
+    >
+
+
+      <div class="discover-number">
+        01
+      </div>
+
+
+      <div class="discover-icon">
+        🔎
+      </div>
+
+
+      <div>
+
+        <h3>
+          Search the internet
+        </h3>
+
+        <p>
+          Use the built-in MUSABX
+          search experience.
+        </p>
+
+      </div>
+
+
+    </a>
+
+
+    <a
+      href="games.html"
+      class="discover-card"
+    >
+
+
+      <div class="discover-number">
+        02
+      </div>
+
+
+      <div class="discover-icon">
+        🕹️
+      </div>
+
+
+      <div>
+
+        <h3>
+          Play games
+        </h3>
+
+        <p>
+          Find games and start
+          playing immediately.
+        </p>
+
+      </div>
+
+
+    </a>
+
+
+    <a
+      href="library.html"
+      class="discover-card"
+    >
+
+
+      <div class="discover-number">
+        03
+      </div>
+
+
+      <div class="discover-icon">
+        ⭐
+      </div>
+
+
+      <div>
+
+        <h3>
+          Build your library
+        </h3>
+
+        <p>
+          Save the things you
+          want to come back to.
+        </p>
+
+      </div>
+
+
+    </a>
+
+
+    <a
+      href="settings.html"
+      class="discover-card"
+    >
+
+
+      <div class="discover-number">
+        04
+      </div>
+
+
+      <div class="discover-icon">
+        ⚙️
+      </div>
+
+
+      <div>
+
+        <h3>
+          Customize MUSABX
+        </h3>
+
+        <p>
+          Change the experience
+          to match your preferences.
+        </p>
+
+      </div>
+
+
+    </a>
+
+
+  </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     DAILY STATUS
+     ===================================================== -->
+
+<section>
+
+
+  <div class="section-header">
+
+
+    <div>
+
+      <h2>
+        Today's Status
+      </h2>
+
+      <p>
+        Everything looks good
+      </p>
+
+    </div>
+
+
+  </div>
+
+
+  <div class="status-grid">
+
+
+    <div class="status-card">
+
+
+      <div class="status-card-icon">
+        🟢
+      </div>
+
+
+      <div>
+
+        <strong>
+          MUSABX
+        </strong>
+
+        <span>
+          Online
+        </span>
+
+      </div>
+
+
+    </div>
+
+
+    <div class="status-card">
+
+
+      <div class="status-card-icon">
+        🌐
+      </div>
+
+
+      <div>
+
+        <strong>
+          Browser
+        </strong>
+
+        <span>
+          Ready
+        </span>
+
+      </div>
+
+
+    </div>
+
+
+    <div class="status-card">
+
+
+      <div class="status-card-icon">
+        🎮
+      </div>
+
+
+      <div>
+
+        <strong>
+          Games
+        </strong>
+
+        <span>
+          Ready
+        </span>
+
+      </div>
+
+
+    </div>
+
+
+    <div class="status-card">
+
+
+      <div class="status-card-icon">
+        💾
+      </div>
+
+
+      <div>
+
+        <strong>
+          Local Storage
+        </strong>
+
+        <span>
+          Available
+        </span>
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     FINAL CTA
+     ===================================================== -->
+
+<section class="final-cta">
+
+
+  <div class="final-cta-glow"></div>
+
+
+  <div class="final-cta-content">
+
+
+    <div class="badge">
+      MUSABX
+    </div>
+
+
+    <h2>
+      Everything you need.
+      <span>One place.</span>
+    </h2>
+
+
+    <p>
+      Browse, play, save, discover,
+      and keep your web experience
+      organized with MUSABX.
+    </p>
+
+
+    <div class="final-cta-buttons">
+
+
+      <a
+        href="browser.html"
+        class="primary-btn cta-button"
+      >
+        Open Browser
+      </a>
+
+
+      <a
+        href="games.html"
+        class="secondary-btn"
+      >
+        Browse Games
+      </a>
+
+
+    </div>
+
+
+  </div>
+
+
+</section>
+```
+
+  </div>
+
+  <!-- =======================================================
+       FOOTER
+       ======================================================= -->
+
+  <footer class="footer">
+
+```
+<div class="footer-brand">
+
+  <div class="footer-logo">
+    M
+  </div>
+
+  <div>
+
+    <strong>
+      MUSABX
+    </strong>
+
+    <span>
+      Your web hub
+    </span>
 
   </div>
 
 </div>
 
 
+<div class="footer-links">
+
+
+  <a href="index.html">
+    Home
+  </a>
+
+
+  <a href="browser.html">
+    Browser
+  </a>
+
+
+  <a href="games.html">
+    Games
+  </a>
+
+
+  <a href="library.html">
+    Library
+  </a>
+
+
+  <a href="achievements.html">
+    Achievements
+  </a>
+
+
+  <a href="settings.html">
+    Settings
+  </a>
+
+
 </div>
 
 
-<footer class="footer">
-  MUSABX • Built for the web
-</footer>
+<div class="footer-copy">
 
+  MUSABX • Built for the web
+
+</div>
+```
+
+  </footer>
 
 </main>
 
+<!-- =========================================================
+     SHARED JAVASCRIPT
+     ========================================================= -->
 
-<button
-  class="mobile-menu"
-  id="mobileMenu"
->
-  ☰
-</button>
+<script
+  src="script.js"
+></script>
+
+<!-- =========================================================
+     HOME PAGE JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
 
 
-<script src="script.js"></script>
+    /*
+     * SEARCH SUGGESTIONS
+     */
+
+    const suggestions =
+      document.querySelectorAll(
+        ".search-suggestion"
+      );
+
+
+    const searchInput =
+      document.getElementById(
+        "searchInput"
+      );
+
+
+    suggestions.forEach(
+      (button) => {
+
+
+        button.addEventListener(
+          "click",
+          () => {
+
+
+            const value =
+              button.dataset.search;
+
+
+            if (!searchInput) {
+              return;
+            }
+
+
+            searchInput.value =
+              value;
+
+
+            searchInput.focus();
+
+
+          }
+        );
+
+
+      }
+    );
+
+
+    /*
+     * CARD RIPPLE EFFECT
+     */
+
+    const cards =
+      document.querySelectorAll(
+        ".card, .discover-card"
+      );
+
+
+    cards.forEach(
+      (card) => {
+
+
+        card.addEventListener(
+          "mouseenter",
+          () => {
+
+
+            card.style.setProperty(
+              "--mouse-x",
+              "50%"
+            );
+
+
+            card.style.setProperty(
+              "--mouse-y",
+              "50%"
+            );
+
+
+          }
+        );
+
+
+      }
+    );
+
+
+    /*
+     * LOCAL WELCOME COUNT
+     */
+
+    const visitKey =
+      "musabx-home-visits";
+
+
+    let visits =
+      Number(
+        localStorage.getItem(
+          visitKey
+        ) || 0
+      );
+
+
+    visits++;
+
+
+    localStorage.setItem(
+      visitKey,
+      visits
+    );
+
+
+    /*
+     * FIRST VISIT ACHIEVEMENT
+     */
+
+    if (
+      !localStorage.getItem(
+        "musabx-achievement-welcome"
+      )
+    ) {
+
+
+      localStorage.setItem(
+        "musabx-achievement-welcome",
+        "true"
+      );
+
+
+    }
+
+
+  }
+);
+
+</script>
 
 </body>
+
 </html>
