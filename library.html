@@ -1,1 +1,339 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#050816"
+  >
+
+  <title>MUSABX Library</title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+</head>
+
+<body>
+
+  <div class="page">
+
+    <!-- HEADER -->
+
+    <header class="site-header">
+
+      <a
+        class="brand"
+        href="index.html"
+      >
+
+        <div class="brand-logo">
+          M
+        </div>
+
+        <div class="brand-name">
+          MUSABX
+        </div>
+
+      </a>
+
+
+      <div class="header-actions">
+
+        <a
+          class="btn"
+          href="index.html"
+        >
+          Home
+        </a>
+
+        <a
+          class="btn"
+          href="browser.html"
+        >
+          Browser
+        </a>
+
+      </div>
+
+    </header>
+
+
+    <!-- MAIN -->
+
+    <main class="page-content">
+
+      <section class="hero">
+
+        <h1>Library</h1>
+
+        <p>
+          Your saved MUSABX pages, games, and favorites
+          in one place.
+        </p>
+
+      </section>
+
+
+      <!-- SEARCH -->
+
+      <section class="section">
+
+        <div class="search-box">
+
+          <input
+            id="librarySearch"
+            type="search"
+            placeholder="Search your library..."
+            autocomplete="off"
+          >
+
+        </div>
+
+      </section>
+
+
+      <!-- LIBRARY -->
+
+      <section class="section">
+
+        <div class="section-title">
+
+          <h2>
+            Your Library
+          </h2>
+
+          <span id="libraryCount">
+            0 items
+          </span>
+
+        </div>
+
+
+        <div
+          class="library-grid"
+          id="libraryGrid"
+        >
+
+          <!-- Items are loaded by JavaScript -->
+
+        </div>
+
+
+        <div
+          class="empty"
+          id="emptyState"
+        >
+
+          <div class="empty-icon">
+            📚
+          </div>
+
+          <strong>
+            Your library is empty
+          </strong>
+
+          <p>
+            Saved items will appear here.
+          </p>
+
+        </div>
+
+      </section>
+
+    </main>
+
+
+    <footer>
+      MUSABX Library
+    </footer>
+
+  </div>
+
+
+  <script>
+
+    /*
+      MUSABX LIBRARY
+
+      The library uses localStorage.
+
+      That means saved items stay on this
+      device/browser without requiring a server.
+    */
+
+
+    const libraryGrid =
+      document.getElementById("libraryGrid");
+
+    const emptyState =
+      document.getElementById("emptyState");
+
+    const librarySearch =
+      document.getElementById("librarySearch");
+
+    const libraryCount =
+      document.getElementById("libraryCount");
+
+
+    let libraryItems =
+      JSON.parse(
+        localStorage.getItem("musabxLibrary")
+      ) || [];
+
+
+    /*
+      Example starter items are NOT automatically
+      added. The library starts empty.
+    */
+
+
+    function renderLibrary(searchTerm = "") {
+
+      libraryGrid.innerHTML = "";
+
+
+      const filtered =
+        libraryItems.filter(item => {
+
+          const text =
+            (
+              (item.title || "") +
+              " " +
+              (item.description || "") +
+              " " +
+              (item.type || "")
+            ).toLowerCase();
+
+          return text.includes(
+            searchTerm.toLowerCase()
+          );
+
+        });
+
+
+      libraryCount.textContent =
+        `${filtered.length} ${
+          filtered.length === 1
+            ? "item"
+            : "items"
+        }`;
+
+
+      if (filtered.length === 0) {
+
+        emptyState.style.display = "block";
+
+        return;
+
+      }
+
+
+      emptyState.style.display = "none";
+
+
+      filtered.forEach(item => {
+
+        const card =
+          document.createElement("article");
+
+        card.className =
+          "library-item";
+
+
+        const icon =
+          document.createElement("div");
+
+        icon.className =
+          "card-icon";
+
+        icon.textContent =
+          item.icon || "📄";
+
+
+        const title =
+          document.createElement("h3");
+
+        title.textContent =
+          item.title || "Saved item";
+
+
+        const description =
+          document.createElement("p");
+
+        description.textContent =
+          item.description ||
+          item.url ||
+          "Saved in MUSABX";
+
+
+        card.appendChild(icon);
+        card.appendChild(title);
+        card.appendChild(description);
+
+
+        if (item.url) {
+
+          const open =
+            document.createElement("a");
+
+          open.className =
+            "btn btn-primary";
+
+          open.style.display =
+            "inline-flex";
+
+          open.style.marginTop =
+            "14px";
+
+          open.style.textDecoration =
+            "none";
+
+          open.textContent =
+            "Open";
+
+
+          open.href =
+            item.url;
+
+
+          card.appendChild(open);
+
+        }
+
+
+        libraryGrid.appendChild(card);
+
+      });
+
+    }
+
+
+    librarySearch.addEventListener(
+      "input",
+      () => {
+
+        renderLibrary(
+          librarySearch.value
+        );
+
+      }
+    );
+
+
+    renderLibrary();
+
+  </script>
+
+</body>
+</html>
+```
 
