@@ -1,811 +1,377 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#050816">
-  <meta name="description" content="MUSABX - Your personal web hub">
 
-  <title>MUSABX</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-  <style>
-    :root {
-      --bg: #050816;
-      --panel: rgba(13, 20, 42, 0.82);
-      --panel-2: rgba(20, 29, 55, 0.72);
-      --border: rgba(255, 255, 255, 0.1);
-      --text: #f5f7ff;
-      --muted: #9ca9c9;
-      --accent: #61dafb;
-      --accent-2: #7c5cff;
-      --danger: #ff5f57;
-      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-    }
+  <meta
+    name="theme-color"
+    content="#060711"
+  >
 
-    * {
-      box-sizing: border-box;
-    }
+  <meta
+    name="description"
+    content="MUSABX - Your personal web hub"
+  >
 
-    html,
-    body {
-      margin: 0;
-      width: 100%;
-      min-height: 100%;
-      background: var(--bg);
-      color: var(--text);
-      font-family:
-        Inter,
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-    }
+  <title>MUSABX • Home</title>
 
-    body {
-      min-height: 100vh;
-      overflow-x: hidden;
-      background:
-        radial-gradient(
-          circle at 10% 0%,
-          rgba(97, 218, 251, 0.18),
-          transparent 32%
-        ),
-        radial-gradient(
-          circle at 90% 100%,
-          rgba(124, 92, 255, 0.16),
-          transparent 32%
-        ),
-        var(--bg);
-    }
+  <link rel="stylesheet" href="style.css">
 
-    button,
-    a,
-    input {
-      font: inherit;
-    }
-
-    button,
-    a {
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .app {
-      min-height: 100vh;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    /* TOP BAR */
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-
-      padding: 14px 18px;
-
-      border: 1px solid var(--border);
-      border-radius: 22px;
-
-      background: var(--panel);
-
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-
-      box-shadow: var(--shadow);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      color: var(--text);
-    }
-
-    .brand-logo {
-      width: 42px;
-      height: 42px;
-
-      display: grid;
-      place-items: center;
-
-      border-radius: 14px;
-
-      background:
-        linear-gradient(
-          135deg,
-          var(--accent),
-          var(--accent-2)
-        );
-
-      color: #07101f;
-      font-weight: 900;
-      font-size: 18px;
-
-      box-shadow:
-        0 10px 30px rgba(97, 218, 251, 0.2);
-    }
-
-    .brand-text {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .brand-text strong {
-      font-size: 16px;
-      letter-spacing: 0.18em;
-    }
-
-    .brand-text span {
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .top-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .icon-button {
-      width: 42px;
-      height: 42px;
-
-      display: grid;
-      place-items: center;
-
-      border: 1px solid var(--border);
-      border-radius: 13px;
-
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text);
-
-      cursor: pointer;
-
-      transition:
-        transform 0.2s ease,
-        background 0.2s ease;
-    }
-
-    .icon-button:hover {
-      transform: translateY(-2px);
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    /* HERO */
-
-    .hero {
-      padding: 36px 20px 28px;
-      text-align: center;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-
-      padding: 7px 12px;
-
-      border: 1px solid var(--border);
-      border-radius: 999px;
-
-      background: rgba(255, 255, 255, 0.04);
-
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .status-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #27c93f;
-      box-shadow: 0 0 12px #27c93f;
-    }
-
-    .hero h1 {
-      margin: 18px 0 10px;
-
-      font-size: clamp(42px, 8vw, 82px);
-      line-height: 0.95;
-
-      letter-spacing: -0.05em;
-
-      background:
-        linear-gradient(
-          135deg,
-          #ffffff,
-          var(--accent)
-        );
-
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .hero p {
-      max-width: 620px;
-      margin: 0 auto;
-
-      color: var(--muted);
-      line-height: 1.6;
-      font-size: 15px;
-    }
-
-    /* SEARCH */
-
-    .search-container {
-      width: min(760px, 100%);
-      margin: 0 auto;
-    }
-
-    .search-form {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 8px;
-
-      padding: 8px;
-
-      border: 1px solid var(--border);
-      border-radius: 20px;
-
-      background: rgba(8, 13, 30, 0.82);
-
-      box-shadow: var(--shadow);
-    }
-
-    .search-form input {
-      min-width: 0;
-
-      border: 0;
-      outline: 0;
-
-      padding: 14px 16px;
-
-      border-radius: 14px;
-
-      background: transparent;
-      color: var(--text);
-
-      font-size: 16px;
-    }
-
-    .search-form input::placeholder {
-      color: #6f7d9e;
-    }
-
-    .search-button {
-      border: 0;
-      border-radius: 15px;
-
-      padding: 0 22px;
-
-      background:
-        linear-gradient(
-          135deg,
-          var(--accent),
-          #4dd0e1
-        );
-
-      color: #07101f;
-      font-weight: 800;
-
-      cursor: pointer;
-
-      transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-    }
-
-    .search-button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 30px rgba(97, 218, 251, 0.2);
-    }
-
-    /* CARDS */
-
-    .section-title {
-      margin: 10px 2px 12px;
-
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 700;
-
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-    }
-
-    .cards {
-      display: grid;
-
-      grid-template-columns:
-        repeat(4, minmax(0, 1fr));
-
-      gap: 12px;
-    }
-
-    .card {
-      min-height: 150px;
-
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-
-      padding: 20px;
-
-      border: 1px solid var(--border);
-      border-radius: 22px;
-
-      background: var(--panel-2);
-
-      color: var(--text);
-      text-decoration: none;
-
-      box-shadow: var(--shadow);
-
-      transition:
-        transform 0.2s ease,
-        border-color 0.2s ease,
-        background 0.2s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-
-      border-color:
-        rgba(97, 218, 251, 0.35);
-
-      background:
-        rgba(30, 40, 72, 0.82);
-    }
-
-    .card-icon {
-      width: 44px;
-      height: 44px;
-
-      display: grid;
-      place-items: center;
-
-      border-radius: 14px;
-
-      background:
-        rgba(97, 218, 251, 0.1);
-
-      font-size: 21px;
-    }
-
-    .card h2 {
-      margin: 18px 0 4px;
-
-      font-size: 18px;
-    }
-
-    .card p {
-      margin: 0;
-
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    /* FOOTER */
-
-    footer {
-      margin-top: auto;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      padding: 18px;
-
-      color: #667493;
-      font-size: 12px;
-    }
-
-    /* FULLSCREEN */
-
-    body.fullscreen-mode .topbar,
-    body.fullscreen-mode .hero,
-    body.fullscreen-mode .cards,
-    body.fullscreen-mode footer {
-      display: none;
-    }
-
-    body.fullscreen-mode .app {
-      padding: 0;
-    }
-
-    body.fullscreen-mode .fullscreen-overlay {
-      display: flex;
-    }
-
-    .fullscreen-overlay {
-      display: none;
-
-      position: fixed;
-      inset: 0;
-
-      z-index: 9999;
-
-      align-items: center;
-      justify-content: center;
-
-      background: #000;
-
-      color: #fff;
-
-      font-size: 14px;
-    }
-
-    /* MOBILE */
-
-    @media (max-width: 800px) {
-      .cards {
-        grid-template-columns:
-          repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 560px) {
-      .app {
-        padding: 10px;
-        gap: 10px;
-      }
-
-      .topbar {
-        padding: 11px 12px;
-        border-radius: 18px;
-      }
-
-      .brand-text span {
-        display: none;
-      }
-
-      .brand-logo {
-        width: 38px;
-        height: 38px;
-      }
-
-      .hero {
-        padding: 28px 10px 20px;
-      }
-
-      .hero h1 {
-        font-size: 52px;
-      }
-
-      .hero p {
-        font-size: 14px;
-      }
-
-      .search-form {
-        grid-template-columns: 1fr;
-        border-radius: 18px;
-      }
-
-      .search-button {
-        min-height: 48px;
-      }
-
-      .cards {
-        grid-template-columns: 1fr 1fr;
-        gap: 9px;
-      }
-
-      .card {
-        min-height: 135px;
-        padding: 15px;
-        border-radius: 18px;
-      }
-
-      .card h2 {
-        font-size: 15px;
-      }
-
-      .card p {
-        font-size: 12px;
-      }
-
-      .card-icon {
-        width: 38px;
-        height: 38px;
-      }
-    }
-  </style>
 </head>
+
 
 <body>
 
-  <div class="app">
 
-    <header class="topbar">
+<aside class="sidebar">
 
-      <a class="brand" href="index.html">
+  <a href="index.html" class="logo">
 
-        <div class="brand-logo">
-          M
-        </div>
+    <div class="logo-mark">M</div>
 
-        <div class="brand-text">
-          <strong>MUSABX</strong>
-          <span>Your web hub</span>
-        </div>
+    <div class="logo-text">
 
-      </a>
+      <strong>MUSABX</strong>
 
-      <div class="top-actions">
+      <span>Your web hub</span>
 
-        <button
-          class="icon-button"
-          id="fullscreenButton"
-          type="button"
-          aria-label="Fullscreen"
-          title="Fullscreen"
-        >
-          ⛶
-        </button>
+    </div>
+
+  </a>
+
+
+  <div class="nav-label">
+    MAIN
+  </div>
+
+
+  <nav class="nav">
+
+    <a href="index.html" class="active">
+      <span class="nav-icon">🏠</span>
+      Home
+    </a>
+
+    <a href="browser.html">
+      <span class="nav-icon">🌐</span>
+      Browser
+    </a>
+
+    <a href="games.html">
+      <span class="nav-icon">🎮</span>
+      Games
+    </a>
+
+    <a href="library.html">
+      <span class="nav-icon">📚</span>
+      Library
+    </a>
+
+    <a href="achievements.html">
+      <span class="nav-icon">🏆</span>
+      Achievements
+    </a>
+
+  </nav>
+
+
+  <div class="nav-label">
+    SYSTEM
+  </div>
+
+
+  <nav class="nav">
+
+    <a href="settings.html">
+      <span class="nav-icon">⚙️</span>
+      Settings
+    </a>
+
+  </nav>
+
+
+  <div class="sidebar-bottom">
+
+    <div class="panel">
+
+      <div style="font-size:11px;color:#8d94ab;">
+        MUSABX STATUS
+      </div>
+
+      <div style="
+        display:flex;
+        align-items:center;
+        gap:7px;
+        margin-top:9px;
+        font-size:12px;
+      ">
+
+        <span class="status-dot"></span>
+
+        Online
 
       </div>
 
-    </header>
+    </div>
+
+  </div>
+
+</aside>
 
 
-    <main>
-
-      <section class="hero">
-
-        <div class="hero-badge">
-          <span class="status-dot"></span>
-          MUSABX ONLINE
-        </div>
-
-        <h1>MUSABX</h1>
-
-        <p>
-          Search, browse, play games, manage your library,
-          and keep everything inside your MUSABX experience.
-        </p>
-
-      </section>
+<main class="main">
 
 
-      <section class="search-container">
+<header class="topbar">
 
-        <form
-          class="search-form"
-          id="searchForm"
-          autocomplete="off"
-        >
+  <div class="top-actions">
 
-          <input
-            id="searchInput"
-            type="search"
-            placeholder="Search DuckDuckGo or enter a website..."
-            spellcheck="false"
-            autocomplete="off"
-          >
+    <button
+      class="icon-btn"
+      id="fullscreenButton"
+      title="Fullscreen"
+    >
+      ⛶
+    </button>
 
-          <button
-            class="search-button"
-            type="submit"
-          >
-            Search
-          </button>
+  </div>
 
-        </form>
-
-      </section>
+</header>
 
 
-      <section>
-
-        <div class="section-title">
-          MUSABX
-        </div>
-
-        <div class="cards">
-
-          <a
-            class="card"
-            href="browser.html"
-          >
-            <div class="card-icon">🌐</div>
-
-            <div>
-              <h2>Browser</h2>
-
-              <p>
-                Browse the web inside MUSABX.
-              </p>
-            </div>
-          </a>
+<div class="content">
 
 
-          <a
-            class="card"
-            href="games.html"
-          >
-            <div class="card-icon">🎮</div>
+<section class="hero">
 
-            <div>
-              <h2>Games</h2>
+  <div class="badge">
 
-              <p>
-                Play different games and categories.
-              </p>
-            </div>
-          </a>
+    <span class="status-dot"></span>
 
-
-          <a
-            class="card"
-            href="library.html"
-          >
-            <div class="card-icon">📚</div>
-
-            <div>
-              <h2>Library</h2>
-
-              <p>
-                Keep your favorite content together.
-              </p>
-            </div>
-          </a>
-
-
-          <a
-            class="card"
-            href="achievements.html"
-          >
-            <div class="card-icon">🏆</div>
-
-            <div>
-              <h2>Achievements</h2>
-
-              <p>
-                Track your MUSABX progress.
-              </p>
-            </div>
-          </a>
-
-        </div>
-
-      </section>
-
-    </main>
-
-
-    <footer>
-      MUSABX • Built for the web
-    </footer>
+    MUSABX ONLINE
 
   </div>
 
 
-  <div class="fullscreen-overlay">
-    Fullscreen mode
+  <h1>
+    Welcome to <span>MUSABX</span>
+  </h1>
+
+
+  <p>
+    Your personal place to browse the web,
+    play games, manage your library,
+    and track your achievements.
+  </p>
+
+</section>
+
+
+<form
+  class="search-box"
+  id="searchForm"
+>
+
+  <input
+    id="searchInput"
+    type="search"
+    placeholder="Search the web or enter a website..."
+    autocomplete="off"
+    spellcheck="false"
+  >
+
+  <button
+    class="primary-btn"
+    type="submit"
+  >
+    Search
+  </button>
+
+</form>
+
+
+<section class="feature-grid">
+
+
+<a
+  href="browser.html"
+  class="feature"
+  style="text-decoration:none;color:white;"
+>
+
+  <div class="badge">
+    🌐 BROWSER
+  </div>
+
+  <h2>Browse the web</h2>
+
+  <p>
+    Search the internet, open websites,
+    and explore the web from inside MUSABX.
+  </p>
+
+</a>
+
+
+<a
+  href="games.html"
+  class="feature"
+  style="text-decoration:none;color:white;"
+>
+
+  <div class="badge">
+    🎮 PLAY
+  </div>
+
+  <h2>Games</h2>
+
+  <p>
+    Jump into your games collection.
+  </p>
+
+</a>
+
+
+</section>
+
+
+<div class="section-header">
+
+  <h2>Explore MUSABX</h2>
+
+  <span>Quick access</span>
+
+</div>
+
+
+<div class="grid">
+
+
+<a href="browser.html" class="card">
+
+  <div class="card-icon">🌐</div>
+
+  <h3>Browser</h3>
+
+  <p>
+    Search and explore the web.
+  </p>
+
+</a>
+
+
+<a href="games.html" class="card">
+
+  <div class="card-icon">🎮</div>
+
+  <h3>Games</h3>
+
+  <p>
+    Play games and discover new ones.
+  </p>
+
+</a>
+
+
+<a href="library.html" class="card">
+
+  <div class="card-icon">📚</div>
+
+  <h3>Library</h3>
+
+  <p>
+    Keep your favorite content together.
+  </p>
+
+</a>
+
+
+<a href="achievements.html" class="card">
+
+  <div class="card-icon">🏆</div>
+
+  <h3>Achievements</h3>
+
+  <p>
+    Track your MUSABX progress.
+  </p>
+
+</a>
+
+
+</div>
+
+
+<div class="section-header">
+
+  <h2>Your progress</h2>
+
+  <span>Getting started</span>
+
+</div>
+
+
+<div class="panel">
+
+  <div style="
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:12px;
+  ">
+
+    <strong style="font-size:13px;">
+      MUSABX Explorer
+    </strong>
+
+    <span style="
+      color:#8d94ab;
+      font-size:11px;
+    ">
+      25%
+    </span>
+
   </div>
 
 
-  <script>
+  <div class="progress">
 
-    const searchForm =
-      document.getElementById("searchForm");
+    <div
+      class="progress-bar"
+      style="width:25%"
+    ></div>
 
-    const searchInput =
-      document.getElementById("searchInput");
+  </div>
 
-    const fullscreenButton =
-      document.getElementById("fullscreenButton");
-
-
-    /*
-      SEARCH
-
-      The homepage always uses DuckDuckGo.
-
-      Instead of trying to force DuckDuckGo
-      into this homepage itself, searches are
-      sent to browser.html.
-
-      browser.html will become our actual
-      MUSABX browser.
-    */
-
-    searchForm.addEventListener(
-      "submit",
-      function (event) {
-
-        event.preventDefault();
-
-        const query =
-          searchInput.value.trim();
-
-        if (!query) {
-          return;
-        }
-
-        const encoded =
-          encodeURIComponent(query);
-
-        window.location.href =
-          "browser.html?q=" + encoded;
-
-      }
-    );
+</div>
 
 
-    /*
-      FULLSCREEN
-
-      Clicking the button enters fullscreen.
-
-      Pressing Escape exits fullscreen
-      and restores the MUSABX interface.
-    */
-
-    fullscreenButton.addEventListener(
-      "click",
-      async function () {
-
-        try {
-
-          if (!document.fullscreenElement) {
-
-            await document.documentElement
-              .requestFullscreen();
-
-          }
-
-          document.body.classList
-            .add("fullscreen-mode");
-
-        } catch (error) {
-
-          document.body.classList
-            .toggle("fullscreen-mode");
-
-        }
-
-      }
-    );
+</div>
 
 
-    document.addEventListener(
-      "fullscreenchange",
-      function () {
-
-        if (!document.fullscreenElement) {
-
-          document.body.classList
-            .remove("fullscreen-mode");
-
-        }
-
-      }
-    );
+<footer class="footer">
+  MUSABX • Built for the web
+</footer>
 
 
-    document.addEventListener(
-      "keydown",
-      function (event) {
+</main>
 
-        if (event.key === "Escape") {
 
-          document.body.classList
-            .remove("fullscreen-mode");
+<button
+  class="mobile-menu"
+  id="mobileMenu"
+>
+  ☰
+</button>
 
-        }
 
-      }
-    );
-
-  </script>
+<script src="script.js"></script>
 
 </body>
 </html>
