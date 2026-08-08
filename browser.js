@@ -1,1 +1,392 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
+  <meta name="theme-color" content="#040814">
+  <title>MUSABX Browser</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .browser-page {
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .browser-app {
+      min-height: calc(100vh - 32px);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 24px;
+      background: rgba(6,11,20,.96);
+      box-shadow: 0 25px 70px rgba(0,0,0,.35);
+    }
+
+    .browser-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.04);
+      backdrop-filter: blur(18px);
+    }
+
+    .browser-brand {
+      flex: 0 0 auto;
+      padding: 0 10px;
+      color: #61dafb;
+      font-weight: 800;
+      letter-spacing: .12em;
+    }
+
+    .browser-button {
+      min-width: 42px;
+      min-height: 42px;
+      border: 0;
+      border-radius: 12px;
+      background: rgba(255,255,255,.07);
+      color: #eef5ff;
+      cursor: pointer;
+      font-size: 18px;
+      transition: .2s ease;
+    }
+
+    .browser-button:hover {
+      background: rgba(97,218,251,.16);
+    }
+
+    .browser-button:active {
+      transform: scale(.96);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 8px 10px;
+      background: rgba(0,0,0,.18);
+      scrollbar-width: thin;
+    }
+
+    .tab {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 150px;
+      max-width: 240px;
+      padding: 8px 10px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      background: rgba(255,255,255,.05);
+      color: #a6b8d7;
+      cursor: pointer;
+    }
+
+    .tab.active {
+      color: #eef5ff;
+      border-color: rgba(97,218,251,.28);
+      background: rgba(97,218,251,.1);
+    }
+
+    .tab-title {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: left;
+    }
+
+    .tab-close {
+      border: 0;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 2px 5px;
+      border-radius: 6px;
+    }
+
+    .tab-close:hover {
+      background: rgba(255,255,255,.1);
+    }
+
+    .address-area {
+      display: flex;
+      gap: 8px;
+      padding: 10px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .address-input {
+      flex: 1;
+      min-width: 0;
+      height: 44px;
+      padding: 0 16px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 14px;
+      outline: none;
+      background: rgba(255,255,255,.06);
+      color: #eef5ff;
+      font-size: 15px;
+    }
+
+    .address-input:focus {
+      border-color: rgba(97,218,251,.55);
+    }
+
+    .browser-content {
+      position: relative;
+      flex: 1;
+      min-height: 0;
+      background: #0b1220;
+    }
+
+    .browser-frame {
+      width: 100%;
+      height: 100%;
+      min-height: 72vh;
+      display: block;
+      border: 0;
+      background: #0b1220;
+    }
+
+    .browser-loader {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      display: grid;
+      place-items: center;
+      background: rgba(4,8,20,.72);
+      backdrop-filter: blur(5px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease;
+    }
+
+    .browser-loader.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .loader-box {
+      text-align: center;
+      color: #eef5ff;
+    }
+
+    .spinner {
+      width: 42px;
+      height: 42px;
+      margin: 0 auto 12px;
+      border: 4px solid rgba(255,255,255,.12);
+      border-top-color: #61dafb;
+      border-radius: 50%;
+      animation: musabx-spin .8s linear infinite;
+    }
+
+    @keyframes musabx-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /*
+      Fullscreen:
+      hide every browser control except the content.
+    */
+    .browser-app.fullscreen-ui .browser-header,
+    .browser-app.fullscreen-ui .tabs,
+    .browser-app.fullscreen-ui .address-area {
+      display: none;
+    }
+
+    .browser-app.fullscreen-ui,
+    .browser-app.fullscreen-ui .browser-content,
+    .browser-app.fullscreen-ui .browser-frame {
+      border-radius: 0;
+    }
+
+    .esc-hint {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      z-index: 100;
+      transform: translateX(-50%);
+      padding: 8px 13px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.7);
+      color: #fff;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease;
+    }
+
+    .esc-hint.visible {
+      opacity: 1;
+    }
+
+    @media (max-width: 720px) {
+      .browser-page {
+        padding: 0;
+      }
+
+      .browser-app {
+        min-height: 100vh;
+        border-radius: 0;
+      }
+
+      .browser-header {
+        flex-wrap: wrap;
+      }
+
+      .browser-brand {
+        width: 100%;
+        text-align: center;
+        padding-bottom: 4px;
+      }
+
+      .browser-button {
+        min-width: 40px;
+        min-height: 40px;
+      }
+
+      .tab {
+        min-width: 130px;
+      }
+
+      .address-area {
+        padding: 8px;
+      }
+
+      .browser-frame {
+        min-height: calc(100vh - 190px);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="browser-page">
+    <section class="browser-app" id="browserApp">
+
+      <div class="browser-header">
+        <button
+          class="browser-button"
+          id="backButton"
+          type="button"
+          aria-label="Back"
+          title="Back"
+        >←</button>
+
+        <button
+          class="browser-button"
+          id="forwardButton"
+          type="button"
+          aria-label="Forward"
+          title="Forward"
+        >→</button>
+
+        <button
+          class="browser-button"
+          id="reloadButton"
+          type="button"
+          aria-label="Reload"
+          title="Reload"
+        >↻</button>
+
+        <div class="browser-brand">MUSABX</div>
+
+        <button
+          class="browser-button"
+          id="fullscreenButton"
+          type="button"
+          aria-label="Fullscreen"
+          title="Fullscreen"
+        >⛶</button>
+
+        <button
+          class="browser-button"
+          id="homeButton"
+          type="button"
+          aria-label="Home"
+          title="DuckDuckGo Home"
+        >⌂</button>
+      </div>
+
+      <div class="tabs" id="tabs"></div>
+
+      <form class="address-area" id="searchForm" autocomplete="off">
+
+        <input
+          id="searchInput"
+          class="address-input"
+          type="search"
+          placeholder="Search or type a website..."
+          spellcheck="false"
+          autocomplete="off"
+        >
+
+        <button
+          class="browser-button"
+          type="submit"
+          aria-label="Go"
+          title="Go"
+        >→</button>
+
+        <button
+          class="browser-button"
+          id="newTabButton"
+          type="button"
+          aria-label="New tab"
+          title="New tab"
+        >+</button>
+
+      </form>
+
+      <section class="browser-content">
+
+        <div
+          class="browser-loader"
+          id="loader"
+          aria-hidden="true"
+        >
+          <div class="loader-box">
+            <div class="spinner"></div>
+            <div>Loading inside MUSABX...</div>
+          </div>
+        </div>
+
+        <iframe
+          id="proxyFrame"
+          class="browser-frame"
+          title="MUSABX Browser"
+          referrerpolicy="no-referrer"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+        ></iframe>
+
+      </section>
+
+    </section>
+  </main>
+
+  <div class="esc-hint" id="escHint">
+    Hold ESC to restore MUSABX controls
+  </div>
+
+  <script src="app.js"></script>
+  <script src="browser.js"></script>
+
+</body>
+</html>
+```
 
