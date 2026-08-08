@@ -1,1 +1,561 @@
 
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#050816"
+  >
+
+  <title>MUSABX Settings</title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+</head>
+
+<body>
+
+  <div class="page">
+
+    <!-- HEADER -->
+
+    <header class="site-header">
+
+      <a
+        class="brand"
+        href="index.html"
+      >
+
+        <div class="brand-logo">
+          M
+        </div>
+
+        <div class="brand-name">
+          MUSABX
+        </div>
+
+      </a>
+
+
+      <div class="header-actions">
+
+        <a
+          class="btn"
+          href="index.html"
+        >
+          Home
+        </a>
+
+      </div>
+
+    </header>
+
+
+    <!-- MAIN -->
+
+    <main class="page-content">
+
+      <section class="hero">
+
+        <h1>Settings</h1>
+
+        <p>
+          Customize your MUSABX experience.
+        </p>
+
+      </section>
+
+
+      <section class="section">
+
+        <div class="section-title">
+
+          <h2>
+            General
+          </h2>
+
+        </div>
+
+
+        <div class="settings-list">
+
+
+          <!-- FULLSCREEN -->
+
+          <div class="setting">
+
+            <div class="setting-info">
+
+              <strong>
+                Fullscreen Mode
+              </strong>
+
+              <span>
+                Hide MUSABX controls while using fullscreen.
+                Press Escape to restore the interface.
+              </span>
+
+            </div>
+
+
+            <label class="toggle">
+
+              <input
+                type="checkbox"
+                id="fullscreenSetting"
+              >
+
+              <span class="toggle-slider"></span>
+
+            </label>
+
+          </div>
+
+
+          <!-- ANIMATIONS -->
+
+          <div class="setting">
+
+            <div class="setting-info">
+
+              <strong>
+                Animations
+              </strong>
+
+              <span>
+                Enable interface animations and transitions.
+              </span>
+
+            </div>
+
+
+            <label class="toggle">
+
+              <input
+                type="checkbox"
+                id="animationsSetting"
+                checked
+              >
+
+              <span class="toggle-slider"></span>
+
+            </label>
+
+          </div>
+
+
+          <!-- CONFIRM LINKS -->
+
+          <div class="setting">
+
+            <div class="setting-info">
+
+              <strong>
+                Internal Navigation
+              </strong>
+
+              <span>
+                Keep MUSABX pages and supported links inside
+                the MUSABX experience.
+              </span>
+
+            </div>
+
+
+            <label class="toggle">
+
+              <input
+                type="checkbox"
+                id="internalLinksSetting"
+                checked
+              >
+
+              <span class="toggle-slider"></span>
+
+            </label>
+
+          </div>
+
+
+        </div>
+
+      </section>
+
+
+      <!-- BROWSER -->
+
+      <section class="section">
+
+        <div class="section-title">
+
+          <h2>
+            Browser
+          </h2>
+
+        </div>
+
+
+        <div class="settings-list">
+
+
+          <div class="setting">
+
+            <div class="setting-info">
+
+              <strong>
+                Start Page
+              </strong>
+
+              <span>
+                MUSABX Browser starts with DuckDuckGo.
+              </span>
+
+            </div>
+
+
+            <strong>
+              DuckDuckGo
+            </strong>
+
+          </div>
+
+
+          <div class="setting">
+
+            <div class="setting-info">
+
+              <strong>
+                Mobile Support
+              </strong>
+
+              <span>
+                MUSABX automatically adapts controls and
+                layouts for smaller screens.
+              </span>
+
+            </div>
+
+
+            <strong>
+              ON
+            </strong>
+
+          </div>
+
+
+        </div>
+
+      </section>
+
+
+      <!-- DATA -->
+
+      <section class="section">
+
+        <div class="section-title">
+
+          <h2>
+            Data
+          </h2>
+
+        </div>
+
+
+        <div class="settings-list">
+
+
+          <div class="setting">
+
+            <div class="setting-info">
+
+              <strong>
+                Saved Library
+              </strong>
+
+              <span>
+                Your saved MUSABX library items are stored
+                locally on this device.
+              </span>
+
+            </div>
+
+
+            <button
+              class="btn btn-danger"
+              id="clearLibrary"
+              type="button"
+            >
+              Clear
+            </button>
+
+          </div>
+
+
+          <div class="setting">
+
+            <div class="setting-info">
+
+              <strong>
+                Reset Settings
+              </strong>
+
+              <span>
+                Restore MUSABX settings to their defaults.
+              </span>
+
+            </div>
+
+
+            <button
+              class="btn"
+              id="resetSettings"
+              type="button"
+            >
+              Reset
+            </button>
+
+          </div>
+
+
+        </div>
+
+      </section>
+
+    </main>
+
+
+    <footer>
+      MUSABX Settings
+    </footer>
+
+  </div>
+
+
+  <script>
+
+    /*
+      MUSABX SETTINGS
+
+      Settings are saved locally so they remain
+      available after refreshing the page.
+    */
+
+
+    const fullscreenSetting =
+      document.getElementById(
+        "fullscreenSetting"
+      );
+
+    const animationsSetting =
+      document.getElementById(
+        "animationsSetting"
+      );
+
+    const internalLinksSetting =
+      document.getElementById(
+        "internalLinksSetting"
+      );
+
+    const clearLibrary =
+      document.getElementById(
+        "clearLibrary"
+      );
+
+    const resetSettings =
+      document.getElementById(
+        "resetSettings"
+      );
+
+
+    const defaultSettings = {
+
+      fullscreen: false,
+
+      animations: true,
+
+      internalLinks: true
+
+    };
+
+
+    let settings =
+      JSON.parse(
+        localStorage.getItem(
+          "musabxSettings"
+        )
+      ) || {
+        ...defaultSettings
+      };
+
+
+    function saveSettings() {
+
+      localStorage.setItem(
+        "musabxSettings",
+        JSON.stringify(settings)
+      );
+
+    }
+
+
+    function loadSettings() {
+
+      fullscreenSetting.checked =
+        settings.fullscreen;
+
+      animationsSetting.checked =
+        settings.animations;
+
+      internalLinksSetting.checked =
+        settings.internalLinks;
+
+
+      document.documentElement
+        .style.setProperty(
+          "--animations-enabled",
+          settings.animations
+            ? "1"
+            : "0"
+        );
+
+    }
+
+
+    fullscreenSetting.addEventListener(
+      "change",
+      () => {
+
+        settings.fullscreen =
+          fullscreenSetting.checked;
+
+        saveSettings();
+
+      }
+    );
+
+
+    animationsSetting.addEventListener(
+      "change",
+      () => {
+
+        settings.animations =
+          animationsSetting.checked;
+
+        saveSettings();
+
+
+        if (
+          animationsSetting.checked
+        ) {
+
+          document.body
+            .classList
+            .remove(
+              "reduce-motion"
+            );
+
+        } else {
+
+          document.body
+            .classList
+            .add(
+              "reduce-motion"
+            );
+
+        }
+
+      }
+    );
+
+
+    internalLinksSetting.addEventListener(
+      "change",
+      () => {
+
+        settings.internalLinks =
+          internalLinksSetting.checked;
+
+        saveSettings();
+
+      }
+    );
+
+
+    clearLibrary.addEventListener(
+      "click",
+      () => {
+
+        const confirmed =
+          confirm(
+            "Clear your entire MUSABX library?"
+          );
+
+
+        if (!confirmed) {
+          return;
+        }
+
+
+        localStorage.removeItem(
+          "musabxLibrary"
+        );
+
+
+        alert(
+          "Your MUSABX library has been cleared."
+        );
+
+      }
+    );
+
+
+    resetSettings.addEventListener(
+      "click",
+      () => {
+
+        const confirmed =
+          confirm(
+            "Reset all MUSABX settings?"
+          );
+
+
+        if (!confirmed) {
+          return;
+        }
+
+
+        settings = {
+          ...defaultSettings
+        };
+
+
+        saveSettings();
+
+        loadSettings();
+
+
+        alert(
+          "MUSABX settings have been reset."
+        );
+
+      }
+    );
+
+
+    loadSettings();
+
+  </script>
+
+</body>
+</html>
+```
