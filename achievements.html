@@ -1,1 +1,178 @@
+<!DOCTYPE html>
 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="theme-color" content="#050816">
+  <meta
+    name="description"
+    content="MUSABX Achievements"
+  >
+
+  <title>Achievements • MUSABX</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="topbar">
+
+  <a class="brand" href="index.html">
+
+```
+<div class="brand-logo">
+  M
+</div>
+
+<div class="brand-text">
+  <strong>MUSABX</strong>
+  <span>Your web hub</span>
+</div>
+```
+
+  </a>
+
+  <div class="top-actions">
+
+```
+<button
+  class="icon-button"
+  id="fullscreenButton"
+  type="button"
+  aria-label="Fullscreen"
+  title="Fullscreen"
+>
+  ⛶
+</button>
+```
+
+  </div>
+
+</header>
+
+<main>
+
+  <section class="hero">
+
+```
+<div class="hero-badge">
+  <span class="status-dot"></span>
+  MUSABX ACHIEVEMENTS
+</div>
+
+<h1>Achievements</h1>
+
+<p>
+  Track your progress and see everything
+  you've accomplished inside MUSABX.
+</p>
+```
+
+  </section>
+
+  <section>
+
+```
+<div class="section-title">
+  YOUR ACHIEVEMENTS
+</div>
+
+<div class="cards">
+
+  <div class="card">
+
+    <div class="card-icon">🌐</div>
+
+    <div>
+      <h2>Web Explorer</h2>
+
+      <p>
+        Visit and explore the web using the MUSABX browser.
+      </p>
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="card-icon">🎮</div>
+
+    <div>
+      <h2>Gamer</h2>
+
+      <p>
+        Play games through the MUSABX games section.
+      </p>
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="card-icon">📚</div>
+
+    <div>
+      <h2>Collector</h2>
+
+      <p>
+        Build up your personal MUSABX library.
+      </p>
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="card-icon">🏆</div>
+
+    <div>
+      <h2>MUSABX Member</h2>
+
+      <p>
+        Welcome to your personal MUSABX web hub.
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
+```
+
+  </section>
+
+</main>
+
+<footer>
+  MUSABX • Built for the web
+</footer>
+
+<script>
+
+  const fullscreenButton =
+    document.getElementById("fullscreenButton");
+
+  fullscreenButton.addEventListener("click", () => {
+
+    if (!document.fullscreenElement) {
+
+      document.documentElement.requestFullscreen();
+
+    } else {
+
+      document.exitFullscreen();
+
+    }
+
+  });
+
+</script>
+
+</body>
+</html>
