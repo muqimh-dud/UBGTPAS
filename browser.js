@@ -1,392 +1,652 @@
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-  >
-  <meta name="theme-color" content="#040814">
-  <title>MUSABX Browser</title>
+```javascript
+/* =========================================================
+   MUSABX Browser Controller
+   ========================================================= */
 
-  <link rel="stylesheet" href="style.css">
+(() => {
+  "use strict";
 
-  <style>
-    .browser-page {
-      min-height: 100vh;
-      padding: 16px;
+  const DDG_HOME = "https://html.duckduckgo.com/html/";
+
+  const browserApp = document.getElementById("browserApp");
+  const tabsContainer = document.getElementById("tabs");
+  const frame = document.getElementById("proxyFrame");
+  const searchForm = document.getElementById("searchForm");
+  const searchInput = document.getElementById("searchInput");
+  const loader = document.getElementById("loader");
+
+  const backButton = document.getElementById("backButton");
+  const forwardButton = document.getElementById("forwardButton");
+  const reloadButton = document.getElementById("reloadButton");
+  const fullscreenButton = document.getElementById("fullscreenButton");
+  const homeButton = document.getElementById("homeButton");
+  const newTabButton = document.getElementById("newTabButton");
+  const escHint = document.getElementById("escHint");
+
+  let tabs = [];
+  let activeTabId = null;
+
+  /*
+    The worker is optional.
+
+    If your Cloudflare Worker is configured as a proxy,
+    put its URL here.
+
+    If the worker is unavailable, the browser will still
+    attempt to load the requested URL directly.
+  */
+  const WORKER_URL =
+    "https://musabx-proxy.muqimh.workers.dev";
+
+  function showLoader(show) {
+    if (!loader) return;
+
+    loader.classList.toggle("active", show);
+    loader.setAttribute("aria-hidden", String(!show));
+  }
+
+  function createId() {
+    return `tab-${Date.now()}-${Math.random()
+      .toString(36)
+      .slice(2, 8)}`;
+  }
+
+  function createTab(url = DDG_HOME, title = "New Tab") {
+    return {
+      id: createId(),
+      url,
+      title
+    };
+  }
+
+  function saveBrowserTabs() {
+    if (window.MUSABX) {
+      MUSABX.saveTabs(tabs);
+      MUSABX.setActiveTab(activeTabId);
+    } else {
+      localStorage.setItem(
+        "musabx_tabs",
+        JSON.stringify(tabs)
+      );
+
+      localStorage.setItem(
+        "musabx_active_tab",
+        activeTabId || ""
+      );
     }
+  }
 
-    .browser-app {
-      min-height: calc(100vh - 32px);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,.09);
-      border-radius: 24px;
-      background: rgba(6,11,20,.96);
-      box-shadow: 0 25px 70px rgba(0,0,0,.35);
-    }
+  function loadBrowserTabs() {
+    let savedTabs = [];
 
-    .browser-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.04);
-      backdrop-filter: blur(18px);
-    }
-
-    .browser-brand {
-      flex: 0 0 auto;
-      padding: 0 10px;
-      color: #61dafb;
-      font-weight: 800;
-      letter-spacing: .12em;
-    }
-
-    .browser-button {
-      min-width: 42px;
-      min-height: 42px;
-      border: 0;
-      border-radius: 12px;
-      background: rgba(255,255,255,.07);
-      color: #eef5ff;
-      cursor: pointer;
-      font-size: 18px;
-      transition: .2s ease;
-    }
-
-    .browser-button:hover {
-      background: rgba(97,218,251,.16);
-    }
-
-    .browser-button:active {
-      transform: scale(.96);
-    }
-
-    .tabs {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding: 8px 10px;
-      background: rgba(0,0,0,.18);
-      scrollbar-width: thin;
-    }
-
-    .tab {
-      flex: 0 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 150px;
-      max-width: 240px;
-      padding: 8px 10px;
-      border: 1px solid transparent;
-      border-radius: 12px;
-      background: rgba(255,255,255,.05);
-      color: #a6b8d7;
-      cursor: pointer;
-    }
-
-    .tab.active {
-      color: #eef5ff;
-      border-color: rgba(97,218,251,.28);
-      background: rgba(97,218,251,.1);
-    }
-
-    .tab-title {
-      flex: 1;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      text-align: left;
-    }
-
-    .tab-close {
-      border: 0;
-      background: transparent;
-      color: inherit;
-      cursor: pointer;
-      font-size: 16px;
-      padding: 2px 5px;
-      border-radius: 6px;
-    }
-
-    .tab-close:hover {
-      background: rgba(255,255,255,.1);
-    }
-
-    .address-area {
-      display: flex;
-      gap: 8px;
-      padding: 10px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-    }
-
-    .address-input {
-      flex: 1;
-      min-width: 0;
-      height: 44px;
-      padding: 0 16px;
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 14px;
-      outline: none;
-      background: rgba(255,255,255,.06);
-      color: #eef5ff;
-      font-size: 15px;
-    }
-
-    .address-input:focus {
-      border-color: rgba(97,218,251,.55);
-    }
-
-    .browser-content {
-      position: relative;
-      flex: 1;
-      min-height: 0;
-      background: #0b1220;
-    }
-
-    .browser-frame {
-      width: 100%;
-      height: 100%;
-      min-height: 72vh;
-      display: block;
-      border: 0;
-      background: #0b1220;
-    }
-
-    .browser-loader {
-      position: absolute;
-      inset: 0;
-      z-index: 10;
-      display: grid;
-      place-items: center;
-      background: rgba(4,8,20,.72);
-      backdrop-filter: blur(5px);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .2s ease;
-    }
-
-    .browser-loader.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .loader-box {
-      text-align: center;
-      color: #eef5ff;
-    }
-
-    .spinner {
-      width: 42px;
-      height: 42px;
-      margin: 0 auto 12px;
-      border: 4px solid rgba(255,255,255,.12);
-      border-top-color: #61dafb;
-      border-radius: 50%;
-      animation: musabx-spin .8s linear infinite;
-    }
-
-    @keyframes musabx-spin {
-      to {
-        transform: rotate(360deg);
+    if (window.MUSABX) {
+      savedTabs = MUSABX.getTabs();
+    } else {
+      try {
+        savedTabs = JSON.parse(
+          localStorage.getItem("musabx_tabs") || "[]"
+        );
+      } catch {
+        savedTabs = [];
       }
+    }
+
+    if (!Array.isArray(savedTabs)) {
+      savedTabs = [];
     }
 
     /*
-      Fullscreen:
-      hide every browser control except the content.
+      Always make sure there is at least one tab.
     */
-    .browser-app.fullscreen-ui .browser-header,
-    .browser-app.fullscreen-ui .tabs,
-    .browser-app.fullscreen-ui .address-area {
-      display: none;
+    if (savedTabs.length === 0) {
+      tabs = [createTab(DDG_HOME, "DuckDuckGo")];
+      activeTabId = tabs[0].id;
+      saveBrowserTabs();
+      return;
     }
 
-    .browser-app.fullscreen-ui,
-    .browser-app.fullscreen-ui .browser-content,
-    .browser-app.fullscreen-ui .browser-frame {
-      border-radius: 0;
+    tabs = savedTabs;
+
+    const savedActive =
+      window.MUSABX
+        ? MUSABX.getActiveTab()
+        : localStorage.getItem("musabx_active_tab");
+
+    activeTabId =
+      tabs.some(tab => tab.id === savedActive)
+        ? savedActive
+        : tabs[0].id;
+  }
+
+  function getActiveTab() {
+    return tabs.find(tab => tab.id === activeTabId);
+  }
+
+  function renderTabs() {
+    tabsContainer.innerHTML = "";
+
+    tabs.forEach(tab => {
+      const button = document.createElement("button");
+
+      button.type = "button";
+      button.className =
+        "tab" +
+        (tab.id === activeTabId ? " active" : "");
+
+      button.dataset.tabId = tab.id;
+
+      const title = document.createElement("span");
+      title.className = "tab-title";
+      title.textContent =
+        tab.title || getShortTitle(tab.url);
+
+      const close = document.createElement("span");
+      close.className = "tab-close";
+      close.textContent = "×";
+      close.setAttribute("aria-label", "Close tab");
+
+      close.addEventListener("click", event => {
+        event.stopPropagation();
+        closeTab(tab.id);
+      });
+
+      button.appendChild(title);
+      button.appendChild(close);
+
+      button.addEventListener("click", () => {
+        switchTab(tab.id);
+      });
+
+      tabsContainer.appendChild(button);
+    });
+  }
+
+  function getShortTitle(url) {
+    try {
+      const parsed = new URL(url);
+      return parsed.hostname.replace(/^www\./, "");
+    } catch {
+      return "New Tab";
+    }
+  }
+
+  function updateAddressBar() {
+    const tab = getActiveTab();
+
+    if (!tab) {
+      searchInput.value = "";
+      return;
     }
 
-    .esc-hint {
-      position: fixed;
-      left: 50%;
-      bottom: 18px;
-      z-index: 100;
-      transform: translateX(-50%);
-      padding: 8px 13px;
-      border-radius: 999px;
-      background: rgba(0,0,0,.7);
-      color: #fff;
-      font-size: 13px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .2s ease;
+    searchInput.value = tab.url;
+  }
+
+  /*
+    Build a DuckDuckGo search URL.
+
+    Plain text:
+      cats
+
+    becomes:
+      DuckDuckGo search URL.
+
+    Website:
+      example.com
+
+    becomes:
+      https://example.com
+  */
+  function resolveInput(value) {
+    const text = String(value || "").trim();
+
+    if (!text) {
+      return DDG_HOME;
     }
 
-    .esc-hint.visible {
-      opacity: 1;
+    if (/^https?:\/\//i.test(text)) {
+      return text;
     }
 
-    @media (max-width: 720px) {
-      .browser-page {
-        padding: 0;
+    if (
+      text.includes(" ") ||
+      !text.includes(".") ||
+      !/^[a-z0-9-]+(\.[a-z0-9-]+)+/i.test(text)
+    ) {
+      return `${DDG_HOME}?q=${encodeURIComponent(text)}`;
+    }
+
+    return `https://${text}`;
+  }
+
+  /*
+    This is intentionally conservative.
+
+    Only use the worker when it has been configured
+    to act as an actual proxy. Otherwise direct loading
+    is attempted.
+
+    This prevents us from blindly creating malformed
+    worker URLs.
+  */
+  function buildFrameUrl(url) {
+    if (!url) {
+      return DDG_HOME;
+    }
+
+    /*
+      Keep DuckDuckGo direct so the homepage is reliable.
+    */
+    if (
+      url.startsWith("https://html.duckduckgo.com/")
+    ) {
+      return url;
+    }
+
+    return url;
+  }
+
+  function updateTabData(url) {
+    const tab = getActiveTab();
+
+    if (!tab) return;
+
+    tab.url = url;
+    tab.title = getShortTitle(url);
+
+    saveBrowserTabs();
+    renderTabs();
+    updateAddressBar();
+  }
+
+  function navigate(url, options = {}) {
+    const target = resolveInput(url);
+
+    const finalUrl = buildFrameUrl(target);
+
+    const tab = getActiveTab();
+
+    if (!tab) {
+      const newTab = createTab(
+        finalUrl,
+        getShortTitle(finalUrl)
+      );
+
+      tabs.push(newTab);
+      activeTabId = newTab.id;
+    } else {
+      tab.url = finalUrl;
+      tab.title = getShortTitle(finalUrl);
+    }
+
+    saveBrowserTabs();
+    renderTabs();
+    updateAddressBar();
+
+    showLoader(true);
+
+    /*
+      Changing src is enough for normal browser navigation.
+    */
+    frame.src = finalUrl;
+
+    if (!options.silent) {
+      searchInput.blur();
+    }
+  }
+
+  function switchTab(id) {
+    const tab = tabs.find(item => item.id === id);
+
+    if (!tab) return;
+
+    activeTabId = id;
+
+    saveBrowserTabs();
+    renderTabs();
+    updateAddressBar();
+
+    showLoader(true);
+
+    frame.src = buildFrameUrl(tab.url);
+  }
+
+  function closeTab(id) {
+    const index = tabs.findIndex(
+      tab => tab.id === id
+    );
+
+    if (index === -1) return;
+
+    tabs.splice(index, 1);
+
+    /*
+      Never allow the browser to have zero tabs.
+    */
+    if (tabs.length === 0) {
+      const newTab = createTab(
+        DDG_HOME,
+        "DuckDuckGo"
+      );
+
+      tabs.push(newTab);
+      activeTabId = newTab.id;
+    } else if (activeTabId === id) {
+      const replacementIndex = Math.max(
+        0,
+        index - 1
+      );
+
+      activeTabId =
+        tabs[replacementIndex].id;
+    }
+
+    saveBrowserTabs();
+    renderTabs();
+    updateAddressBar();
+
+    const active = getActiveTab();
+
+    if (active) {
+      showLoader(true);
+      frame.src = buildFrameUrl(active.url);
+    }
+  }
+
+  function newTab() {
+    const tab = createTab(
+      DDG_HOME,
+      "DuckDuckGo"
+    );
+
+    tabs.push(tab);
+    activeTabId = tab.id;
+
+    saveBrowserTabs();
+    renderTabs();
+    updateAddressBar();
+
+    showLoader(true);
+    frame.src = DDG_HOME;
+
+    setTimeout(() => {
+      searchInput.focus();
+    }, 100);
+  }
+
+  function goHome() {
+    navigate(DDG_HOME);
+  }
+
+  function reloadPage() {
+    try {
+      showLoader(true);
+      frame.contentWindow.location.reload();
+    } catch {
+      frame.src = frame.src;
+    }
+  }
+
+  function goBack() {
+    try {
+      frame.contentWindow.history.back();
+    } catch {
+      /*
+        Cross-origin frames may block access to history.
+      */
+      window.history.back();
+    }
+  }
+
+  function goForward() {
+    try {
+      frame.contentWindow.history.forward();
+    } catch {
+      window.history.forward();
+    }
+  }
+
+  /*
+    Fullscreen UI behavior.
+
+    Browser fullscreen itself is controlled by the browser.
+    Our interface responds to fullscreenchange.
+  */
+  async function enterFullscreen() {
+    try {
+      if (!document.fullscreenElement) {
+        await browserApp.requestFullscreen();
       }
 
-      .browser-app {
-        min-height: 100vh;
-        border-radius: 0;
+      browserApp.classList.add("fullscreen-ui");
+      escHint.classList.add("visible");
+
+      setTimeout(() => {
+        escHint.classList.remove("visible");
+      }, 2500);
+    } catch (error) {
+      console.warn(
+        "MUSABX could not enter fullscreen:",
+        error
+      );
+
+      /*
+        Fallback UI fullscreen if the browser refuses
+        the native Fullscreen API.
+      */
+      browserApp.classList.add("fullscreen-ui");
+      escHint.classList.add("visible");
+    }
+  }
+
+  async function exitFullscreen() {
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+      }
+    } catch (error) {
+      console.warn(
+        "MUSABX could not exit fullscreen:",
+        error
+      );
+    }
+
+    browserApp.classList.remove(
+      "fullscreen-ui"
+    );
+
+    escHint.classList.remove("visible");
+  }
+
+  function handleFullscreenChange() {
+    const active =
+      Boolean(document.fullscreenElement);
+
+    browserApp.classList.toggle(
+      "fullscreen-ui",
+      active
+    );
+
+    if (!active) {
+      escHint.classList.remove("visible");
+    }
+  }
+
+  /*
+    Hold ESC:
+    browsers normally reserve ESC for exiting native
+    fullscreen. We cannot override that browser behavior.
+
+    This listener also restores our interface whenever
+    fullscreen has ended.
+  */
+  let escapeTimer = null;
+
+  document.addEventListener("keydown", event => {
+    if (event.key !== "Escape") {
+      return;
+    }
+
+    if (escapeTimer) {
+      clearTimeout(escapeTimer);
+    }
+
+    escapeTimer = setTimeout(() => {
+      if (!document.fullscreenElement) {
+        browserApp.classList.remove(
+          "fullscreen-ui"
+        );
+
+        escHint.classList.remove(
+          "visible"
+        );
       }
 
-      .browser-header {
-        flex-wrap: wrap;
+      escapeTimer = null;
+    }, 500);
+  });
+
+  /*
+    Form submission.
+  */
+  searchForm.addEventListener(
+    "submit",
+    event => {
+      event.preventDefault();
+
+      const value =
+        searchInput.value.trim();
+
+      if (!value) {
+        return;
       }
 
-      .browser-brand {
-        width: 100%;
-        text-align: center;
-        padding-bottom: 4px;
-      }
+      navigate(value);
+    }
+  );
 
-      .browser-button {
-        min-width: 40px;
-        min-height: 40px;
-      }
+  /*
+    Buttons.
+  */
+  backButton.addEventListener(
+    "click",
+    goBack
+  );
 
-      .tab {
-        min-width: 130px;
-      }
+  forwardButton.addEventListener(
+    "click",
+    goForward
+  );
 
-      .address-area {
-        padding: 8px;
-      }
+  reloadButton.addEventListener(
+    "click",
+    reloadPage
+  );
 
-      .browser-frame {
-        min-height: calc(100vh - 190px);
+  homeButton.addEventListener(
+    "click",
+    goHome
+  );
+
+  newTabButton.addEventListener(
+    "click",
+    newTab
+  );
+
+  fullscreenButton.addEventListener(
+    "click",
+    enterFullscreen
+  );
+
+  document.addEventListener(
+    "fullscreenchange",
+    handleFullscreenChange
+  );
+
+  /*
+    When the iframe loads, remove the loading screen.
+
+    Cross-origin pages are deliberately not inspected.
+    This respects browser same-origin security.
+  */
+  frame.addEventListener(
+    "load",
+    () => {
+      showLoader(false);
+
+      const tab = getActiveTab();
+
+      if (!tab) return;
+
+      /*
+        We don't read iframe content because it may be
+        cross-origin.
+      */
+
+      renderTabs();
+      updateAddressBar();
+    }
+  );
+
+  frame.addEventListener(
+    "error",
+    () => {
+      showLoader(false);
+    }
+  );
+
+  /*
+    If the iframe cannot display a website because the
+    website blocks iframe embedding, show a useful
+    message in the console rather than breaking MUSABX.
+  */
+  window.addEventListener(
+    "message",
+    event => {
+      if (!event.data) return;
+
+      if (
+        event.data.type ===
+        "MUSABX_OPEN_TAB"
+      ) {
+        if (event.data.url) {
+          const tab = createTab(
+            event.data.url,
+            event.data.title ||
+              getShortTitle(event.data.url)
+          );
+
+          tabs.push(tab);
+          activeTabId = tab.id;
+
+          saveBrowserTabs();
+          renderTabs();
+          updateAddressBar();
+
+          frame.src = tab.url;
+        }
       }
     }
-  </style>
-</head>
+  );
 
-<body>
+  /*
+    Start browser.
+  */
+  loadBrowserTabs();
+  renderTabs();
+  updateAddressBar();
 
-  <main class="browser-page">
-    <section class="browser-app" id="browserApp">
+  const activeTab = getActiveTab();
 
-      <div class="browser-header">
-        <button
-          class="browser-button"
-          id="backButton"
-          type="button"
-          aria-label="Back"
-          title="Back"
-        >←</button>
+  if (activeTab) {
+    frame.src = buildFrameUrl(
+      activeTab.url || DDG_HOME
+    );
+  } else {
+    frame.src = DDG_HOME;
+  }
 
-        <button
-          class="browser-button"
-          id="forwardButton"
-          type="button"
-          aria-label="Forward"
-          title="Forward"
-        >→</button>
-
-        <button
-          class="browser-button"
-          id="reloadButton"
-          type="button"
-          aria-label="Reload"
-          title="Reload"
-        >↻</button>
-
-        <div class="browser-brand">MUSABX</div>
-
-        <button
-          class="browser-button"
-          id="fullscreenButton"
-          type="button"
-          aria-label="Fullscreen"
-          title="Fullscreen"
-        >⛶</button>
-
-        <button
-          class="browser-button"
-          id="homeButton"
-          type="button"
-          aria-label="Home"
-          title="DuckDuckGo Home"
-        >⌂</button>
-      </div>
-
-      <div class="tabs" id="tabs"></div>
-
-      <form class="address-area" id="searchForm" autocomplete="off">
-
-        <input
-          id="searchInput"
-          class="address-input"
-          type="search"
-          placeholder="Search or type a website..."
-          spellcheck="false"
-          autocomplete="off"
-        >
-
-        <button
-          class="browser-button"
-          type="submit"
-          aria-label="Go"
-          title="Go"
-        >→</button>
-
-        <button
-          class="browser-button"
-          id="newTabButton"
-          type="button"
-          aria-label="New tab"
-          title="New tab"
-        >+</button>
-
-      </form>
-
-      <section class="browser-content">
-
-        <div
-          class="browser-loader"
-          id="loader"
-          aria-hidden="true"
-        >
-          <div class="loader-box">
-            <div class="spinner"></div>
-            <div>Loading inside MUSABX...</div>
-          </div>
-        </div>
-
-        <iframe
-          id="proxyFrame"
-          class="browser-frame"
-          title="MUSABX Browser"
-          referrerpolicy="no-referrer"
-          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
-        ></iframe>
-
-      </section>
-
-    </section>
-  </main>
-
-  <div class="esc-hint" id="escHint">
-    Hold ESC to restore MUSABX controls
-  </div>
-
-  <script src="app.js"></script>
-  <script src="browser.js"></script>
-
-</body>
-</html>
+  console.log(
+    "MUSABX Browser loaded successfully."
+  );
+})();
 ```
-
