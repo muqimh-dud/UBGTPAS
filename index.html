@@ -1,1524 +1,642 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="MUSABX District Game Hub - polished browser games in one self-contained page." />
+<title>MUSABX v3 — Browser & Game Hub</title>
+<style>
+:root{
+  --bg:#07111f; --bg2:#0c1b31; --panel:rgba(13,28,50,.82); --panel2:#132744;
+  --text:#f8fbff; --muted:#9fb2cc; --accent:#67e8f9; --accent2:#8b5cf6;
+  --good:#34d399; --warn:#fbbf24; --danger:#fb7185; --line:rgba(255,255,255,.10);
+  --shadow:0 22px 70px rgba(0,0,0,.42); --radius:22px;
+}
+body.theme-sunset{--bg:#26101b;--bg2:#5a2035;--panel:rgba(56,20,38,.86);--panel2:#7a2948;--accent:#ffd166;--accent2:#ff6b6b;--good:#7ee787;--muted:#e8b7c6}
+body.theme-forest{--bg:#071b17;--bg2:#123c2f;--panel:rgba(9,45,35,.86);--panel2:#165a42;--accent:#86efac;--accent2:#2dd4bf;--good:#facc15;--muted:#b7d9cb}
+body.theme-light{--bg:#eaf4ff;--bg2:#cde3fb;--panel:rgba(255,255,255,.88);--panel2:#fff;--text:#10233d;--muted:#56708e;--accent:#0ea5e9;--accent2:#7c3aed;--line:rgba(18,47,78,.12);--shadow:0 22px 60px rgba(35,74,110,.18)}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg)}
+body{overflow-x:hidden;background:
+ radial-gradient(circle at 15% 10%,color-mix(in srgb,var(--accent) 26%,transparent),transparent 32%),
+ radial-gradient(circle at 85% 0%,color-mix(in srgb,var(--accent2) 28%,transparent),transparent 30%),
+ linear-gradient(145deg,var(--bg),var(--bg2));transition:background .35s,color .35s}
+button,input{font:inherit}
+button{border:0;cursor:pointer}
+.app-shell{min-height:100vh;display:grid;grid-template-columns:250px 1fr}
+.sidebar{position:sticky;top:0;height:100vh;padding:22px 18px;background:rgba(5,13,25,.74);backdrop-filter:blur(18px);border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:20}
+.brand{display:flex;gap:12px;align-items:center;padding:8px 8px 20px}
+.brand-mark{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;font-size:24px;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 12px 30px color-mix(in srgb,var(--accent) 25%,transparent)}
+.brand strong{font-size:19px;letter-spacing:.4px}.brand small{display:block;color:var(--muted);margin-top:2px}
+.nav{display:grid;gap:9px}.nav-btn{width:100%;padding:13px 14px;border-radius:14px;color:var(--muted);background:transparent;text-align:left;display:flex;gap:11px;align-items:center;font-weight:750;transition:.2s}
+.nav-btn:hover,.nav-btn.active{background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 17%,transparent),color-mix(in srgb,var(--accent2) 13%,transparent));color:var(--text);transform:translateX(3px)}
+.sidebar-note{margin-top:auto;padding:14px;border-radius:16px;background:var(--panel);border:1px solid var(--line);color:var(--muted);font-size:12px;line-height:1.45}.sidebar-note b{color:var(--text)}
+.main{min-width:0;padding:24px 28px 36px}
+.topbar{display:flex;align-items:center;gap:14px;margin-bottom:24px}.search{flex:1;display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:0 14px;box-shadow:var(--shadow)}
+.search input{width:100%;border:0;outline:0;color:var(--text);background:transparent;padding:14px 0}.search input::placeholder{color:var(--muted)}
+.icon-btn{width:46px;height:46px;border-radius:15px;background:var(--panel);color:var(--text);border:1px solid var(--line);display:grid;place-items:center;transition:.2s}.icon-btn:hover{transform:translateY(-2px);border-color:var(--accent)}
+.view{display:none;animation:fade .28s ease}.view.active{display:block}@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.hero{position:relative;overflow:hidden;border-radius:30px;padding:38px;min-height:320px;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;background:
+ linear-gradient(115deg,rgba(5,15,30,.94),rgba(23,43,78,.72)),
+ radial-gradient(circle at 85% 30%,var(--accent2),transparent 36%);border:1px solid var(--line);box-shadow:var(--shadow)}
+body.theme-light .hero{background:linear-gradient(115deg,rgba(255,255,255,.96),rgba(221,238,255,.82)),radial-gradient(circle at 85% 30%,var(--accent2),transparent 36%)}
+.hero h1{font-size:clamp(36px,5vw,68px);line-height:.96;margin:0 0 16px;letter-spacing:-2.6px}.hero h1 span{background:linear-gradient(90deg,var(--accent),#fff,var(--accent2));-webkit-background-clip:text;color:transparent}
+body.theme-light .hero h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;color:transparent}.hero p{max-width:620px;color:var(--muted);font-size:17px;line-height:1.65}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}.primary,.secondary{padding:13px 19px;border-radius:14px;font-weight:850;transition:.2s}.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#061321}.secondary{background:rgba(255,255,255,.08);color:var(--text);border:1px solid var(--line)}.primary:hover,.secondary:hover{transform:translateY(-2px)}
+.hero-art{position:relative;height:250px}.planet{position:absolute;right:10%;top:6%;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 3%,#86e7ff 7%,#3566d9 43%,#1e2b6b 71%);box-shadow:0 0 80px color-mix(in srgb,var(--accent) 48%,transparent)}
+.planet:after{content:"";position:absolute;inset:42% -38%;border:12px solid rgba(255,255,255,.55);border-left-color:transparent;border-right-color:transparent;border-radius:50%;transform:rotate(-14deg)}
+.ship{position:absolute;left:9%;bottom:24px;width:170px;height:80px;filter:drop-shadow(0 16px 18px rgba(0,0,0,.38));animation:float 3s ease-in-out infinite}.ship:before{content:"";position:absolute;inset:18px 15px;background:linear-gradient(90deg,#d9f7ff,#72c5ff 55%,#6b5cff);clip-path:polygon(0 51%,64% 0,100% 48%,65% 100%);border-radius:40%}.ship:after{content:"";position:absolute;left:-35px;top:31px;width:64px;height:17px;background:linear-gradient(90deg,transparent,#ffd166,#ff6b6b);filter:blur(2px);clip-path:polygon(0 50%,100% 0,100% 100%)}
+@keyframes float{50%{transform:translateY(-12px) rotate(-2deg)}}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin:30px 0 16px}.section-head h2{font-size:28px;margin:0}.section-head p{margin:5px 0 0;color:var(--muted)}
+.games-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}.game-card{position:relative;overflow:hidden;border-radius:23px;background:var(--panel);border:1px solid var(--line);box-shadow:0 16px 40px rgba(0,0,0,.22);transition:.24s}.game-card:hover{transform:translateY(-7px);border-color:color-mix(in srgb,var(--accent) 60%,transparent)}
+.cover{height:170px;position:relative;overflow:hidden;background:#13233e}.cover svg{width:100%;height:100%;display:block}.card-body{padding:16px}.game-card h3{margin:0 0 7px}.game-card p{margin:0 0 14px;color:var(--muted);font-size:13px;line-height:1.5}.meta{display:flex;justify-content:space-between;align-items:center}.badge{font-size:11px;font-weight:900;padding:6px 9px;border-radius:999px;background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent)}
+.play-btn{padding:9px 13px;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--accent2));font-weight:900;color:#061321}.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}.stat{padding:18px;border-radius:19px;background:var(--panel);border:1px solid var(--line)}.stat b{font-size:28px;display:block}.stat span{color:var(--muted);font-size:13px}
+.panel{padding:24px;border-radius:24px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow)}
+.theme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.theme-card{padding:18px;border-radius:19px;border:2px solid transparent;background:var(--panel2);color:var(--text);text-align:left}.theme-card.active{border-color:var(--accent)}.swatches{display:flex;gap:7px;margin-top:14px}.swatch{width:25px;height:25px;border-radius:50%}
+.game-screen{display:none;position:fixed;inset:0;z-index:100;background:rgba(2,8,18,.92);backdrop-filter:blur(12px);padding:18px}.game-screen.open{display:flex;flex-direction:column}.game-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}.game-title{font-size:20px;font-weight:900}.game-stage-wrap{flex:1;min-height:0;display:grid;place-items:center}.game-stage{position:relative;width:min(1100px,96vw);height:min(680px,82vh);border-radius:24px;overflow:hidden;background:#07111f;border:1px solid rgba(255,255,255,.14);box-shadow:0 35px 100px rgba(0,0,0,.6)}canvas{display:block;width:100%;height:100%}.game-hud{position:absolute;left:18px;right:18px;top:18px;display:flex;justify-content:space-between;pointer-events:none}.hud-pill{padding:9px 13px;border-radius:999px;background:rgba(5,13,25,.72);border:1px solid rgba(255,255,255,.18);font-weight:900;backdrop-filter:blur(8px)}
+.overlay-card{position:absolute;inset:0;display:grid;place-items:center;background:rgba(3,9,18,.62);backdrop-filter:blur(5px)}.overlay-card.hidden{display:none}.overlay-inner{width:min(460px,88%);padding:28px;border-radius:25px;text-align:center;background:rgba(12,28,49,.94);border:1px solid rgba(255,255,255,.15);box-shadow:0 28px 80px rgba(0,0,0,.5)}.overlay-inner h2{font-size:34px;margin:0 0 10px}.overlay-inner p{color:#b9c7da;line-height:1.55}.controls{font-size:12px;color:#9fb2cc;margin-top:12px}
+.memory-board{height:100%;padding:76px 24px 24px;display:grid;grid-template-columns:repeat(4,minmax(90px,1fr));gap:14px;background:linear-gradient(135deg,#10243e,#261d54)}.memory-card{position:relative;border:0;background:transparent;perspective:900px}.memory-inner{position:absolute;inset:0;transition:transform .45s;transform-style:preserve-3d}.memory-card.flipped .memory-inner,.memory-card.matched .memory-inner{transform:rotateY(180deg)}.memory-face{position:absolute;inset:0;border-radius:18px;backface-visibility:hidden;display:grid;place-items:center}.memory-back{background:linear-gradient(145deg,#1d4ed8,#7c3aed);border:2px solid rgba(255,255,255,.26);font-size:34px}.memory-front{transform:rotateY(180deg);background:linear-gradient(145deg,#f8fbff,#cde7ff);color:#10233d;border:2px solid white;font-size:52px}.memory-card.matched{filter:drop-shadow(0 0 16px #34d399)}
+.toast{position:fixed;right:22px;bottom:22px;z-index:200;padding:13px 17px;border-radius:14px;background:#0e2038;color:white;border:1px solid rgba(255,255,255,.15);transform:translateY(20px);opacity:0;pointer-events:none;transition:.25s}.toast.show{transform:none;opacity:1}
+@media(max-width:1050px){.games-grid{grid-template-columns:repeat(2,1fr)}.hero{grid-template-columns:1fr}.hero-art{display:none}.theme-grid{grid-template-columns:repeat(2,1fr)}}
 
-  <meta charset="UTF-8">
+.category-row{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 18px}.filter-chip{padding:9px 13px;border-radius:999px;background:var(--panel);border:1px solid var(--line);color:var(--muted);font-weight:800}.filter-chip.active,.filter-chip:hover{color:var(--text);border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--panel))}.library-count{color:var(--accent);font-weight:900}.game-card .cover-label{position:absolute;left:12px;top:12px;padding:6px 9px;border-radius:999px;background:rgba(3,9,18,.7);color:white;font-size:10px;font-weight:900;backdrop-filter:blur(7px)}
+@media(max-width:760px){.app-shell{grid-template-columns:1fr}.sidebar{position:fixed;left:0;right:0;bottom:0;top:auto;height:72px;padding:8px 10px;border-right:0;border-top:1px solid var(--line);z-index:60}.brand,.sidebar-note{display:none}.nav{grid-template-columns:repeat(4,1fr);gap:5px}.nav-btn{justify-content:center;flex-direction:column;gap:2px;font-size:10px;padding:7px}.main{padding:16px 14px 94px}.topbar{margin-bottom:16px}.hero{padding:25px;min-height:280px}.hero h1{font-size:42px}.games-grid{grid-template-columns:1fr}.stats-grid{grid-template-columns:1fr}.theme-grid{grid-template-columns:1fr}.game-screen{padding:7px}.game-stage{height:84vh}.memory-board{grid-template-columns:repeat(3,1fr);padding:70px 10px 10px;gap:8px}.memory-front{font-size:38px}}
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
 
->
+/* Integrated proxy browser */
+.browser-view{height:calc(100vh - 90px);min-height:650px}.browser-view .section-head{margin-top:0}
+.browser-shell{height:calc(100% - 82px);min-height:560px;display:flex;flex-direction:column;overflow:hidden;border-radius:24px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow)}
+.browser-toolbar{display:flex;align-items:center;gap:8px;padding:11px;background:color-mix(in srgb,var(--panel2) 86%,#020617);border-bottom:1px solid var(--line)}
+.browser-icon,.browser-go{height:42px;min-width:42px;border-radius:12px;background:rgba(255,255,255,.08);color:var(--text);border:1px solid var(--line);font-weight:900}.browser-icon:hover{border-color:var(--accent);transform:translateY(-1px)}
+.browser-go{padding:0 18px;min-width:64px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#061321}
+.browser-address{flex:1;display:flex;align-items:center;gap:9px;height:42px;padding:0 13px;border-radius:13px;background:rgba(2,8,18,.58);border:1px solid var(--line)}
+.browser-address input{width:100%;border:0;outline:0;background:transparent;color:var(--text)}
+.browser-tabs{display:flex;align-items:center;gap:7px;min-height:42px;padding:6px 10px;background:rgba(2,8,18,.48);overflow-x:auto;border-bottom:1px solid var(--line)}
+.browser-tab{display:flex;align-items:center;gap:8px;max-width:210px;padding:8px 11px;border-radius:10px;background:rgba(255,255,255,.07);color:var(--muted);white-space:nowrap}.browser-tab.active{background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--text)}.browser-tab-title{overflow:hidden;text-overflow:ellipsis}.browser-tab-close{background:transparent;color:inherit;padding:0;font-size:16px}.browser-add-tab{padding:7px 12px;border-radius:9px;background:var(--good);color:#052315;font-weight:900}
+.browser-content{flex:1;min-height:0;display:grid;grid-template-columns:190px 1fr}.browser-side{padding:12px;background:rgba(2,8,18,.42);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:9px}.browser-side>button{padding:12px;border-radius:12px;text-align:left;background:rgba(255,255,255,.07);color:var(--text);font-weight:750}.browser-side>button:hover{background:color-mix(in srgb,var(--accent) 15%,transparent)}.browser-tip{margin-top:auto;padding:12px;border-radius:13px;background:rgba(255,255,255,.06);color:var(--muted);font-size:11px;line-height:1.5}.browser-tip b{color:var(--text)}
+.browser-frame-wrap{position:relative;min-width:0;min-height:0;background:white}.browser-frame-wrap iframe{width:100%;height:100%;border:0;background:white}.browser-loading{display:none;position:absolute;inset:0;z-index:4;place-items:center;align-content:center;gap:13px;background:rgba(4,13,28,.82);color:white}.browser-loading.show{display:grid}.browser-loading span{width:44px;height:44px;border-radius:50%;border:4px solid rgba(255,255,255,.2);border-top-color:var(--accent);animation:browserSpin .8s linear infinite}@keyframes browserSpin{to{transform:rotate(360deg)}}
+.browser-panel{display:none;position:absolute;z-index:6;inset:18px 18px 18px auto;width:min(390px,90%);padding:15px;overflow:auto;border-radius:19px;background:rgba(9,22,40,.97);color:white;border:1px solid rgba(255,255,255,.15);box-shadow:0 25px 80px rgba(0,0,0,.55)}.browser-panel.open{display:block}.browser-panel-head{display:flex;justify-content:space-between;align-items:center}.browser-panel-head h3{margin:0}.browser-panel-head button{font-size:25px;background:transparent;color:white}.browser-list-item{display:block;width:100%;margin-top:9px;padding:11px;border-radius:11px;text-align:left;background:rgba(255,255,255,.07);color:white;word-break:break-word}.browser-list-item:hover{background:rgba(103,232,249,.15)}.browser-empty{padding:24px 5px;color:#9fb2cc;text-align:center}
+@media(max-width:760px){.nav{grid-template-columns:repeat(5,1fr)}.browser-view{height:auto;min-height:720px}.browser-shell{height:650px}.browser-toolbar{flex-wrap:wrap}.browser-address{order:2;flex-basis:calc(100% - 72px)}.browser-go{order:2}.browser-content{grid-template-columns:1fr}.browser-side{display:grid;grid-template-columns:repeat(4,1fr);border-right:0;border-bottom:1px solid var(--line)}.browser-side>button{text-align:center;font-size:11px;padding:10px 4px}.browser-tip{display:none}}
 
-<meta
-name="theme-color"
-content="#050611"
-
->
-
-<meta
-name="description"
-content="MUSABX - Your personal web hub"
-
->
-
-  <title>MUSABX — Home</title>
-
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
-
+</style>
 </head>
-
 <body>
-
-<!-- =========================================================
-     MOBILE MENU
-     ========================================================= -->
-
-<button
-class="mobile-menu"
-id="mobileMenu"
-type="button"
-aria-label="Open navigation"
-
->
-
-☰ </button>
-
-<!-- =========================================================
-     SIDEBAR
-     ========================================================= -->
-
-<aside
-  class="sidebar"
-  id="sidebar"
->
-
-  <!-- LOGO -->
-
-<a
-href="index.html"
-class="logo"
-
->
-
-```
-<div class="logo-mark">
-  M
-</div>
-
-<div class="logo-text">
-
-  <strong>
-    MUSABX
-  </strong>
-
-  <span>
-    Your web hub
-  </span>
-
-</div>
-```
-
-  </a>
-
-  <!-- MAIN NAVIGATION -->
-
-  <div class="nav-label">
-    MAIN
-  </div>
-
-  <nav class="nav">
-
-```
-<a
-  href="index.html"
-  class="active"
->
-
-  <span class="nav-icon">
-    🏠
-  </span>
-
-  <span>
-    Home
-  </span>
-
-</a>
-
-
-<a
-  href="browser.html"
->
-
-  <span class="nav-icon">
-    🌐
-  </span>
-
-  <span>
-    Browser
-  </span>
-
-</a>
-
-
-<a
-  href="games.html"
->
-
-  <span class="nav-icon">
-    🎮
-  </span>
-
-  <span>
-    Games
-  </span>
-
-</a>
-
-
-<a
-  href="library.html"
->
-
-  <span class="nav-icon">
-    📚
-  </span>
-
-  <span>
-    Library
-  </span>
-
-</a>
-
-
-<a
-  href="achievements.html"
->
-
-  <span class="nav-icon">
-    🏆
-  </span>
-
-  <span>
-    Achievements
-  </span>
-
-</a>
-```
-
-  </nav>
-
-  <!-- SYSTEM NAVIGATION -->
-
-  <div class="nav-label">
-    SYSTEM
-  </div>
-
-  <nav class="nav">
-
-```
-<a
-  href="settings.html"
->
-
-  <span class="nav-icon">
-    ⚙️
-  </span>
-
-  <span>
-    Settings
-  </span>
-
-</a>
-```
-
-  </nav>
-
-  <!-- SIDEBAR STATUS -->
-
-  <div class="sidebar-bottom">
-
-```
-<div class="panel sidebar-status">
-
-
-  <div class="sidebar-status-title">
-    MUSABX STATUS
-  </div>
-
-
-  <div class="sidebar-status-row">
-
-    <span class="status-dot"></span>
-
-    <span>
-      All systems online
-    </span>
-
-  </div>
-
-
-  <div class="sidebar-version">
-    Web Hub • v1.0
-  </div>
-
-
-</div>
-```
-
-  </div>
-
-</aside>
-
-<!-- =========================================================
-     MAIN APPLICATION
-     ========================================================= -->
-
-<main class="main">
-
-  <!-- =======================================================
-       TOP BAR
-       ======================================================= -->
-
-  <header class="topbar">
-
-```
-<div class="topbar-left">
-
-
-  <div class="mobile-page-title">
-    MUSABX
-  </div>
-
-
-</div>
-
-
-<div class="top-actions">
-
-
-  <button
-    class="icon-btn"
-    id="fullscreenButton"
-    type="button"
-    aria-label="Fullscreen"
-    title="Fullscreen"
-  >
-    ⛶
-  </button>
-
-
-  <a
-    href="settings.html"
-    class="icon-btn"
-    aria-label="Settings"
-    title="Settings"
-  >
-    ⚙
-  </a>
-
-
-</div>
-```
-
-  </header>
-
-  <!-- =======================================================
-       CONTENT
-       ======================================================= -->
-
-  <div class="content">
-
-```
-<!-- =====================================================
-     HERO
-     ===================================================== -->
-
-<section class="hero">
-
-
-  <div class="badge">
-
-
-    <span class="status-dot"></span>
-
-
-    MUSABX ONLINE
-
-
-  </div>
-
-
-  <h1>
-
-    Welcome to
-
-    <span>
-      MUSABX.
-    </span>
-
-  </h1>
-
-
-  <p>
-
-    Your personal web hub for browsing,
-    gaming, discovering content, managing
-    your library, and tracking your progress.
-
-  </p>
-
-
-</section>
-
-
-<!-- =====================================================
-     SEARCH
-     ===================================================== -->
-
-<section class="search-section">
-
-
-  <form
-    class="search-box"
-    id="searchForm"
-    autocomplete="off"
-  >
-
-
-    <div class="search-icon">
-      🔎
-    </div>
-
-
-    <input
-      id="searchInput"
-      type="search"
-      placeholder="Search the web or enter a website..."
-      spellcheck="false"
-      autocomplete="off"
-      aria-label="Search the web"
-    >
-
-
-    <button
-      class="primary-btn"
-      type="submit"
-    >
-      Search
-    </button>
-
-
-  </form>
-
-
-  <div class="search-hint">
-
-    <span>
-      Try:
-    </span>
-
-    <button
-      type="button"
-      class="search-suggestion"
-      data-search="YouTube"
-    >
-      YouTube
-    </button>
-
-    <button
-      type="button"
-      class="search-suggestion"
-      data-search="games"
-    >
-      games
-    </button>
-
-    <button
-      type="button"
-      class="search-suggestion"
-      data-search="weather"
-    >
-      weather
-    </button>
-
-  </div>
-
-
-</section>
-
-
-<!-- =====================================================
-     WELCOME DASHBOARD
-     ===================================================== -->
-
-<section class="dashboard-grid">
-
-
-  <!-- LARGE CARD -->
-
-  <a
-    href="browser.html"
-    class="dashboard-feature"
-  >
-
-
-    <div class="dashboard-feature-background"></div>
-
-
-    <div class="dashboard-feature-content">
-
-
-      <div class="dashboard-icon">
-        🌐
-      </div>
-
-
-      <div class="badge">
-        BROWSER
-      </div>
-
-
-      <h2>
-        Explore the web
-      </h2>
-
-
-      <p>
-
-        Search for anything,
-        open websites, and explore
-        the internet from MUSABX.
-
-      </p>
-
-
-      <span class="feature-link">
-        Open Browser →
-      </span>
-
-
-    </div>
-
-
-  </a>
-
-
-  <!-- SIDE CARD -->
-
-  <a
-    href="games.html"
-    class="dashboard-side-card"
-  >
-
-
-    <div class="card-glow"></div>
-
-
-    <div class="dashboard-icon">
-      🎮
-    </div>
-
-
-    <div class="badge">
-      GAMES
-    </div>
-
-
-    <h3>
-      Play something
-    </h3>
-
-
-    <p>
-      Jump into your games.
-    </p>
-
-
-    <span class="feature-link">
-      Open Games →
-    </span>
-
-
-  </a>
-
-
-</section>
-
-
-<!-- =====================================================
-     QUICK ACCESS
-     ===================================================== -->
-
-<section>
-
-
-  <div class="section-header">
-
-
-    <div>
-
-      <h2>
-        Quick Access
-      </h2>
-
-      <p>
-        Jump straight into MUSABX
-      </p>
-
-    </div>
-
-
-    <span>
-      4 destinations
-    </span>
-
-
-  </div>
-
-
-  <div class="grid">
-
-
-    <!-- BROWSER -->
-
-    <a
-      href="browser.html"
-      class="card"
-    >
-
-
-      <div class="card-top">
-
-
-        <div class="card-icon">
-          🌐
-        </div>
-
-
-        <span class="card-arrow">
-          ↗
-        </span>
-
-
-      </div>
-
-
-      <h3>
-        Browser
-      </h3>
-
-
-      <p>
-        Search and explore the web.
-      </p>
-
-
-    </a>
-
-
-    <!-- GAMES -->
-
-    <a
-      href="games.html"
-      class="card"
-    >
-
-
-      <div class="card-top">
-
-
-        <div class="card-icon">
-          🎮
-        </div>
-
-
-        <span class="card-arrow">
-          ↗
-        </span>
-
-
-      </div>
-
-
-      <h3>
-        Games
-      </h3>
-
-
-      <p>
-        Play games and discover
-        something new.
-      </p>
-
-
-    </a>
-
-
-    <!-- LIBRARY -->
-
-    <a
-      href="library.html"
-      class="card"
-    >
-
-
-      <div class="card-top">
-
-
-        <div class="card-icon">
-          📚
-        </div>
-
-
-        <span class="card-arrow">
-          ↗
-        </span>
-
-
-      </div>
-
-
-      <h3>
-        Library
-      </h3>
-
-
-      <p>
-        Keep your favorite content
-        together.
-      </p>
-
-
-    </a>
-
-
-    <!-- ACHIEVEMENTS -->
-
-    <a
-      href="achievements.html"
-      class="card"
-    >
-
-
-      <div class="card-top">
-
-
-        <div class="card-icon">
-          🏆
-        </div>
-
-
-        <span class="card-arrow">
-          ↗
-        </span>
-
-
-      </div>
-
-
-      <h3>
-        Achievements
-      </h3>
-
-
-      <p>
-        Track your MUSABX progress.
-      </p>
-
-
-    </a>
-
-
-  </div>
-
-
-</section>
-
-
-<!-- =====================================================
-     PROGRESS
-     ===================================================== -->
-
-<section>
-
-
-  <div class="section-header">
-
-
-    <div>
-
-      <h2>
-        Your Progress
-      </h2>
-
-      <p>
-        Keep exploring MUSABX
-      </p>
-
-    </div>
-
-
-    <a
-      href="achievements.html"
-      class="section-link"
-    >
-      View achievements →
-    </a>
-
-
-  </div>
-
-
-  <div class="progress-panel">
-
-
-    <div class="progress-header">
-
-
-      <div class="progress-user">
-
-
-        <div class="progress-avatar">
-          M
-        </div>
-
-
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">✦</div><div><strong>MUSABX</strong><small>Browser & Game Hub</small></div></div>
+    <nav class="nav">
+      <button class="nav-btn active" data-view="home"><span>⌂</span> Home</button>
+      <button class="nav-btn" data-view="browser"><span>🌐</span> Browser</button>
+      <button class="nav-btn" data-view="library"><span>🎮</span> Game Library</button>
+      <button class="nav-btn" data-view="achievements"><span>🏆</span> Achievements</button>
+      <button class="nav-btn" data-view="settings"><span>⚙</span> Themes</button>
+    </nav>
+    <div class="sidebar-note"><b>MUSABX all-in-one</b><br>The original proxy browser remains available, while games run directly inside this file. No app shortcut buttons.</div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="search"><span>⌕</span><input id="searchInput" aria-label="Search games" placeholder="Search the game library..." /></div>
+      <button class="icon-btn" id="soundBtn" title="Toggle sound">🔊</button>
+      <button class="icon-btn" id="fullBtn" title="Fullscreen">⛶</button>
+    </header>
+
+    <section id="home" class="view active">
+      <div class="hero">
         <div>
-
-          <strong>
-            MUSABX Explorer
-          </strong>
-
-          <span>
-            Level 1
-          </span>
-
+          <div class="badge">MUSABX ORIGINALS</div>
+          <h1>Play. Improve. <span>Level Up.</span></h1>
+          <p>A polished district-ready portal combining the original MUSABX proxy browser with colorful games built directly into the site. Browse and play from one clean interface.</p>
+          <div class="hero-actions"><button class="primary" onclick="launchGame('drift')">Play Featured Game</button><button class="secondary" onclick="switchView('browser')">Open Browser</button><button class="secondary" onclick="switchView('library')">Browse Games</button></div>
         </div>
-
-
+        <div class="hero-art"><div class="planet"></div><div class="ship"></div></div>
       </div>
-
-
-      <div class="progress-xp">
-
-        <strong>
-          100 XP
-        </strong>
-
-        <span>
-          / 400 XP
-        </span>
-
+      <div class="stats-grid">
+        <div class="stat"><b id="gamesPlayed">0</b><span>Games played</span></div>
+        <div class="stat"><b id="bestScore">0</b><span>Highest score</span></div>
+        <div class="stat"><b id="achievementCount">0/8</b><span>Achievements earned</span></div>
       </div>
+      <div class="section-head"><div><h2>Featured games</h2><p>Original games designed for quick sessions and replay value.</p></div></div>
+      <div class="games-grid" id="featuredGrid"></div>
+    </section>
 
 
-    </div>
-
-
-    <div class="progress">
-
-
-      <div
-        class="progress-bar"
-        style="width:25%"
-      ></div>
-
-
-    </div>
-
-
-    <div class="progress-footer">
-
-
-      <span>
-        25% complete
-      </span>
-
-
-      <span>
-        300 XP until Level 2
-      </span>
-
-
-    </div>
-
-
-  </div>
-
-
-</section>
-
-
-<!-- =====================================================
-     STATS
-     ===================================================== -->
-
-<section>
-
-
-  <div class="section-header">
-
-
-    <div>
-
-      <h2>
-        MUSABX Stats
-      </h2>
-
-      <p>
-        Your activity at a glance
-      </p>
-
-    </div>
-
-
-  </div>
-
-
-  <div class="stats">
-
-
-    <div class="stat">
-
-
-      <div class="stat-icon">
-        🌐
+    <section id="browser" class="view browser-view">
+      <div class="section-head"><div><h2>MUSABX Browser</h2><p>The original proxy browser, rebuilt inside the new interface.</p></div><span class="badge" id="browserStatus">READY</span></div>
+      <div class="browser-shell">
+        <div class="browser-toolbar">
+          <button class="browser-icon" onclick="browserBack()" title="Back">←</button>
+          <button class="browser-icon" onclick="browserForward()" title="Forward">→</button>
+          <button class="browser-icon" onclick="browserReload()" title="Reload">↻</button>
+          <button class="browser-icon" onclick="browserHome()" title="Home">⌂</button>
+          <div class="browser-address"><span>🔒</span><input id="browserUrl" aria-label="Browser address" placeholder="Search or enter a website..." autocomplete="off"></div>
+          <button class="browser-go" onclick="browserGo()">GO</button>
+          <button class="browser-icon" onclick="saveBrowserBookmark()" title="Bookmark">☆</button>
+          <button class="browser-icon" onclick="browserFullscreen()" title="Fullscreen">⛶</button>
+        </div>
+        <div class="browser-tabs" id="browserTabs"></div>
+        <div class="browser-content">
+          <aside class="browser-side">
+            <button onclick="browserHome()">🔎 Search Home</button>
+            <button onclick="showBrowserPanel('history')">🕘 History</button>
+            <button onclick="showBrowserPanel('bookmarks')">⭐ Bookmarks</button>
+            <button onclick="newBrowserTab()">＋ New Tab</button>
+            <div class="browser-tip"><b>Proxy note</b><br>Some websites block iframes, scripts, sign-ins, or video playback even through a proxy. Search pages and simpler sites work best.</div>
+          </aside>
+          <div class="browser-frame-wrap">
+            <div class="browser-loading" id="browserLoading"><span></span><b>Loading page…</b></div>
+            <iframe id="browserFrame" title="MUSABX proxied browser" referrerpolicy="no-referrer"></iframe>
+            <div class="browser-panel" id="browserPanel"><div class="browser-panel-head"><h3 id="browserPanelTitle">History</h3><button onclick="closeBrowserPanel()">×</button></div><div id="browserPanelList"></div></div>
+          </div>
+        </div>
       </div>
-
-
-      <div class="stat-value">
-        0
-      </div>
-
-
-      <div class="stat-label">
-        Websites Visited
-      </div>
-
-
-      <div class="stat-change">
-        Start exploring
-      </div>
-
-
-    </div>
-
-
-    <div class="stat">
-
-
-      <div class="stat-icon">
-        🎮
-      </div>
-
-
-      <div class="stat-value">
-        0
-      </div>
-
-
-      <div class="stat-label">
-        Games Played
-      </div>
-
-
-      <div class="stat-change">
-        Ready to play
-      </div>
-
-
-    </div>
-
-
-    <div class="stat">
-
-
-      <div class="stat-icon">
-        🏆
-      </div>
-
-
-      <div class="stat-value">
-        1
-      </div>
-
-
-      <div class="stat-label">
-        Achievements
-      </div>
-
-
-      <div class="stat-change">
-        Welcome unlocked
-      </div>
-
-
-    </div>
-
-
-  </div>
-
-
-</section>
-
-
-<!-- =====================================================
-     RECENT / DISCOVER
-     ===================================================== -->
-
-<section>
-
-
-  <div class="section-header">
-
-
-    <div>
-
-      <h2>
-        Discover
-      </h2>
-
-      <p>
-        Things you can do in MUSABX
-      </p>
-
-    </div>
-
-
-  </div>
-
-
-  <div class="discover-grid">
-
-
-    <a
-      href="browser.html"
-      class="discover-card"
-    >
-
-
-      <div class="discover-number">
-        01
-      </div>
-
-
-      <div class="discover-icon">
-        🔎
-      </div>
-
-
-      <div>
-
-        <h3>
-          Search the internet
-        </h3>
-
-        <p>
-          Use the built-in MUSABX
-          search experience.
-        </p>
-
-      </div>
-
-
-    </a>
-
-
-    <a
-      href="games.html"
-      class="discover-card"
-    >
-
-
-      <div class="discover-number">
-        02
-      </div>
-
-
-      <div class="discover-icon">
-        🕹️
-      </div>
-
-
-      <div>
-
-        <h3>
-          Play games
-        </h3>
-
-        <p>
-          Find games and start
-          playing immediately.
-        </p>
-
-      </div>
-
-
-    </a>
-
-
-    <a
-      href="library.html"
-      class="discover-card"
-    >
-
-
-      <div class="discover-number">
-        03
-      </div>
-
-
-      <div class="discover-icon">
-        ⭐
-      </div>
-
-
-      <div>
-
-        <h3>
-          Build your library
-        </h3>
-
-        <p>
-          Save the things you
-          want to come back to.
-        </p>
-
-      </div>
-
-
-    </a>
-
-
-    <a
-      href="settings.html"
-      class="discover-card"
-    >
-
-
-      <div class="discover-number">
-        04
-      </div>
-
-
-      <div class="discover-icon">
-        ⚙️
-      </div>
-
-
-      <div>
-
-        <h3>
-          Customize MUSABX
-        </h3>
-
-        <p>
-          Change the experience
-          to match your preferences.
-        </p>
-
-      </div>
-
-
-    </a>
-
-
-  </div>
-
-
-</section>
-
-
-<!-- =====================================================
-     DAILY STATUS
-     ===================================================== -->
-
-<section>
-
-
-  <div class="section-header">
-
-
-    <div>
-
-      <h2>
-        Today's Status
-      </h2>
-
-      <p>
-        Everything looks good
-      </p>
-
-    </div>
-
-
-  </div>
-
-
-  <div class="status-grid">
-
-
-    <div class="status-card">
-
-
-      <div class="status-card-icon">
-        🟢
-      </div>
-
-
-      <div>
-
-        <strong>
-          MUSABX
-        </strong>
-
-        <span>
-          Online
-        </span>
-
-      </div>
-
-
-    </div>
-
-
-    <div class="status-card">
-
-
-      <div class="status-card-icon">
-        🌐
-      </div>
-
-
-      <div>
-
-        <strong>
-          Browser
-        </strong>
-
-        <span>
-          Ready
-        </span>
-
-      </div>
-
-
-    </div>
-
-
-    <div class="status-card">
-
-
-      <div class="status-card-icon">
-        🎮
-      </div>
-
-
-      <div>
-
-        <strong>
-          Games
-        </strong>
-
-        <span>
-          Ready
-        </span>
-
-      </div>
-
-
-    </div>
-
-
-    <div class="status-card">
-
-
-      <div class="status-card-icon">
-        💾
-      </div>
-
-
-      <div>
-
-        <strong>
-          Local Storage
-        </strong>
-
-        <span>
-          Available
-        </span>
-
-      </div>
-
-
-    </div>
-
-
-  </div>
-
-
-</section>
-
-
-<!-- =====================================================
-     FINAL CTA
-     ===================================================== -->
-
-<section class="final-cta">
-
-
-  <div class="final-cta-glow"></div>
-
-
-  <div class="final-cta-content">
-
-
-    <div class="badge">
-      MUSABX
-    </div>
-
-
-    <h2>
-      Everything you need.
-      <span>One place.</span>
-    </h2>
-
-
-    <p>
-      Browse, play, save, discover,
-      and keep your web experience
-      organized with MUSABX.
-    </p>
-
-
-    <div class="final-cta-buttons">
-
-
-      <a
-        href="browser.html"
-        class="primary-btn cta-button"
-      >
-        Open Browser
-      </a>
-
-
-      <a
-        href="games.html"
-        class="secondary-btn"
-      >
-        Browse Games
-      </a>
-
-
-    </div>
-
-
-  </div>
-
-
-</section>
-```
-
-  </div>
-
-  <!-- =======================================================
-       FOOTER
-       ======================================================= -->
-
-  <footer class="footer">
-
-```
-<div class="footer-brand">
-
-  <div class="footer-logo">
-    M
-  </div>
-
-  <div>
-
-    <strong>
-      MUSABX
-    </strong>
-
-    <span>
-      Your web hub
-    </span>
-
-  </div>
-
+    </section>
+
+    <section id="library" class="view">
+      <div class="section-head"><div><h2>Game library</h2><p>Choose a game and start instantly.</p></div><span class="badge">4 GAMES</span></div>
+      <div class="category-row" id="categoryRow"></div><div class="games-grid" id="libraryGrid"></div>
+    </section>
+
+    <section id="achievements" class="view">
+      <div class="section-head"><div><h2>Achievements</h2><p>Progress is stored on this device.</p></div></div>
+      <div class="panel"><div id="achievementGrid" class="games-grid"></div></div>
+    </section>
+
+    <section id="settings" class="view">
+      <div class="section-head"><div><h2>Themes and display</h2><p>Personalize the experience without changing the games.</p></div></div>
+      <div class="panel"><div class="theme-grid">
+        <button class="theme-card" data-theme="default"><b>Midnight Space</b><div class="swatches"><i class="swatch" style="background:#07111f"></i><i class="swatch" style="background:#67e8f9"></i><i class="swatch" style="background:#8b5cf6"></i></div></button>
+        <button class="theme-card" data-theme="sunset"><b>Sunset Arcade</b><div class="swatches"><i class="swatch" style="background:#26101b"></i><i class="swatch" style="background:#ffd166"></i><i class="swatch" style="background:#ff6b6b"></i></div></button>
+        <button class="theme-card" data-theme="forest"><b>Emerald Quest</b><div class="swatches"><i class="swatch" style="background:#071b17"></i><i class="swatch" style="background:#86efac"></i><i class="swatch" style="background:#2dd4bf"></i></div></button>
+        <button class="theme-card" data-theme="light"><b>Clean Campus</b><div class="swatches"><i class="swatch" style="background:#eaf4ff"></i><i class="swatch" style="background:#0ea5e9"></i><i class="swatch" style="background:#7c3aed"></i></div></button>
+      </div></div>
+    </section>
+  </main>
 </div>
 
-
-<div class="footer-links">
-
-
-  <a href="index.html">
-    Home
-  </a>
-
-
-  <a href="browser.html">
-    Browser
-  </a>
-
-
-  <a href="games.html">
-    Games
-  </a>
-
-
-  <a href="library.html">
-    Library
-  </a>
-
-
-  <a href="achievements.html">
-    Achievements
-  </a>
-
-
-  <a href="settings.html">
-    Settings
-  </a>
-
-
+<div class="game-screen" id="gameScreen">
+  <div class="game-top"><button class="icon-btn" onclick="closeGame()">←</button><div class="game-title" id="gameTitle">Game</div><div style="flex:1"></div><button class="icon-btn" onclick="restartCurrentGame()">↻</button></div>
+  <div class="game-stage-wrap"><div class="game-stage" id="gameStage"><canvas id="gameCanvas" width="1100" height="680"></canvas><div class="game-hud"><div class="hud-pill" id="hudLeft">Score: 0</div><div class="hud-pill" id="hudRight">Best: 0</div></div><div class="overlay-card" id="gameOverlay"><div class="overlay-inner"><h2 id="overlayTitle">Ready?</h2><p id="overlayText"></p><button class="primary" id="overlayButton">Start Game</button><div class="controls" id="overlayControls"></div></div></div></div></div>
 </div>
-
-
-<div class="footer-copy">
-
-  MUSABX • Built for the web
-
-</div>
-```
-
-  </footer>
-
-</main>
-
-<!-- =========================================================
-     SHARED JAVASCRIPT
-     ========================================================= -->
-
-<script
-  src="script.js"
-></script>
-
-<!-- =========================================================
-     HOME PAGE JAVASCRIPT
-     ========================================================= -->
-
+<div class="toast" id="toast"></div>
 <script>
-
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
-
-
-    /*
-     * SEARCH SUGGESTIONS
-     */
-
-    const suggestions =
-      document.querySelectorAll(
-        ".search-suggestion"
-      );
-
-
-    const searchInput =
-      document.getElementById(
-        "searchInput"
-      );
-
-
-    suggestions.forEach(
-      (button) => {
-
-
-        button.addEventListener(
-          "click",
-          () => {
-
-
-            const value =
-              button.dataset.search;
-
-
-            if (!searchInput) {
-              return;
-            }
-
-
-            searchInput.value =
-              value;
-
-
-            searchInput.focus();
-
-
-          }
-        );
-
-
-      }
-    );
-
-
-    /*
-     * CARD RIPPLE EFFECT
-     */
-
-    const cards =
-      document.querySelectorAll(
-        ".card, .discover-card"
-      );
-
-
-    cards.forEach(
-      (card) => {
-
-
-        card.addEventListener(
-          "mouseenter",
-          () => {
-
-
-            card.style.setProperty(
-              "--mouse-x",
-              "50%"
-            );
-
-
-            card.style.setProperty(
-              "--mouse-y",
-              "50%"
-            );
-
-
-          }
-        );
+const gameData=[
+ {id:'drift',title:'Neon Drift',genre:'Arcade Racing',desc:'Dodge traffic, collect energy cores, and survive an increasingly fast neon highway.',cover:'drift'},
+ {id:'space',title:'Star Defender',genre:'Space Action',desc:'Protect the orbital station from crystal meteors with smooth movement and rapid laser fire.',cover:'space'},
+ {id:'memory',title:'Jungle Match',genre:'Memory Puzzle',desc:'Match beautifully illustrated jungle icons before the timer runs out.',cover:'memory'},
+ {id:'goal',title:'Goal Rush',genre:'Sports Skill',desc:'Aim your shots past a moving goalkeeper and chase a high-scoring streak.',cover:'goal'}
+ ];
+const generatedNames=[
+['Sky Sprint','racer','Racing'],['Moon Rally','racer','Racing'],['Cyber Circuit','racer','Racing'],['Desert Velocity','racer','Racing'],['Aqua Rush','racer','Racing'],['Volcano Run','racer','Racing'],['Arctic Drive','racer','Racing'],['Metro Racer','racer','Racing'],
+['Crystal Collector','collect','Adventure'],['Forest Forager','collect','Adventure'],['Ocean Treasure','collect','Adventure'],['Candy Catch','collect','Adventure'],['Robot Rescue','collect','Adventure'],['Gem Garden','collect','Adventure'],['Cloud Harvester','collect','Adventure'],['Museum Dash','collect','Adventure'],
+['Meteor Escape','dodge','Survival'],['Laser Lane','dodge','Survival'],['Falling Stars','dodge','Survival'],['Avalanche Alert','dodge','Survival'],['Traffic Tangle','dodge','Survival'],['Comet Crisis','dodge','Survival'],['Temple Traps','dodge','Survival'],['Storm Runner','dodge','Survival'],
+['Galaxy Patrol','shooter','Action'],['Bug Blaster','shooter','Action'],['Ocean Defender','shooter','Action'],['Castle Cannon','shooter','Action'],['Drone Defense','shooter','Action'],['Candy Cannon','shooter','Action'],['Shadow Strike','shooter','Action'],['Solar Squadron','shooter','Action'],
+['Prism Breaker','breakout','Arcade'],['Ice Breakout','breakout','Arcade'],['Brick Galaxy','breakout','Arcade'],['Candy Smash','breakout','Arcade'],['Temple Breaker','breakout','Arcade'],['Neon Blocks','breakout','Arcade'],['Pixel Fortress','breakout','Arcade'],['Rainbow Ricochet','breakout','Arcade'],
+['Garden Snake','snake','Classic'],['Neon Serpent','snake','Classic'],['Space Worm','snake','Classic'],['Sushi Snake','snake','Classic'],['Dragon Trail','snake','Classic'],['Circuit Crawler','snake','Classic'],['Jungle Python','snake','Classic'],['Ice Serpent','snake','Classic'],
+['Mystic Maze','maze','Puzzle'],['Robot Labyrinth','maze','Puzzle'],['Temple Escape','maze','Puzzle'],['Moon Maze','maze','Puzzle'],['Library Labyrinth','maze','Puzzle'],['Crystal Caverns','maze','Puzzle'],['Haunted Hallways','maze','Puzzle'],['Circuit Maze','maze','Puzzle'],
+['Target Titan','target','Skill'],['Fruit Pop','target','Skill'],['Bubble Burst','target','Skill'],['Alien Tap','target','Skill'],['Ninja Reflex','target','Skill'],['Goal Target','target','Skill'],['Meteor Tap','target','Skill'],['Color Clash','target','Skill'],
+['Tower Stack','stack','Strategy'],['City Builder','stack','Strategy'],['Space Stacker','stack','Strategy'],['Candy Tower','stack','Strategy'],['Temple Blocks','stack','Strategy'],['Robot Factory','stack','Strategy'],['Cloud Constructor','stack','Strategy'],['Castle Stack','stack','Strategy'],
+['Pond Hopper','platform','Platformer'],['Jungle Jump','platform','Platformer'],['Moon Bounce','platform','Platformer'],['Robot Rooftops','platform','Platformer'],['Candy Climb','platform','Platformer'],['Volcano Vault','platform','Platformer'],['Iceberg Hop','platform','Platformer'],['Skyline Leap','platform','Platformer'],
+['Penalty Pro','goal','Sports'],['Basket Blitz','target','Sports'],['Tennis Target','target','Sports'],['Hockey Hero','goal','Sports'],['Golf Precision','target','Sports'],['Baseball Blast','target','Sports'],['Volleyball Volley','platform','Sports'],['Track Champion','racer','Sports'],
+['Number Ninja','target','Learning'],['Word Wizard','target','Learning'],['Shape Scholar','collect','Learning'],['History Hunt','maze','Learning'],['Science Sprint','dodge','Learning'],['Math Meteor','shooter','Learning'],['Geography Quest','collect','Learning'],['Logic Lab','breakout','Learning']
+];
+const paletteSets=[['#22d3ee','#7c3aed'],['#34d399','#0ea5e9'],['#fb7185','#f59e0b'],['#a78bfa','#ec4899'],['#60a5fa','#14b8a6'],['#facc15','#f97316']];
+generatedNames.forEach((x,i)=>gameData.push({id:'g'+(i+5),title:x[0],engine:x[1],genre:x[2],desc:'A polished '+x[2].toLowerCase()+' challenge with responsive controls, increasing difficulty, and a saved high score.',seed:i+17,palette:paletteSets[i%paletteSets.length]}));
+const covers={
+ drift:`<svg viewBox="0 0 500 240"><defs><linearGradient id="d1" x2="1" y2="1"><stop stop-color="#08162f"/><stop offset="1" stop-color="#5b21b6"/></linearGradient><linearGradient id="road" x2="0" y2="1"><stop stop-color="#18233c"/><stop offset="1" stop-color="#030712"/></linearGradient></defs><rect width="500" height="240" fill="url(#d1)"/><circle cx="420" cy="48" r="60" fill="#67e8f9" opacity=".2"/><path d="M150 240L225 75h50l80 165" fill="url(#road)" stroke="#818cf8" stroke-width="3"/><path d="M250 220V90" stroke="#fff" stroke-width="6" stroke-dasharray="20 16" opacity=".8"/><g transform="translate(172 145)"><path d="M0 42l18-38h78l25 38-7 38H8z" fill="#19d3ff"/><path d="M28 8h54l16 27H14z" fill="#bff7ff" opacity=".85"/><circle cx="25" cy="77" r="14" fill="#05070d"/><circle cx="98" cy="77" r="14" fill="#05070d"/><rect x="20" y="42" width="78" height="13" rx="6" fill="#09213d"/></g><g fill="#ff4d8d"><rect x="80" y="80" width="7" height="90"/><rect x="405" y="72" width="7" height="98"/></g></svg>`,
+ space:`<svg viewBox="0 0 500 240"><defs><radialGradient id="s1"><stop stop-color="#4527a0"/><stop offset="1" stop-color="#050816"/></radialGradient></defs><rect width="500" height="240" fill="url(#s1)"/><g fill="#fff">${Array.from({length:30},(_,i)=>`<circle cx="${(i*83)%500}" cy="${(i*47)%220}" r="${i%3+1}" opacity=".${i%8+2}"/>`).join('')}</g><circle cx="415" cy="60" r="44" fill="#4fd1c5"/><circle cx="400" cy="48" r="10" fill="#1f6d7a" opacity=".5"/><g transform="translate(175 90)"><path d="M70 0l22 52 66 23-66 22-22 58-22-58-66-22 66-23z" fill="#e5f8ff" stroke="#60a5fa" stroke-width="5"/><ellipse cx="70" cy="75" rx="30" ry="18" fill="#172554"/><path d="M18 75H-20M122 75h38" stroke="#ff5ea8" stroke-width="8"/></g></svg>`,
+ memory:`<svg viewBox="0 0 500 240"><defs><linearGradient id="m1" x2="1" y2="1"><stop stop-color="#064e3b"/><stop offset="1" stop-color="#0f766e"/></linearGradient></defs><rect width="500" height="240" fill="url(#m1)"/><circle cx="75" cy="48" r="90" fill="#86efac" opacity=".13"/><g transform="translate(75 34)"><rect width="145" height="170" rx="22" fill="#e7fff5" transform="rotate(-8 72 85)"/><text x="72" y="112" text-anchor="middle" font-size="78">🦜</text></g><g transform="translate(280 38)"><rect width="145" height="170" rx="22" fill="#fff5d9" transform="rotate(7 72 85)"/><text x="72" y="112" text-anchor="middle" font-size="78">🐯</text></g></svg>`,
+ goal:`<svg viewBox="0 0 500 240"><defs><linearGradient id="g1" y2="1"><stop stop-color="#75d5ff"/><stop offset=".55" stop-color="#b5ecff"/><stop offset=".56" stop-color="#2f9f52"/><stop offset="1" stop-color="#0b5f2d"/></linearGradient></defs><rect width="500" height="240" fill="url(#g1)"/><path d="M85 180V70h330v110M85 70h330" fill="none" stroke="#fff" stroke-width="9"/><g stroke="#fff" opacity=".45"><path d="M105 75v105m35-105v105m35-105v105m35-105v105m35-105v105m35-105v105m35-105v105m35-105v105m35-105v105M90 100h320M90 130h320M90 160h320"/></g><circle cx="250" cy="188" r="31" fill="#fff"/><path d="M250 160l14 10-5 17h-18l-5-17zM220 179l14-9M280 179l-14-9M231 211l10-24M269 211l-10-24" stroke="#111827" stroke-width="7" fill="#111827"/></svg>`
+};
+const achievements=[
+ {id:'first',name:'First Launch',desc:'Play your first game.',icon:'🚀'},
+ {id:'score100',name:'Triple Digits',desc:'Score 100 points in any game.',icon:'💯'},
+ {id:'drift500',name:'Road Legend',desc:'Score 500 in Neon Drift.',icon:'🏎️'},
+ {id:'space300',name:'Star Guardian',desc:'Score 300 in Star Defender.',icon:'🛡️'},
+ {id:'memory',name:'Sharp Memory',desc:'Finish Jungle Match.',icon:'🧠'},
+ {id:'goal10',name:'Top Striker',desc:'Score 10 goals in Goal Rush.',icon:'⚽'},
+ {id:'played10',name:'Game Regular',desc:'Play 10 total games.',icon:'🎟️'},
+ {id:'all',name:'MUSABX Master',desc:'Try every game.',icon:'👑'}
+];
+let progress=JSON.parse(localStorage.getItem('musabxGameProgress')||'null')||{played:0,best:0,scores:{},achievements:[],tried:[]};
+let soundOn=true,currentGame=null,raf=0,cleanupFns=[];
+const canvas=document.getElementById('gameCanvas'),ctx=canvas.getContext('2d'),stage=document.getElementById('gameStage');
+function saveProgress(){localStorage.setItem('musabxGameProgress',JSON.stringify(progress));updateStats();renderAchievements()}
+function unlock(id){if(!progress.achievements.includes(id)){progress.achievements.push(id);toast('Achievement unlocked: '+achievements.find(a=>a.id===id).name);saveProgress()}}
+function recordPlay(id){progress.played++;if(!progress.tried.includes(id))progress.tried.push(id);unlock('first');if(progress.played>=10)unlock('played10');if(progress.tried.length===gameData.length)unlock('all');saveProgress()}
+function recordScore(id,score){score=Math.floor(score);progress.scores[id]=Math.max(progress.scores[id]||0,score);progress.best=Math.max(progress.best,score);if(score>=100)unlock('score100');if(id==='drift'&&score>=500)unlock('drift500');if(id==='space'&&score>=300)unlock('space300');saveProgress()}
+function updateStats(){gamesPlayed.textContent=progress.played;bestScore.textContent=progress.best;achievementCount.textContent=progress.achievements.length+'/'+achievements.length}
+function makeCover(g){let p=g.palette||['#22d3ee','#7c3aed'],n=(g.seed||7)%7;return `<svg viewBox="0 0 500 240"><defs><linearGradient id="cg${g.id}" x2="1" y2="1"><stop stop-color="${p[0]}"/><stop offset="1" stop-color="${p[1]}"/></linearGradient></defs><rect width="500" height="240" fill="#07111f"/><circle cx="${90+n*35}" cy="55" r="110" fill="${p[0]}" opacity=".18"/><circle cx="420" cy="190" r="130" fill="${p[1]}" opacity=".2"/><path d="M0 205 Q120 ${90+n*8} 250 190 T500 120 V240 H0Z" fill="url(#cg${g.id})" opacity=".72"/><g transform="translate(250 120)"><circle r="63" fill="rgba(3,9,18,.75)" stroke="white" stroke-opacity=".35" stroke-width="4"/><text y="20" text-anchor="middle" font-size="58">${({racer:'🏎️',collect:'💎',dodge:'⚡',shooter:'🚀',breakout:'🧱',snake:'🐍',maze:'🧭',target:'🎯',stack:'🏗️',platform:'🦘',goal:'⚽'})[g.engine]||'🎮'}</text></g><path d="M20 35H170" stroke="white" stroke-width="6" opacity=".7"/><path d="M330 205H480" stroke="white" stroke-width="6" opacity=".45"/></svg>`}
+function cardHTML(g){return `<article class="game-card" data-title="${g.title.toLowerCase()} ${g.genre.toLowerCase()}" data-genre="${g.genre}"><div class="cover">${covers[g.cover]||makeCover(g)}<span class="cover-label">${g.genre}</span></div><div class="card-body"><h3>${g.title}</h3><p>${g.desc}</p><div class="meta"><span class="badge">BEST ${progress.scores[g.id]||0}</span><button class="play-btn" onclick="launchGame('${g.id}')">Play</button></div></div></article>`}
+featuredGrid.innerHTML=gameData.slice(0,4).map(cardHTML).join('');libraryGrid.innerHTML=gameData.map(cardHTML).join('');document.querySelectorAll('.library-count').forEach(e=>e.textContent=gameData.length);
+function renderAchievements(){achievementGrid.innerHTML=achievements.map(a=>{let on=progress.achievements.includes(a.id);return `<article class="game-card" style="opacity:${on?1:.48}"><div class="card-body" style="min-height:155px"><div style="font-size:42px">${a.icon}</div><h3>${a.name}</h3><p>${a.desc}</p><span class="badge">${on?'UNLOCKED':'LOCKED'}</span></div></article>`}).join('')}
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('.nav-btn').forEach(b=>b.onclick=()=>switchView(b.dataset.view));
+searchInput.addEventListener('input',e=>{switchView('library');let q=e.target.value.toLowerCase();document.querySelectorAll('#libraryGrid .game-card').forEach(c=>c.style.display=c.dataset.title.includes(q)?'block':'none')});
+const genres=['All',...new Set(gameData.map(g=>g.genre))];let activeGenre='All';categoryRow.innerHTML=genres.map(x=>`<button class="filter-chip ${x==='All'?'active':''}" data-genre="${x}">${x}</button>`).join('');categoryRow.onclick=e=>{let b=e.target.closest('.filter-chip');if(!b)return;activeGenre=b.dataset.genre;categoryRow.querySelectorAll('.filter-chip').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('#libraryGrid .game-card').forEach(c=>c.style.display=(activeGenre==='All'||c.dataset.genre===activeGenre)?'block':'none')};
+function applyTheme(t){document.body.className=t==='default'?'':'theme-'+t;localStorage.setItem('musabxTheme',t);document.querySelectorAll('.theme-card').forEach(c=>c.classList.toggle('active',c.dataset.theme===t))}
+document.querySelectorAll('.theme-card').forEach(c=>c.onclick=()=>applyTheme(c.dataset.theme));applyTheme(localStorage.getItem('musabxTheme')||'default');
+soundBtn.onclick=()=>{soundOn=!soundOn;soundBtn.textContent=soundOn?'🔊':'🔇'};fullBtn.onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
+function beep(freq=440,d=.06,type='sine'){if(!soundOn)return;try{let ac=beep.ac||(beep.ac=new AudioContext()),o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(.055,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(g).connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
+function setOverlay(title,text,button='Start Game',controls=''){overlayTitle.textContent=title;overlayText.textContent=text;overlayButton.textContent=button;overlayControls.textContent=controls;gameOverlay.classList.remove('hidden')}
+function hideOverlay(){gameOverlay.classList.add('hidden')}
+function cleanupGame(){cancelAnimationFrame(raf);cleanupFns.forEach(f=>f());cleanupFns=[];stage.querySelector('.memory-board')?.remove();canvas.style.display='block'}
+function launchGame(id){cleanupGame();currentGame=id;gameScreen.classList.add('open');let g=gameData.find(x=>x.id===id);gameTitle.textContent=g.title;recordPlay(id);if(id==='drift')setupDrift();else if(id==='space')setupSpace();else if(id==='memory')setupMemory();else if(id==='goal')setupGoal();else setupMegaGame(g)}
+function closeGame(){cleanupGame();gameScreen.classList.remove('open');currentGame=null}
+function restartCurrentGame(){if(currentGame)launchGame(currentGame)}
+function fitCanvas(){canvas.width=1100;canvas.height=680}
+function roundRect(x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.stroke()}}
+function setupDrift(){fitCanvas();canvas.style.display='block';let running=false,score=0,speed=7,lane=1,playerX=550,obstacles=[],cores=[],stars=[];for(let i=0;i<80;i++)stars.push({x:Math.random()*1100,y:Math.random()*680,s:Math.random()*2+1});hudLeft.textContent='Score: 0';hudRight.textContent='Best: '+(progress.scores.drift||0);setOverlay('Neon Drift','Change lanes, avoid traffic, and collect cyan energy cores. Speed increases over time.','Start Race','Controls: A / D or Left / Right arrows');
+ const key=e=>{if(!running)return;if(['ArrowLeft','a','A'].includes(e.key))lane=Math.max(0,lane-1);if(['ArrowRight','d','D'].includes(e.key))lane=Math.min(2,lane+1)};addEventListener('keydown',key);cleanupFns.push(()=>removeEventListener('keydown',key));overlayButton.onclick=()=>{hideOverlay();running=true;loop()};
+ function spawn(){let l=Math.floor(Math.random()*3);obstacles.push({lane:l,y:-150,type:Math.random()>.5?0:1});if(Math.random()>.45)cores.push({lane:Math.floor(Math.random()*3),y:-80,spin:0})}
+ function drawCar(x,y,enemy=false,type=0){ctx.save();ctx.translate(x,y);ctx.shadowBlur=22;ctx.shadowColor=enemy?(type?'#fb7185':'#fbbf24'):'#67e8f9';let color=enemy?(type?'#ef476f':'#f59e0b'):'#18c8ff';roundRect(-50,-85,100,170,24,color);roundRect(-36,-55,72,55,16,enemy?'#202638':'#dff8ff');roundRect(-36,13,72,45,12,'#172033');ctx.fillStyle='#05070d';ctx.fillRect(-59,-52,14,43);ctx.fillRect(45,-52,14,43);ctx.fillRect(-59,38,14,43);ctx.fillRect(45,38,14,43);ctx.fillStyle='#fff';ctx.fillRect(-38,-78,25,8);ctx.fillRect(13,-78,25,8);ctx.restore()}
+ function loop(){if(!running)return;score+=.18*speed;speed=Math.min(17,7+score/170);if(Math.random()<.026)spawn();playerX+=(310+lane*240-playerX)*.18;ctx.clearRect(0,0,1100,680);let bg=ctx.createLinearGradient(0,0,0,680);bg.addColorStop(0,'#07152c');bg.addColorStop(1,'#13051f');ctx.fillStyle=bg;ctx.fillRect(0,0,1100,680);stars.forEach(s=>{s.y+=speed*.22;if(s.y>680)s.y=0;ctx.fillStyle='rgba(255,255,255,.65)';ctx.fillRect(s.x,s.y,s.s,s.s)});ctx.fillStyle='#131b2b';ctx.beginPath();ctx.moveTo(180,680);ctx.lineTo(390,0);ctx.lineTo(710,0);ctx.lineTo(920,680);ctx.fill();ctx.strokeStyle='#6d5dfc';ctx.lineWidth=5;ctx.stroke();for(let y=-80;y<760;y+=120){let yy=(y+(score*6)%120);ctx.strokeStyle='rgba(255,255,255,.78)';ctx.lineWidth=7;ctx.setLineDash([38,28]);ctx.beginPath();ctx.moveTo(470,yy);ctx.lineTo(420+(yy/680)*25,yy+70);ctx.stroke();ctx.beginPath();ctx.moveTo(630,yy);ctx.lineTo(680-(yy/680)*25,yy+70);ctx.stroke()}ctx.setLineDash([]);
+ obstacles.forEach(o=>{o.y+=speed;let x=310+o.lane*240;drawCar(x,o.y,true,o.type)});cores.forEach(c=>{c.y+=speed;c.spin+=.1;let x=310+c.lane*240;ctx.save();ctx.translate(x,c.y);ctx.rotate(c.spin);ctx.shadowBlur=24;ctx.shadowColor='#67e8f9';ctx.fillStyle='#67e8f9';ctx.beginPath();ctx.moveTo(0,-25);ctx.lineTo(22,0);ctx.lineTo(0,25);ctx.lineTo(-22,0);ctx.closePath();ctx.fill();ctx.restore()});drawCar(playerX,560,false);
+ let hit=obstacles.find(o=>Math.abs((310+o.lane*240)-playerX)<72&&Math.abs(o.y-560)<125);cores=cores.filter(c=>{if(Math.abs((310+c.lane*240)-playerX)<72&&Math.abs(c.y-560)<105){score+=40;beep(760,.08,'triangle');return false}return c.y<760});obstacles=obstacles.filter(o=>o.y<820);hudLeft.textContent='Score: '+Math.floor(score);if(hit){running=false;beep(90,.3,'sawtooth');recordScore('drift',score);setOverlay('Race Over','You scored '+Math.floor(score)+' points.','Race Again','Use quick lane changes to survive at higher speeds.');overlayButton.onclick=()=>setupDrift();return}raf=requestAnimationFrame(loop)} }
+function setupSpace(){fitCanvas();let running=false,score=0,lives=3,keys={},player={x:550,y:580},shots=[],rocks=[],particles=[],stars=Array.from({length:90},()=>({x:Math.random()*1100,y:Math.random()*680,z:Math.random()*2+1}));hudLeft.textContent='Score: 0';hudRight.textContent='Lives: 3';setOverlay('Star Defender','Move the starfighter, fire lasers, and stop crystal meteors from reaching the station.','Begin Mission','Controls: WASD / arrows to move, Space to fire');let kd=e=>{keys[e.key.toLowerCase()]=true;if(e.code==='Space')e.preventDefault()},ku=e=>keys[e.key.toLowerCase()]=false;addEventListener('keydown',kd);addEventListener('keyup',ku);cleanupFns.push(()=>removeEventListener('keydown',kd),()=>removeEventListener('keyup',ku));overlayButton.onclick=()=>{hideOverlay();running=true;loop()};let fireDelay=0;
+ function ship(){ctx.save();ctx.translate(player.x,player.y);ctx.shadowBlur=25;ctx.shadowColor='#60a5fa';ctx.fillStyle='#e7f8ff';ctx.beginPath();ctx.moveTo(0,-54);ctx.lineTo(45,35);ctx.lineTo(17,27);ctx.lineTo(0,48);ctx.lineTo(-17,27);ctx.lineTo(-45,35);ctx.closePath();ctx.fill();ctx.fillStyle='#172554';ctx.beginPath();ctx.ellipse(0,-5,15,25,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#ff5ea8';ctx.fillRect(-34,34,18,22);ctx.fillRect(16,34,18,22);ctx.restore()}
+ function crystal(r){ctx.save();ctx.translate(r.x,r.y);ctx.rotate(r.a);ctx.shadowBlur=15;ctx.shadowColor='#f472b6';ctx.fillStyle='#c084fc';ctx.beginPath();for(let i=0;i<8;i++){let ang=i*Math.PI/4,rad=i%2?18:r.size;ctx.lineTo(Math.cos(ang)*rad,Math.sin(ang)*rad)}ctx.closePath();ctx.fill();ctx.strokeStyle='#f5d0fe';ctx.stroke();ctx.restore()}
+ function loop(){if(!running)return;score+=.08;if(keys.a||keys.arrowleft)player.x-=8;if(keys.d||keys.arrowright)player.x+=8;if(keys.w||keys.arrowup)player.y-=8;if(keys.s||keys.arrowdown)player.y+=8;player.x=Math.max(55,Math.min(1045,player.x));player.y=Math.max(120,Math.min(620,player.y));if(fireDelay>0)fireDelay--;if((keys[' ']||keys.space||keys.spacebar)&&fireDelay<=0){shots.push({x:player.x,y:player.y-50});fireDelay=9;beep(620,.04,'square')}if(Math.random()<.025+score/70000)rocks.push({x:60+Math.random()*980,y:-50,size:24+Math.random()*25,v:2.7+Math.random()*2.8+score/240,a:0});ctx.fillStyle='#040818';ctx.fillRect(0,0,1100,680);stars.forEach(s=>{s.y+=s.z;if(s.y>680){s.y=0;s.x=Math.random()*1100}ctx.fillStyle=`rgba(255,255,255,${.25+s.z*.25})`;ctx.fillRect(s.x,s.y,s.z,s.z)});let neb=ctx.createRadialGradient(180,200,10,180,200,270);neb.addColorStop(0,'rgba(84,46,180,.25)');neb.addColorStop(1,'transparent');ctx.fillStyle=neb;ctx.fillRect(0,0,500,500);shots.forEach(s=>s.y-=13);rocks.forEach(r=>{r.y+=r.v;r.a+=.03;crystal(r)});ctx.fillStyle='#67e8f9';ctx.shadowBlur=12;ctx.shadowColor='#67e8f9';shots.forEach(s=>ctx.fillRect(s.x-3,s.y-18,6,30));ctx.shadowBlur=0;
+ shots=shots.filter(s=>{let hit=rocks.find(r=>Math.hypot(r.x-s.x,r.y-s.y)<r.size+8);if(hit){rocks.splice(rocks.indexOf(hit),1);score+=25;beep(250,.05,'triangle');return false}return s.y>-30});rocks=rocks.filter(r=>{if(r.y>700){lives--;beep(110,.18,'sawtooth');return false}return true});ship();hudLeft.textContent='Score: '+Math.floor(score);hudRight.textContent='Lives: '+lives;if(lives<=0){running=false;recordScore('space',score);setOverlay('Mission Complete','Final score: '+Math.floor(score),'Play Again','Destroy meteors early to protect all three lives.');overlayButton.onclick=()=>setupSpace();return}raf=requestAnimationFrame(loop)} }
+function setupMemory(){canvas.style.display='none';let old=stage.querySelector('.memory-board');if(old)old.remove();let board=document.createElement('div');board.className='memory-board';stage.appendChild(board);let icons=['🦜','🐯','🐸','🦋','🦥','🐼','🦎','🌺'];let deck=[...icons,...icons].sort(()=>Math.random()-.5),first=null,lock=false,matches=0,moves=0,time=90,timer;hudLeft.textContent='Moves: 0';hudRight.textContent='Time: 90';setOverlay('Jungle Match','Find all eight matching pairs before time runs out.','Start Puzzle','Click two cards to reveal their jungle pictures.');deck.forEach((icon,i)=>{let c=document.createElement('button');c.className='memory-card';c.innerHTML=`<span class="memory-inner"><span class="memory-face memory-back">✦</span><span class="memory-face memory-front">${icon}</span></span>`;c.onclick=()=>flip(c,icon);board.appendChild(c)});overlayButton.onclick=()=>{hideOverlay();timer=setInterval(()=>{time--;hudRight.textContent='Time: '+time;if(time<=0){clearInterval(timer);finish(false)}},1000)};cleanupFns.push(()=>clearInterval(timer));function flip(c,icon){if(lock||c.classList.contains('flipped')||c.classList.contains('matched'))return;c.classList.add('flipped');beep(440,.04);if(!first){first={c,icon};return}moves++;hudLeft.textContent='Moves: '+moves;if(first.icon===icon){first.c.classList.add('matched');c.classList.add('matched');matches++;first=null;beep(750,.09,'triangle');if(matches===8)finish(true)}else{lock=true;setTimeout(()=>{first.c.classList.remove('flipped');c.classList.remove('flipped');first=null;lock=false},700)}}function finish(win){clearInterval(timer);let score=win?Math.max(100,1000-moves*20+time*5):0;if(win){unlock('memory');recordScore('memory',score)}setOverlay(win?'Jungle Cleared!':'Time Up',win?`Score ${score} with ${moves} moves.`:'Try again and remember each picture location.','Play Again','Fewer moves and more time remaining earn a higher score.');overlayButton.onclick=()=>setupMemory()}}
+function setupGoal(){fitCanvas();let running=false,score=0,shots=10,streak=0,keeperX=550,keeperDir=1,aim={x:550,y:260},ball={x:550,y:590,tx:550,ty:260,moving:false,t:0};hudLeft.textContent='Goals: 0';hudRight.textContent='Shots: 10';setOverlay('Goal Rush','Move the target and shoot around the goalkeeper. Consecutive goals build your streak.','Kick Off','Mouse: aim and click. Keyboard: arrows to aim, Space to shoot.');let move=e=>{let r=canvas.getBoundingClientRect();aim.x=(e.clientX-r.left)*canvas.width/r.width;aim.y=(e.clientY-r.top)*canvas.height/r.height},click=()=>shoot(),key=e=>{if(e.key==='ArrowLeft')aim.x-=25;if(e.key==='ArrowRight')aim.x+=25;if(e.key==='ArrowUp')aim.y-=20;if(e.key==='ArrowDown')aim.y+=20;if(e.code==='Space')shoot()};canvas.addEventListener('mousemove',move);canvas.addEventListener('click',click);addEventListener('keydown',key);cleanupFns.push(()=>canvas.removeEventListener('mousemove',move),()=>canvas.removeEventListener('click',click),()=>removeEventListener('keydown',key));overlayButton.onclick=()=>{hideOverlay();running=true;loop()};function shoot(){if(!running||ball.moving||shots<=0)return;ball.moving=true;ball.t=0;ball.tx=Math.max(160,Math.min(940,aim.x));ball.ty=Math.max(110,Math.min(395,aim.y));shots--;beep(160,.08,'square')}
+ function drawBall(x,y,r=27){ctx.save();ctx.translate(x,y);ctx.fillStyle='white';ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);ctx.fill();ctx.fillStyle='#111827';ctx.beginPath();for(let i=0;i<5;i++){let a=-Math.PI/2+i*Math.PI*2/5;ctx.lineTo(Math.cos(a)*r*.38,Math.sin(a)*r*.38)}ctx.closePath();ctx.fill();ctx.restore()}
+ function loop(){if(!running)return;keeperX+=keeperDir*4.5;if(keeperX>825||keeperX<275)keeperDir*=-1;ctx.clearRect(0,0,1100,680);let sky=ctx.createLinearGradient(0,0,0,680);sky.addColorStop(0,'#73d6ff');sky.addColorStop(.55,'#d8f5ff');sky.addColorStop(.56,'#2c9b50');sky.addColorStop(1,'#09542c');ctx.fillStyle=sky;ctx.fillRect(0,0,1100,680);for(let i=0;i<1100;i+=55){ctx.fillStyle=i%110?'rgba(255,255,255,.2)':'rgba(0,0,0,.08)';ctx.fillRect(i,380,27,300)}ctx.strokeStyle='white';ctx.lineWidth=12;ctx.strokeRect(140,95,820,330);ctx.lineWidth=2;ctx.globalAlpha=.35;for(let x=160;x<960;x+=35){ctx.beginPath();ctx.moveTo(x,100);ctx.lineTo(x,425);ctx.stroke()}for(let y=120;y<425;y+=30){ctx.beginPath();ctx.moveTo(145,y);ctx.lineTo(955,y);ctx.stroke()}ctx.globalAlpha=1;ctx.save();ctx.translate(keeperX,315);ctx.fillStyle='#ffcf56';roundRect(-28,-95,56,95,18,'#ffcf56');ctx.fillStyle='#172033';ctx.fillRect(-27,0,22,72);ctx.fillRect(5,0,22,72);ctx.strokeStyle='#ffcf56';ctx.lineWidth=18;ctx.beginPath();ctx.moveTo(-20,-65);ctx.lineTo(-75,-35);ctx.moveTo(20,-65);ctx.lineTo(75,-35);ctx.stroke();ctx.fillStyle='#f0b18a';ctx.beginPath();ctx.arc(0,-118,25,0,Math.PI*2);ctx.fill();ctx.restore();ctx.strokeStyle='#67e8f9';ctx.lineWidth=4;ctx.beginPath();ctx.arc(aim.x,aim.y,24,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.moveTo(aim.x-34,aim.y);ctx.lineTo(aim.x+34,aim.y);ctx.moveTo(aim.x,aim.y-34);ctx.lineTo(aim.x,aim.y+34);ctx.stroke();if(ball.moving){ball.t+=.035;let e=1-Math.pow(1-Math.min(ball.t,1),3),x=550+(ball.tx-550)*e,y=590+(ball.ty-590)*e-120*Math.sin(Math.PI*e),r=27-12*e;drawBall(x,y,r);if(ball.t>=1){ball.moving=false;let saved=Math.abs(ball.tx-keeperX)<92&&ball.ty>190;let goal=!saved&&ball.tx>155&&ball.tx<945&&ball.ty>100&&ball.ty<420;if(goal){score++;streak++;beep(820,.15,'triangle');if(score>=10)unlock('goal10')}else{streak=0;beep(100,.15,'sawtooth')}hudLeft.textContent='Goals: '+score+(streak>1?' • Streak '+streak:'');hudRight.textContent='Shots: '+shots;if(shots<=0){running=false;recordScore('goal',score*100);setOverlay('Final Whistle',`You scored ${score} out of 10 shots.`,'Play Again','Aim away from the moving goalkeeper.');overlayButton.onclick=()=>setupGoal();return}}}else drawBall(550,590);raf=requestAnimationFrame(loop)} }
 
 
-      }
-    );
+function setupMegaGame(g){fitCanvas();const W=1100,H=680,p=g.palette||['#22d3ee','#7c3aed'];let running=false,score=0,lives=3,time=45,keys={},objects=[],player={x:W/2,y:H-90,w:52,h:52,vx:0,vy:0},last=0,tick=0;hudLeft.textContent='Score: 0';hudRight.textContent='Lives: 3';setOverlay(g.title,g.desc,'Start Game',controlText(g.engine));let kd=e=>{keys[e.key.toLowerCase()]=true;if([' ','arrowup','arrowdown','arrowleft','arrowright'].includes(e.key.toLowerCase()))e.preventDefault()},ku=e=>keys[e.key.toLowerCase()]=false,click=e=>{if(g.engine==='target'&&running){let r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)*W/r.width,y=(e.clientY-r.top)*H/r.height;objects.forEach(o=>{if(Math.hypot(o.x-x,o.y-y)<o.r){o.hit=true;score+=10;beep(700,.04)}})}};addEventListener('keydown',kd);addEventListener('keyup',ku);canvas.addEventListener('click',click);cleanupFns.push(()=>removeEventListener('keydown',kd),()=>removeEventListener('keyup',ku),()=>canvas.removeEventListener('click',click));overlayButton.onclick=()=>{hideOverlay();running=true;spawnInitial();last=performance.now();loop(last)};
+function controlText(e){return ({racer:'Arrow keys or WASD to steer.',collect:'Move with Arrow keys or WASD and collect every item.',dodge:'Move with Arrow keys or WASD and avoid hazards.',shooter:'Move with Arrow keys or WASD. Space fires.',breakout:'Move paddle with Left/Right or A/D.',snake:'Use Arrow keys or WASD.',maze:'Use Arrow keys or WASD to reach the exit.',target:'Click targets before they disappear.',stack:'Press Space to drop each moving block.',platform:'Move with Arrow keys or A/D. Space jumps.'})[e]||'Arrow keys or WASD.'}
+function spawnInitial(){objects=[];if(g.engine==='breakout'){for(let y=0;y<5;y++)for(let x=0;x<10;x++)objects.push({x:95+x*92,y:85+y*42,w:78,h:28,hp:1});player={x:W/2-70,y:H-55,w:140,h:20};objects.ball={x:W/2,y:H-90,vx:5,vy:-6,r:12}}else if(g.engine==='snake'){player={x:15,y:10,dir:{x:1,y:0},body:[{x:15,y:10}],food:{x:25,y:12}}}else if(g.engine==='maze'){let cols=22,rows=13;objects.maze=[];for(let y=0;y<rows;y++){objects.maze[y]=[];for(let x=0;x<cols;x++)objects.maze[y][x]=(x===0||y===0||x===cols-1||y===rows-1||((x*7+y*11+g.seed)%9===0))?1:0}objects.maze[1][1]=0;objects.maze[rows-2][cols-2]=0;player={gx:1,gy:1};objects.lastMove=0}else if(g.engine==='stack'){objects.push({x:390,y:H-50,w:320,h:35});objects.moving={x:0,y:H-90,w:320,h:35,vx:5};objects.level=1}else if(g.engine==='platform'){player={x:80,y:520,w:42,h:52,vx:0,vy:0,on:false};objects=[{x:0,y:610,w:1100,h:70},{x:170,y:500,w:190,h:24},{x:430,y:420,w:170,h:24},{x:680,y:330,w:170,h:24},{x:890,y:245,w:150,h:24}];objects.goal={x:975,y:185}}}
+function finish(msg='Game Over'){running=false;recordScore(g.id,score);setOverlay(msg,`Final score: ${Math.floor(score)}. Best: ${Math.max(progress.scores[g.id]||0,Math.floor(score))}.`,'Play Again',controlText(g.engine));overlayButton.onclick=()=>setupMegaGame(g)}
+function bg(){let gr=ctx.createLinearGradient(0,0,W,H);gr.addColorStop(0,'#07111f');gr.addColorStop(1,p[1]);ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);for(let i=0;i<45;i++){ctx.globalAlpha=.25;ctx.fillStyle=i%2?p[0]:'#fff';ctx.beginPath();ctx.arc((i*83+g.seed*31)%W,(i*47+tick*.15)%H,i%3+1,0,7);ctx.fill()}ctx.globalAlpha=1}
+function loop(now){if(!running)return;let dt=Math.min(32,now-last)/16.67;last=now;tick+=dt;bg();if(g.engine==='racer')racer(dt);else if(g.engine==='collect')collect(dt);else if(g.engine==='dodge')dodge(dt);else if(g.engine==='shooter')shooter(dt);else if(g.engine==='breakout')breakout(dt);else if(g.engine==='snake')snake(now);else if(g.engine==='maze')maze(now);else if(g.engine==='target')target(dt);else if(g.engine==='stack')stack();else if(g.engine==='platform')platform(dt);hudLeft.textContent='Score: '+Math.floor(score);hudRight.textContent=g.engine==='target'?'Time: '+Math.ceil(time):'Lives: '+lives;if(running)raf=requestAnimationFrame(loop)}
+function move(dt,s=7){let dx=(keys.arrowright||keys.d?1:0)-(keys.arrowleft||keys.a?1:0),dy=(keys.arrowdown||keys.s?1:0)-(keys.arrowup||keys.w?1:0);player.x=Math.max(20,Math.min(W-player.w-20,player.x+dx*s*dt));player.y=Math.max(50,Math.min(H-player.h-20,player.y+dy*s*dt))}
+function drawPlayer(icon='◆'){ctx.fillStyle=p[0];ctx.shadowColor=p[0];ctx.shadowBlur=20;roundRect(player.x,player.y,player.w,player.h,14,p[0]);ctx.shadowBlur=0;ctx.fillStyle='#fff';ctx.font='28px sans-serif';ctx.textAlign='center';ctx.fillText(icon,player.x+player.w/2,player.y+35)}
+function hit(o){return player.x<o.x+(o.w||o.r*2)&&player.x+player.w>o.x&&player.y<o.y+(o.h||o.r*2)&&player.y+player.h>o.y}
+function racer(dt){move(dt,9);player.y=H-105;drawPlayer('🏎');if(Math.random()<.035+.00015*score)objects.push({x:80+Math.random()*900,y:-80,w:55,h:80,v:5+score/180});objects.forEach(o=>{o.y+=o.v*dt;roundRect(o.x,o.y,o.w,o.h,12,'#fb7185');if(hit(o)&&!o.dead){o.dead=true;lives--;beep(90,.1);if(lives<=0)finish()}if(o.y>H){o.dead=true;score+=5}});objects=objects.filter(o=>!o.dead);ctx.strokeStyle='rgba(255,255,255,.25)';ctx.setLineDash([28,22]);ctx.lineWidth=5;for(let x=220;x<900;x+=220){ctx.beginPath();ctx.moveTo(x,(tick*12)%50-50);ctx.lineTo(x,H);ctx.stroke()}ctx.setLineDash([])}
+function collect(dt){move(dt);drawPlayer('🧭');if(objects.length<8&&Math.random()<.04)objects.push({x:30+Math.random()*1020,y:70+Math.random()*560,r:16});objects.forEach(o=>{ctx.fillStyle='#facc15';ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,7);ctx.fill();ctx.fillStyle='#fff';ctx.font='17px sans-serif';ctx.fillText('◆',o.x,o.y+6);if(Math.hypot(player.x+26-o.x,player.y+26-o.y)<38){o.dead=true;score+=10;beep(600,.04)}});objects=objects.filter(o=>!o.dead);if(score>=300)finish('Collection Complete!')}
+function dodge(dt){move(dt,8);drawPlayer('⚡');if(Math.random()<.05)objects.push({x:20+Math.random()*1040,y:-30,w:30+Math.random()*35,h:30+Math.random()*35,v:5+tick/800});objects.forEach(o=>{o.y+=o.v*dt;roundRect(o.x,o.y,o.w,o.h,10,'#fb7185');if(hit(o)&&!o.dead){o.dead=true;lives--;if(lives<=0)finish()}if(o.y>H){o.dead=true;score+=3}});objects=objects.filter(o=>!o.dead)}
+function shooter(dt){move(dt,7);drawPlayer('🚀');if((keys[' ']||keys.space)&&(!objects.lastShot||tick-objects.lastShot>10)){objects.push({shot:true,x:player.x+24,y:player.y-10,w:5,h:18,v:-12});objects.lastShot=tick;beep(300,.03,'square')}if(Math.random()<.035)objects.push({x:30+Math.random()*1030,y:-40,w:40,h:40,v:3+score/250});objects.forEach(o=>{o.y+=o.v*dt;ctx.fillStyle=o.shot?'#fff':'#fb7185';ctx.fillRect(o.x,o.y,o.w,o.h);if(!o.shot&&hit(o)){o.dead=true;lives--;if(lives<=0)finish()}if(o.y>H||o.y<-30)o.dead=true});let shots=objects.filter(o=>o.shot),foes=objects.filter(o=>!o.shot);shots.forEach(s=>foes.forEach(f=>{if(!s.dead&&!f.dead&&s.x<f.x+f.w&&s.x+s.w>f.x&&s.y<f.y+f.h&&s.y+s.h>f.y){s.dead=f.dead=true;score+=15;beep(700,.04)}}));objects=objects.filter(o=>!o.dead)}
+function breakout(dt){let b=objects.ball;player.x=Math.max(0,Math.min(W-player.w,player.x+(((keys.arrowright||keys.d)?1:0)-((keys.arrowleft||keys.a)?1:0))*10*dt));roundRect(player.x,player.y,player.w,player.h,10,p[0]);b.x+=b.vx*dt;b.y+=b.vy*dt;if(b.x<12||b.x>W-12)b.vx*=-1;if(b.y<45)b.vy=Math.abs(b.vy);if(b.y>H){lives--;if(lives<=0)return finish();b.x=W/2;b.y=H-90;b.vy=-6}if(b.x>player.x&&b.x<player.x+player.w&&b.y>player.y-15&&b.y<player.y+20)b.vy=-Math.abs(b.vy);objects.forEach(o=>{roundRect(o.x,o.y,o.w,o.h,8,p[(o.x/90|0)%2]);if(o.hp&&b.x>o.x&&b.x<o.x+o.w&&b.y>o.y&&b.y<o.y+o.h){o.hp=0;b.vy*=-1;score+=10}});objects=objects.filter(o=>o.hp!==0);objects.ball=b;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,7);ctx.fill();if(objects.filter(o=>o.hp).length===0)finish('Board Cleared!')}
+function snake(now){let cell=26,ox=250,oy=150;if(now-(objects.lastMove||0)>105){objects.lastMove=now;let nd=keys.arrowup||keys.w?{x:0,y:-1}:keys.arrowdown||keys.s?{x:0,y:1}:keys.arrowleft||keys.a?{x:-1,y:0}:keys.arrowright||keys.d?{x:1,y:0}:player.dir;if(nd.x!==-player.dir.x||nd.y!==-player.dir.y)player.dir=nd;let h={x:player.body[0].x+player.dir.x,y:player.body[0].y+player.dir.y};if(h.x<0||h.x>=23||h.y<0||h.y>=15||player.body.some(q=>q.x===h.x&&q.y===h.y))return finish();player.body.unshift(h);if(h.x===player.food.x&&h.y===player.food.y){score+=10;player.food={x:(Math.random()*23)|0,y:(Math.random()*15)|0}}else player.body.pop()}ctx.fillStyle='#facc15';ctx.beginPath();ctx.arc(ox+player.food.x*cell+13,oy+player.food.y*cell+13,10,0,7);ctx.fill();player.body.forEach((q,i)=>roundRect(ox+q.x*cell,oy+q.y*cell,24,24,7,i?p[1]:p[0]))}
+function maze(now){let m=objects.maze,cw=46,ch=44,ox=45,oy=70;if(now-objects.lastMove>120){let dx=(keys.arrowright||keys.d?1:0)-(keys.arrowleft||keys.a?1:0),dy=(keys.arrowdown||keys.s?1:0)-(keys.arrowup||keys.w?1:0);if(dx||dy){let nx=player.gx+dx,ny=player.gy+dy;if(!m[ny][nx]){player.gx=nx;player.gy=ny;score++}objects.lastMove=now}}m.forEach((r,y)=>r.forEach((v,x)=>{if(v)roundRect(ox+x*cw,oy+y*ch,cw-3,ch-3,7,p[1])}));ctx.fillStyle='#34d399';ctx.fillRect(ox+(m[0].length-2)*cw+8,oy+(m.length-2)*ch+8,28,28);roundRect(ox+player.gx*cw+8,oy+player.gy*ch+8,28,28,8,p[0]);if(player.gx===m[0].length-2&&player.gy===m.length-2)finish('Maze Escaped!')}
+function target(dt){time-=dt/60;if(time<=0)return finish('Time Up!');if(objects.length<5&&Math.random()<.07)objects.push({x:70+Math.random()*960,y:100+Math.random()*500,r:18+Math.random()*18,life:150});objects.forEach(o=>{o.life-=dt;ctx.globalAlpha=Math.max(0,o.life/35);ctx.fillStyle=o.hit?'#34d399':p[0];ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,7);ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=4;ctx.stroke();ctx.globalAlpha=1;if(o.life<=0||o.hit)o.dead=true});objects=objects.filter(o=>!o.dead)}
+function stack(){let m=objects.moving;m.x+=m.vx;if(m.x<0||m.x+m.w>W)m.vx*=-1;roundRect(m.x,m.y,m.w,m.h,8,p[0]);objects.forEach(o=>roundRect(o.x,o.y,o.w,o.h,8,p[1]));if(keys[' ']&&!objects.lock){objects.lock=true;let prev=objects[objects.length-1],left=Math.max(m.x,prev.x),right=Math.min(m.x+m.w,prev.x+prev.w),w=right-left;if(w<15)return finish();objects.push({x:left,y:m.y,w,h:m.h});score+=20;objects.level++;objects.moving={x:0,y:m.y-40,w,vx:(objects.level%2?1:-1)*(5+objects.level*.18),h:35};if(objects.moving.y<100)return finish('Tower Complete!')}if(!keys[' '])objects.lock=false}
+function platform(dt){let dx=((keys.arrowright||keys.d)?1:0)-((keys.arrowleft||keys.a)?1:0);player.vx=dx*7;if((keys[' ']||keys.arrowup||keys.w)&&player.on){player.vy=-13;player.on=false}player.vy+=.65*dt;player.x+=player.vx*dt;player.y+=player.vy*dt;player.on=false;objects.forEach(o=>{roundRect(o.x,o.y,o.w,o.h,8,p[1]);if(player.vy>=0&&player.x+player.w>o.x&&player.x<o.x+o.w&&player.y+player.h>o.y&&player.y+player.h<o.y+25){player.y=o.y-player.h;player.vy=0;player.on=true}});drawPlayer('★');ctx.fillStyle='#34d399';ctx.beginPath();ctx.arc(objects.goal.x,objects.goal.y,25,0,7);ctx.fill();if(Math.hypot(player.x-objects.goal.x,player.y-objects.goal.y)<60){score=500;finish('Level Complete!')}if(player.y>H)finish()}
+}
 
+// ===== MUSABX ORIGINAL PROXY BROWSER =====
+const WORKER_URL = 'https://musabx-proxy.muqimh.workers.dev';
+const browserFrame=document.getElementById('browserFrame'),browserUrl=document.getElementById('browserUrl'),browserLoading=document.getElementById('browserLoading');
+let browserHistory=JSON.parse(localStorage.getItem('musabx_history')||'[]');
+let browserBookmarks=JSON.parse(localStorage.getItem('musabx_bookmarks')||'[]');
+let browserTabsData=JSON.parse(localStorage.getItem('musabx_tabs')||'null')||[{url:'https://html.duckduckgo.com/html/',title:'Search'}];
+let activeBrowserTab=Math.min(Number(localStorage.getItem('musabx_active_tab')||0),browserTabsData.length-1);
+function normalizeBrowserTarget(value){value=value.trim();if(!value)return null;if(/^https?:\/\//i.test(value))return value;if(value.includes('.')&&!value.includes(' '))return 'https://'+value;return 'https://html.duckduckgo.com/html/?q='+encodeURIComponent(value)}
+function browserLoad(target,{remember=true}={}){if(!target)return;closeBrowserPanel();browserLoading.classList.add('show');document.getElementById('browserStatus').textContent='LOADING';browserTabsData[activeBrowserTab].url=target;browserTabsData[activeBrowserTab].title=browserTitle(target);browserUrl.value=target;browserFrame.src=WORKER_URL+'/proxy?url='+encodeURIComponent(target);if(remember){browserHistory.push({url:target,time:Date.now()});browserHistory=browserHistory.slice(-100);localStorage.setItem('musabx_history',JSON.stringify(browserHistory))}saveBrowserTabs();renderBrowserTabs()}
+function browserTitle(url){try{let u=new URL(url);if(u.hostname.includes('duckduckgo'))return 'Search';return u.hostname.replace(/^www\./,'')}catch{return 'New Tab'}}
+function browserGo(){let t=normalizeBrowserTarget(browserUrl.value);if(t)browserLoad(t)}
+function browserHome(){browserLoad('https://html.duckduckgo.com/html/')}
+function browserReload(){browserLoading.classList.add('show');browserFrame.src=browserFrame.src}
+function browserBack(){try{browserFrame.contentWindow.history.back()}catch(e){}}
+function browserForward(){try{browserFrame.contentWindow.history.forward()}catch(e){}}
+function browserFullscreen(){let el=document.querySelector('.browser-shell');if(!document.fullscreenElement)el.requestFullscreen?.();else document.exitFullscreen?.()}
+function newBrowserTab(){browserTabsData.push({url:'https://html.duckduckgo.com/html/',title:'Search'});activeBrowserTab=browserTabsData.length-1;saveBrowserTabs();renderBrowserTabs();browserHome()}
+function selectBrowserTab(i){activeBrowserTab=i;saveBrowserTabs();renderBrowserTabs();browserLoad(browserTabsData[i].url,{remember:false})}
+function closeBrowserTab(i,event){event.stopPropagation();if(browserTabsData.length===1){browserTabsData[0]={url:'https://html.duckduckgo.com/html/',title:'Search'};activeBrowserTab=0}else{browserTabsData.splice(i,1);if(activeBrowserTab>=browserTabsData.length)activeBrowserTab=browserTabsData.length-1}saveBrowserTabs();renderBrowserTabs();browserLoad(browserTabsData[activeBrowserTab].url,{remember:false})}
+function saveBrowserTabs(){localStorage.setItem('musabx_tabs',JSON.stringify(browserTabsData));localStorage.setItem('musabx_active_tab',activeBrowserTab)}
+function renderBrowserTabs(){let box=document.getElementById('browserTabs');box.innerHTML='';browserTabsData.forEach((tab,i)=>{let b=document.createElement('button');b.className='browser-tab '+(i===activeBrowserTab?'active':'');b.onclick=()=>selectBrowserTab(i);b.innerHTML='<span>🌐</span><span class="browser-tab-title"></span><span class="browser-tab-close">×</span>';b.querySelector('.browser-tab-title').textContent=tab.title||browserTitle(tab.url);b.querySelector('.browser-tab-close').onclick=e=>closeBrowserTab(i,e);box.appendChild(b)});let add=document.createElement('button');add.className='browser-add-tab';add.textContent='＋';add.onclick=newBrowserTab;box.appendChild(add)}
+function saveBrowserBookmark(){let target=browserTabsData[activeBrowserTab]?.url;if(!target)return;if(!browserBookmarks.some(x=>(typeof x==='string'?x:x.url)===target))browserBookmarks.push({url:target,time:Date.now()});localStorage.setItem('musabx_bookmarks',JSON.stringify(browserBookmarks));toast('Bookmark saved ⭐')}
+function showBrowserPanel(type){let panel=document.getElementById('browserPanel'),title=document.getElementById('browserPanelTitle'),list=document.getElementById('browserPanelList');panel.classList.add('open');title.textContent=type==='history'?'History':'Bookmarks';let data=type==='history'?[...browserHistory].reverse():[...browserBookmarks].reverse();list.innerHTML='';if(!data.length){list.innerHTML='<div class="browser-empty">Nothing saved yet.</div>';return}data.slice(0,60).forEach(entry=>{let u=typeof entry==='string'?entry:entry.url,b=document.createElement('button');b.className='browser-list-item';b.textContent=u;b.onclick=()=>browserLoad(u);list.appendChild(b)})}
+function closeBrowserPanel(){document.getElementById('browserPanel').classList.remove('open')}
+browserFrame.addEventListener('load',()=>{browserLoading.classList.remove('show');document.getElementById('browserStatus').textContent='READY'});
+browserUrl.addEventListener('keydown',e=>{if(e.key==='Enter')browserGo()});
+renderBrowserTabs();browserLoad(browserTabsData[activeBrowserTab].url,{remember:false});
 
-    /*
-     * LOCAL WELCOME COUNT
-     */
-
-    const visitKey =
-      "musabx-home-visits";
-
-
-    let visits =
-      Number(
-        localStorage.getItem(
-          visitKey
-        ) || 0
-      );
-
-
-    visits++;
-
-
-    localStorage.setItem(
-      visitKey,
-      visits
-    );
-
-
-    /*
-     * FIRST VISIT ACHIEVEMENT
-     */
-
-    if (
-      !localStorage.getItem(
-        "musabx-achievement-welcome"
-      )
-    ) {
-
-
-      localStorage.setItem(
-        "musabx-achievement-welcome",
-        "true"
-      );
-
-
-    }
-
-
-  }
-);
-
+updateStats();renderAchievements();
 </script>
-
 </body>
-
 </html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="MUSABX District Game Hub - polished browser games in one self-contained page." />
+<title>MUSABX v3 — Browser & Game Hub</title>
+<style>
+:root{
+  --bg:#07111f; --bg2:#0c1b31; --panel:rgba(13,28,50,.82); --panel2:#132744;
+  --text:#f8fbff; --muted:#9fb2cc; --accent:#67e8f9; --accent2:#8b5cf6;
+  --good:#34d399; --warn:#fbbf24; --danger:#fb7185; --line:rgba(255,255,255,.10);
+  --shadow:0 22px 70px rgba(0,0,0,.42); --radius:22px;
+}
+body.theme-sunset{--bg:#26101b;--bg2:#5a2035;--panel:rgba(56,20,38,.86);--panel2:#7a2948;--accent:#ffd166;--accent2:#ff6b6b;--good:#7ee787;--muted:#e8b7c6}
+body.theme-forest{--bg:#071b17;--bg2:#123c2f;--panel:rgba(9,45,35,.86);--panel2:#165a42;--accent:#86efac;--accent2:#2dd4bf;--good:#facc15;--muted:#b7d9cb}
+body.theme-light{--bg:#eaf4ff;--bg2:#cde3fb;--panel:rgba(255,255,255,.88);--panel2:#fff;--text:#10233d;--muted:#56708e;--accent:#0ea5e9;--accent2:#7c3aed;--line:rgba(18,47,78,.12);--shadow:0 22px 60px rgba(35,74,110,.18)}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg)}
+body{overflow-x:hidden;background:
+ radial-gradient(circle at 15% 10%,color-mix(in srgb,var(--accent) 26%,transparent),transparent 32%),
+ radial-gradient(circle at 85% 0%,color-mix(in srgb,var(--accent2) 28%,transparent),transparent 30%),
+ linear-gradient(145deg,var(--bg),var(--bg2));transition:background .35s,color .35s}
+button,input{font:inherit}
+button{border:0;cursor:pointer}
+.app-shell{min-height:100vh;display:grid;grid-template-columns:250px 1fr}
+.sidebar{position:sticky;top:0;height:100vh;padding:22px 18px;background:rgba(5,13,25,.74);backdrop-filter:blur(18px);border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:20}
+.brand{display:flex;gap:12px;align-items:center;padding:8px 8px 20px}
+.brand-mark{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;font-size:24px;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 12px 30px color-mix(in srgb,var(--accent) 25%,transparent)}
+.brand strong{font-size:19px;letter-spacing:.4px}.brand small{display:block;color:var(--muted);margin-top:2px}
+.nav{display:grid;gap:9px}.nav-btn{width:100%;padding:13px 14px;border-radius:14px;color:var(--muted);background:transparent;text-align:left;display:flex;gap:11px;align-items:center;font-weight:750;transition:.2s}
+.nav-btn:hover,.nav-btn.active{background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 17%,transparent),color-mix(in srgb,var(--accent2) 13%,transparent));color:var(--text);transform:translateX(3px)}
+.sidebar-note{margin-top:auto;padding:14px;border-radius:16px;background:var(--panel);border:1px solid var(--line);color:var(--muted);font-size:12px;line-height:1.45}.sidebar-note b{color:var(--text)}
+.main{min-width:0;padding:24px 28px 36px}
+.topbar{display:flex;align-items:center;gap:14px;margin-bottom:24px}.search{flex:1;display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:0 14px;box-shadow:var(--shadow)}
+.search input{width:100%;border:0;outline:0;color:var(--text);background:transparent;padding:14px 0}.search input::placeholder{color:var(--muted)}
+.icon-btn{width:46px;height:46px;border-radius:15px;background:var(--panel);color:var(--text);border:1px solid var(--line);display:grid;place-items:center;transition:.2s}.icon-btn:hover{transform:translateY(-2px);border-color:var(--accent)}
+.view{display:none;animation:fade .28s ease}.view.active{display:block}@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.hero{position:relative;overflow:hidden;border-radius:30px;padding:38px;min-height:320px;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;background:
+ linear-gradient(115deg,rgba(5,15,30,.94),rgba(23,43,78,.72)),
+ radial-gradient(circle at 85% 30%,var(--accent2),transparent 36%);border:1px solid var(--line);box-shadow:var(--shadow)}
+body.theme-light .hero{background:linear-gradient(115deg,rgba(255,255,255,.96),rgba(221,238,255,.82)),radial-gradient(circle at 85% 30%,var(--accent2),transparent 36%)}
+.hero h1{font-size:clamp(36px,5vw,68px);line-height:.96;margin:0 0 16px;letter-spacing:-2.6px}.hero h1 span{background:linear-gradient(90deg,var(--accent),#fff,var(--accent2));-webkit-background-clip:text;color:transparent}
+body.theme-light .hero h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;color:transparent}.hero p{max-width:620px;color:var(--muted);font-size:17px;line-height:1.65}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}.primary,.secondary{padding:13px 19px;border-radius:14px;font-weight:850;transition:.2s}.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#061321}.secondary{background:rgba(255,255,255,.08);color:var(--text);border:1px solid var(--line)}.primary:hover,.secondary:hover{transform:translateY(-2px)}
+.hero-art{position:relative;height:250px}.planet{position:absolute;right:10%;top:6%;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 3%,#86e7ff 7%,#3566d9 43%,#1e2b6b 71%);box-shadow:0 0 80px color-mix(in srgb,var(--accent) 48%,transparent)}
+.planet:after{content:"";position:absolute;inset:42% -38%;border:12px solid rgba(255,255,255,.55);border-left-color:transparent;border-right-color:transparent;border-radius:50%;transform:rotate(-14deg)}
+.ship{position:absolute;left:9%;bottom:24px;width:170px;height:80px;filter:drop-shadow(0 16px 18px rgba(0,0,0,.38));animation:float 3s ease-in-out infinite}.ship:before{content:"";position:absolute;inset:18px 15px;background:linear-gradient(90deg,#d9f7ff,#72c5ff 55%,#6b5cff);clip-path:polygon(0 51%,64% 0,100% 48%,65% 100%);border-radius:40%}.ship:after{content:"";position:absolute;left:-35px;top:31px;width:64px;height:17px;background:linear-gradient(90deg,transparent,#ffd166,#ff6b6b);filter:blur(2px);clip-path:polygon(0 50%,100% 0,100% 100%)}
+@keyframes float{50%{transform:translateY(-12px) rotate(-2deg)}}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin:30px 0 16px}.section-head h2{font-size:28px;margin:0}.section-head p{margin:5px 0 0;color:var(--muted)}
+.games-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}.game-card{position:relative;overflow:hidden;border-radius:23px;background:var(--panel);border:1px solid var(--line);box-shadow:0 16px 40px rgba(0,0,0,.22);transition:.24s}.game-card:hover{transform:translateY(-7px);border-color:color-mix(in srgb,var(--accent) 60%,transparent)}
+.cover{height:170px;position:relative;overflow:hidden;background:#13233e}.cover svg{width:100%;height:100%;display:block}.card-body{padding:16px}.game-card h3{margin:0 0 7px}.game-card p{margin:0 0 14px;color:var(--muted);font-size:13px;line-height:1.5}.meta{display:flex;justify-content:space-between;align-items:center}.badge{font-size:11px;font-weight:900;padding:6px 9px;border-radius:999px;background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent)}
+.play-btn{padding:9px 13px;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--accent2));font-weight:900;color:#061321}.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}.stat{padding:18px;border-radius:19px;background:var(--panel);border:1px solid var(--line)}.stat b{font-size:28px;display:block}.stat span{color:var(--muted);font-size:13px}
+.panel{padding:24px;border-radius:24px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow)}
+.theme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.theme-card{padding:18px;border-radius:19px;border:2px solid transparent;background:var(--panel2);color:var(--text);text-align:left}.theme-card.active{border-color:var(--accent)}.swatches{display:flex;gap:7px;margin-top:14px}.swatch{width:25px;height:25px;border-radius:50%}
+.game-screen{display:none;position:fixed;inset:0;z-index:100;background:rgba(2,8,18,.92);backdrop-filter:blur(12px);padding:18px}.game-screen.open{display:flex;flex-direction:column}.game-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}.game-title{font-size:20px;font-weight:900}.game-stage-wrap{flex:1;min-height:0;display:grid;place-items:center}.game-stage{position:relative;width:min(1100px,96vw);height:min(680px,82vh);border-radius:24px;overflow:hidden;background:#07111f;border:1px solid rgba(255,255,255,.14);box-shadow:0 35px 100px rgba(0,0,0,.6)}canvas{display:block;width:100%;height:100%}.game-hud{position:absolute;left:18px;right:18px;top:18px;display:flex;justify-content:space-between;pointer-events:none}.hud-pill{padding:9px 13px;border-radius:999px;background:rgba(5,13,25,.72);border:1px solid rgba(255,255,255,.18);font-weight:900;backdrop-filter:blur(8px)}
+.overlay-card{position:absolute;inset:0;display:grid;place-items:center;background:rgba(3,9,18,.62);backdrop-filter:blur(5px)}.overlay-card.hidden{display:none}.overlay-inner{width:min(460px,88%);padding:28px;border-radius:25px;text-align:center;background:rgba(12,28,49,.94);border:1px solid rgba(255,255,255,.15);box-shadow:0 28px 80px rgba(0,0,0,.5)}.overlay-inner h2{font-size:34px;margin:0 0 10px}.overlay-inner p{color:#b9c7da;line-height:1.55}.controls{font-size:12px;color:#9fb2cc;margin-top:12px}
+.memory-board{height:100%;padding:76px 24px 24px;display:grid;grid-template-columns:repeat(4,minmax(90px,1fr));gap:14px;background:linear-gradient(135deg,#10243e,#261d54)}.memory-card{position:relative;border:0;background:transparent;perspective:900px}.memory-inner{position:absolute;inset:0;transition:transform .45s;transform-style:preserve-3d}.memory-card.flipped .memory-inner,.memory-card.matched .memory-inner{transform:rotateY(180deg)}.memory-face{position:absolute;inset:0;border-radius:18px;backface-visibility:hidden;display:grid;place-items:center}.memory-back{background:linear-gradient(145deg,#1d4ed8,#7c3aed);border:2px solid rgba(255,255,255,.26);font-size:34px}.memory-front{transform:rotateY(180deg);background:linear-gradient(145deg,#f8fbff,#cde7ff);color:#10233d;border:2px solid white;font-size:52px}.memory-card.matched{filter:drop-shadow(0 0 16px #34d399)}
+.toast{position:fixed;right:22px;bottom:22px;z-index:200;padding:13px 17px;border-radius:14px;background:#0e2038;color:white;border:1px solid rgba(255,255,255,.15);transform:translateY(20px);opacity:0;pointer-events:none;transition:.25s}.toast.show{transform:none;opacity:1}
+@media(max-width:1050px){.games-grid{grid-template-columns:repeat(2,1fr)}.hero{grid-template-columns:1fr}.hero-art{display:none}.theme-grid{grid-template-columns:repeat(2,1fr)}}
+
+.category-row{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 18px}.filter-chip{padding:9px 13px;border-radius:999px;background:var(--panel);border:1px solid var(--line);color:var(--muted);font-weight:800}.filter-chip.active,.filter-chip:hover{color:var(--text);border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--panel))}.library-count{color:var(--accent);font-weight:900}.game-card .cover-label{position:absolute;left:12px;top:12px;padding:6px 9px;border-radius:999px;background:rgba(3,9,18,.7);color:white;font-size:10px;font-weight:900;backdrop-filter:blur(7px)}
+@media(max-width:760px){.app-shell{grid-template-columns:1fr}.sidebar{position:fixed;left:0;right:0;bottom:0;top:auto;height:72px;padding:8px 10px;border-right:0;border-top:1px solid var(--line);z-index:60}.brand,.sidebar-note{display:none}.nav{grid-template-columns:repeat(4,1fr);gap:5px}.nav-btn{justify-content:center;flex-direction:column;gap:2px;font-size:10px;padding:7px}.main{padding:16px 14px 94px}.topbar{margin-bottom:16px}.hero{padding:25px;min-height:280px}.hero h1{font-size:42px}.games-grid{grid-template-columns:1fr}.stats-grid{grid-template-columns:1fr}.theme-grid{grid-template-columns:1fr}.game-screen{padding:7px}.game-stage{height:84vh}.memory-board{grid-template-columns:repeat(3,1fr);padding:70px 10px 10px;gap:8px}.memory-front{font-size:38px}}
+
+
+/* Integrated proxy browser */
+.browser-view{height:calc(100vh - 90px);min-height:650px}.browser-view .section-head{margin-top:0}
+.browser-shell{height:calc(100% - 82px);min-height:560px;display:flex;flex-direction:column;overflow:hidden;border-radius:24px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow)}
+.browser-toolbar{display:flex;align-items:center;gap:8px;padding:11px;background:color-mix(in srgb,var(--panel2) 86%,#020617);border-bottom:1px solid var(--line)}
+.browser-icon,.browser-go{height:42px;min-width:42px;border-radius:12px;background:rgba(255,255,255,.08);color:var(--text);border:1px solid var(--line);font-weight:900}.browser-icon:hover{border-color:var(--accent);transform:translateY(-1px)}
+.browser-go{padding:0 18px;min-width:64px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#061321}
+.browser-address{flex:1;display:flex;align-items:center;gap:9px;height:42px;padding:0 13px;border-radius:13px;background:rgba(2,8,18,.58);border:1px solid var(--line)}
+.browser-address input{width:100%;border:0;outline:0;background:transparent;color:var(--text)}
+.browser-tabs{display:flex;align-items:center;gap:7px;min-height:42px;padding:6px 10px;background:rgba(2,8,18,.48);overflow-x:auto;border-bottom:1px solid var(--line)}
+.browser-tab{display:flex;align-items:center;gap:8px;max-width:210px;padding:8px 11px;border-radius:10px;background:rgba(255,255,255,.07);color:var(--muted);white-space:nowrap}.browser-tab.active{background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--text)}.browser-tab-title{overflow:hidden;text-overflow:ellipsis}.browser-tab-close{background:transparent;color:inherit;padding:0;font-size:16px}.browser-add-tab{padding:7px 12px;border-radius:9px;background:var(--good);color:#052315;font-weight:900}
+.browser-content{flex:1;min-height:0;display:grid;grid-template-columns:190px 1fr}.browser-side{padding:12px;background:rgba(2,8,18,.42);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:9px}.browser-side>button{padding:12px;border-radius:12px;text-align:left;background:rgba(255,255,255,.07);color:var(--text);font-weight:750}.browser-side>button:hover{background:color-mix(in srgb,var(--accent) 15%,transparent)}.browser-tip{margin-top:auto;padding:12px;border-radius:13px;background:rgba(255,255,255,.06);color:var(--muted);font-size:11px;line-height:1.5}.browser-tip b{color:var(--text)}
+.browser-frame-wrap{position:relative;min-width:0;min-height:0;background:white}.browser-frame-wrap iframe{width:100%;height:100%;border:0;background:white}.browser-loading{display:none;position:absolute;inset:0;z-index:4;place-items:center;align-content:center;gap:13px;background:rgba(4,13,28,.82);color:white}.browser-loading.show{display:grid}.browser-loading span{width:44px;height:44px;border-radius:50%;border:4px solid rgba(255,255,255,.2);border-top-color:var(--accent);animation:browserSpin .8s linear infinite}@keyframes browserSpin{to{transform:rotate(360deg)}}
+.browser-panel{display:none;position:absolute;z-index:6;inset:18px 18px 18px auto;width:min(390px,90%);padding:15px;overflow:auto;border-radius:19px;background:rgba(9,22,40,.97);color:white;border:1px solid rgba(255,255,255,.15);box-shadow:0 25px 80px rgba(0,0,0,.55)}.browser-panel.open{display:block}.browser-panel-head{display:flex;justify-content:space-between;align-items:center}.browser-panel-head h3{margin:0}.browser-panel-head button{font-size:25px;background:transparent;color:white}.browser-list-item{display:block;width:100%;margin-top:9px;padding:11px;border-radius:11px;text-align:left;background:rgba(255,255,255,.07);color:white;word-break:break-word}.browser-list-item:hover{background:rgba(103,232,249,.15)}.browser-empty{padding:24px 5px;color:#9fb2cc;text-align:center}
+@media(max-width:760px){.nav{grid-template-columns:repeat(5,1fr)}.browser-view{height:auto;min-height:720px}.browser-shell{height:650px}.browser-toolbar{flex-wrap:wrap}.browser-address{order:2;flex-basis:calc(100% - 72px)}.browser-go{order:2}.browser-content{grid-template-columns:1fr}.browser-side{display:grid;grid-template-columns:repeat(4,1fr);border-right:0;border-bottom:1px solid var(--line)}.browser-side>button{text-align:center;font-size:11px;padding:10px 4px}.browser-tip{display:none}}
+
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">✦</div><div><strong>MUSABX</strong><small>Browser & Game Hub</small></div></div>
+    <nav class="nav">
+      <button class="nav-btn active" data-view="home"><span>⌂</span> Home</button>
+      <button class="nav-btn" data-view="browser"><span>🌐</span> Browser</button>
+      <button class="nav-btn" data-view="library"><span>🎮</span> Game Library</button>
+      <button class="nav-btn" data-view="achievements"><span>🏆</span> Achievements</button>
+      <button class="nav-btn" data-view="settings"><span>⚙</span> Themes</button>
+    </nav>
+    <div class="sidebar-note"><b>MUSABX all-in-one</b><br>The original proxy browser remains available, while games run directly inside this file. No app shortcut buttons.</div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="search"><span>⌕</span><input id="searchInput" aria-label="Search games" placeholder="Search the game library..." /></div>
+      <button class="icon-btn" id="soundBtn" title="Toggle sound">🔊</button>
+      <button class="icon-btn" id="fullBtn" title="Fullscreen">⛶</button>
+    </header>
+
+    <section id="home" class="view active">
+      <div class="hero">
+        <div>
+          <div class="badge">MUSABX ORIGINALS</div>
+          <h1>Play. Improve. <span>Level Up.</span></h1>
+          <p>A polished district-ready portal combining the original MUSABX proxy browser with colorful games built directly into the site. Browse and play from one clean interface.</p>
+          <div class="hero-actions"><button class="primary" onclick="launchGame('drift')">Play Featured Game</button><button class="secondary" onclick="switchView('browser')">Open Browser</button><button class="secondary" onclick="switchView('library')">Browse Games</button></div>
+        </div>
+        <div class="hero-art"><div class="planet"></div><div class="ship"></div></div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat"><b id="gamesPlayed">0</b><span>Games played</span></div>
+        <div class="stat"><b id="bestScore">0</b><span>Highest score</span></div>
+        <div class="stat"><b id="achievementCount">0/8</b><span>Achievements earned</span></div>
+      </div>
+      <div class="section-head"><div><h2>Featured games</h2><p>Original games designed for quick sessions and replay value.</p></div></div>
+      <div class="games-grid" id="featuredGrid"></div>
+    </section>
+
+
+    <section id="browser" class="view browser-view">
+      <div class="section-head"><div><h2>MUSABX Browser</h2><p>The original proxy browser, rebuilt inside the new interface.</p></div><span class="badge" id="browserStatus">READY</span></div>
+      <div class="browser-shell">
+        <div class="browser-toolbar">
+          <button class="browser-icon" onclick="browserBack()" title="Back">←</button>
+          <button class="browser-icon" onclick="browserForward()" title="Forward">→</button>
+          <button class="browser-icon" onclick="browserReload()" title="Reload">↻</button>
+          <button class="browser-icon" onclick="browserHome()" title="Home">⌂</button>
+          <div class="browser-address"><span>🔒</span><input id="browserUrl" aria-label="Browser address" placeholder="Search or enter a website..." autocomplete="off"></div>
+          <button class="browser-go" onclick="browserGo()">GO</button>
+          <button class="browser-icon" onclick="saveBrowserBookmark()" title="Bookmark">☆</button>
+          <button class="browser-icon" onclick="browserFullscreen()" title="Fullscreen">⛶</button>
+        </div>
+        <div class="browser-tabs" id="browserTabs"></div>
+        <div class="browser-content">
+          <aside class="browser-side">
+            <button onclick="browserHome()">🔎 Search Home</button>
+            <button onclick="showBrowserPanel('history')">🕘 History</button>
+            <button onclick="showBrowserPanel('bookmarks')">⭐ Bookmarks</button>
+            <button onclick="newBrowserTab()">＋ New Tab</button>
+            <div class="browser-tip"><b>Proxy note</b><br>Some websites block iframes, scripts, sign-ins, or video playback even through a proxy. Search pages and simpler sites work best.</div>
+          </aside>
+          <div class="browser-frame-wrap">
+            <div class="browser-loading" id="browserLoading"><span></span><b>Loading page…</b></div>
+            <iframe id="browserFrame" title="MUSABX proxied browser" referrerpolicy="no-referrer"></iframe>
+            <div class="browser-panel" id="browserPanel"><div class="browser-panel-head"><h3 id="browserPanelTitle">History</h3><button onclick="closeBrowserPanel()">×</button></div><div id="browserPanelList"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="library" class="view">
+      <div class="section-head"><div><h2>Game library</h2><p>Choose a game and start instantly.</p></div><span class="badge">4 GAMES</span></div>
+      <div class="category-row" id="categoryRow"></div><div class="games-grid" id="libraryGrid"></div>
+    </section>
+
+    <section id="achievements" class="view">
+      <div class="section-head"><div><h2>Achievements</h2><p>Progress is stored on this device.</p></div></div>
+      <div class="panel"><div id="achievementGrid" class="games-grid"></div></div>
+    </section>
+
+    <section id="settings" class="view">
+      <div class="section-head"><div><h2>Themes and display</h2><p>Personalize the experience without changing the games.</p></div></div>
+      <div class="panel"><div class="theme-grid">
+        <button class="theme-card" data-theme="default"><b>Midnight Space</b><div class="swatches"><i class="swatch" style="background:#07111f"></i><i class="swatch" style="background:#67e8f9"></i><i class="swatch" style="background:#8b5cf6"></i></div></button>
+        <button class="theme-card" data-theme="sunset"><b>Sunset Arcade</b><div class="swatches"><i class="swatch" style="background:#26101b"></i><i class="swatch" style="background:#ffd166"></i><i class="swatch" style="background:#ff6b6b"></i></div></button>
+        <button class="theme-card" data-theme="forest"><b>Emerald Quest</b><div class="swatches"><i class="swatch" style="background:#071b17"></i><i class="swatch" style="background:#86efac"></i><i class="swatch" style="background:#2dd4bf"></i></div></button>
+        <button class="theme-card" data-theme="light"><b>Clean Campus</b><div class="swatches"><i class="swatch" style="background:#eaf4ff"></i><i class="swatch" style="background:#0ea5e9"></i><i class="swatch" style="background:#7c3aed"></i></div></button>
+      </div></div>
+    </section>
+  </main>
+</div>
+
+<div class="game-screen" id="gameScreen">
+  <div class="game-top"><button class="icon-btn" onclick="closeGame()">←</button><div class="game-title" id="gameTitle">Game</div><div style="flex:1"></div><button class="icon-btn" onclick="restartCurrentGame()">↻</button></div>
+  <div class="game-stage-wrap"><div class="game-stage" id="gameStage"><canvas id="gameCanvas" width="1100" height="680"></canvas><div class="game-hud"><div class="hud-pill" id="hudLeft">Score: 0</div><div class="hud-pill" id="hudRight">Best: 0</div></div><div class="overlay-card" id="gameOverlay"><div class="overlay-inner"><h2 id="overlayTitle">Ready?</h2><p id="overlayText"></p><button class="primary" id="overlayButton">Start Game</button><div class="controls" id="overlayControls"></div></div></div></div></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const gameData=[
+ {id:'drift',title:'Neon Drift',genre:'Arcade Racing',desc:'Dodge traffic, collect energy cores, and survive an increasingly fast neon highway.',cover:'drift'},
+ {id:'space',title:'Star Defender',genre:'Space Action',desc:'Protect the orbital station from crystal meteors with smooth movement and rapid laser fire.',cover:'space'},
+ {id:'memory',title:'Jungle Match',genre:'Memory Puzzle',desc:'Match beautifully illustrated jungle icons before the timer runs out.',cover:'memory'},
+ {id:'goal',title:'Goal Rush',genre:'Sports Skill',desc:'Aim your shots past a moving goalkeeper and chase a high-scoring streak.',cover:'goal'}
+ ];
+const generatedNames=[
+['Sky Sprint','racer','Racing'],['Moon Rally','racer','Racing'],['Cyber Circuit','racer','Racing'],['Desert Velocity','racer','Racing'],['Aqua Rush','racer','Racing'],['Volcano Run','racer','Racing'],['Arctic Drive','racer','Racing'],['Metro Racer','racer','Racing'],
+['Crystal Collector','collect','Adventure'],['Forest Forager','collect','Adventure'],['Ocean Treasure','collect','Adventure'],['Candy Catch','collect','Adventure'],['Robot Rescue','collect','Adventure'],['Gem Garden','collect','Adventure'],['Cloud Harvester','collect','Adventure'],['Museum Dash','collect','Adventure'],
+['Meteor Escape','dodge','Survival'],['Laser Lane','dodge','Survival'],['Falling Stars','dodge','Survival'],['Avalanche Alert','dodge','Survival'],['Traffic Tangle','dodge','Survival'],['Comet Crisis','dodge','Survival'],['Temple Traps','dodge','Survival'],['Storm Runner','dodge','Survival'],
+['Galaxy Patrol','shooter','Action'],['Bug Blaster','shooter','Action'],['Ocean Defender','shooter','Action'],['Castle Cannon','shooter','Action'],['Drone Defense','shooter','Action'],['Candy Cannon','shooter','Action'],['Shadow Strike','shooter','Action'],['Solar Squadron','shooter','Action'],
+['Prism Breaker','breakout','Arcade'],['Ice Breakout','breakout','Arcade'],['Brick Galaxy','breakout','Arcade'],['Candy Smash','breakout','Arcade'],['Temple Breaker','breakout','Arcade'],['Neon Blocks','breakout','Arcade'],['Pixel Fortress','breakout','Arcade'],['Rainbow Ricochet','breakout','Arcade'],
+['Garden Snake','snake','Classic'],['Neon Serpent','snake','Classic'],['Space Worm','snake','Classic'],['Sushi Snake','snake','Classic'],['Dragon Trail','snake','Classic'],['Circuit Crawler','snake','Classic'],['Jungle Python','snake','Classic'],['Ice Serpent','snake','Classic'],
+['Mystic Maze','maze','Puzzle'],['Robot Labyrinth','maze','Puzzle'],['Temple Escape','maze','Puzzle'],['Moon Maze','maze','Puzzle'],['Library Labyrinth','maze','Puzzle'],['Crystal Caverns','maze','Puzzle'],['Haunted Hallways','maze','Puzzle'],['Circuit Maze','maze','Puzzle'],
+['Target Titan','target','Skill'],['Fruit Pop','target','Skill'],['Bubble Burst','target','Skill'],['Alien Tap','target','Skill'],['Ninja Reflex','target','Skill'],['Goal Target','target','Skill'],['Meteor Tap','target','Skill'],['Color Clash','target','Skill'],
+['Tower Stack','stack','Strategy'],['City Builder','stack','Strategy'],['Space Stacker','stack','Strategy'],['Candy Tower','stack','Strategy'],['Temple Blocks','stack','Strategy'],['Robot Factory','stack','Strategy'],['Cloud Constructor','stack','Strategy'],['Castle Stack','stack','Strategy'],
+['Pond Hopper','platform','Platformer'],['Jungle Jump','platform','Platformer'],['Moon Bounce','platform','Platformer'],['Robot Rooftops','platform','Platformer'],['Candy Climb','platform','Platformer'],['Volcano Vault','platform','Platformer'],['Iceberg Hop','platform','Platformer'],['Skyline Leap','platform','Platformer'],
+['Penalty Pro','goal','Sports'],['Basket Blitz','target','Sports'],['Tennis Target','target','Sports'],['Hockey Hero','goal','Sports'],['Golf Precision','target','Sports'],['Baseball Blast','target','Sports'],['Volleyball Volley','platform','Sports'],['Track Champion','racer','Sports'],
+['Number Ninja','target','Learning'],['Word Wizard','target','Learning'],['Shape Scholar','collect','Learning'],['History Hunt','maze','Learning'],['Science Sprint','dodge','Learning'],['Math Meteor','shooter','Learning'],['Geography Quest','collect','Learning'],['Logic Lab','breakout','Learning']
+];
+const paletteSets=[['#22d3ee','#7c3aed'],['#34d399','#0ea5e9'],['#fb7185','#f59e0b'],['#a78bfa','#ec4899'],['#60a5fa','#14b8a6'],['#facc15','#f97316']];
+generatedNames.forEach((x,i)=>gameData.push({id:'g'+(i+5),title:x[0],engine:x[1],genre:x[2],desc:'A polished '+x[2].toLowerCase()+' challenge with responsive controls, increasing difficulty, and a saved high score.',seed:i+17,palette:paletteSets[i%paletteSets.length]}));
+const covers={
+ drift:`<svg viewBox="0 0 500 240"><defs><linearGradient id="d1" x2="1" y2="1"><stop stop-color="#08162f"/><stop offset="1" stop-color="#5b21b6"/></linearGradient><linearGradient id="road" x2="0" y2="1"><stop stop-color="#18233c"/><stop offset="1" stop-color="#030712"/></linearGradient></defs><rect width="500" height="240" fill="url(#d1)"/><circle cx="420" cy="48" r="60" fill="#67e8f9" opacity=".2"/><path d="M150 240L225 75h50l80 165" fill="url(#road)" stroke="#818cf8" stroke-width="3"/><path d="M250 220V90" stroke="#fff" stroke-width="6" stroke-dasharray="20 16" opacity=".8"/><g transform="translate(172 145)"><path d="M0 42l18-38h78l25 38-7 38H8z" fill="#19d3ff"/><path d="M28 8h54l16 27H14z" fill="#bff7ff" opacity=".85"/><circle cx="25" cy="77" r="14" fill="#05070d"/><circle cx="98" cy="77" r="14" fill="#05070d"/><rect x="20" y="42" width="78" height="13" rx="6" fill="#09213d"/></g><g fill="#ff4d8d"><rect x="80" y="80" width="7" height="90"/><rect x="405" y="72" width="7" height="98"/></g></svg>`,
+ space:`<svg viewBox="0 0 500 240"><defs><radialGradient id="s1"><stop stop-color="#4527a0"/><stop offset="1" stop-color="#050816"/></radialGradient></defs><rect width="500" height="240" fill="url(#s1)"/><g fill="#fff">${Array.from({length:30},(_,i)=>`<circle cx="${(i*83)%500}" cy="${(i*47)%220}" r="${i%3+1}" opacity=".${i%8+2}"/>`).join('')}</g><circle cx="415" cy="60" r="44" fill="#4fd1c5"/><circle cx="400" cy="48" r="10" fill="#1f6d7a" opacity=".5"/><g transform="translate(175 90)"><path d="M70 0l22 52 66 23-66 22-22 58-22-58-66-22 66-23z" fill="#e5f8ff" stroke="#60a5fa" stroke-width="5"/><ellipse cx="70" cy="75" rx="30" ry="18" fill="#172554"/><path d="M18 75H-20M122 75h38" stroke="#ff5ea8" stroke-width="8"/></g></svg>`,
+ memory:`<svg viewBox="0 0 500 240"><defs><linearGradient id="m1" x2="1" y2="1"><stop stop-color="#064e3b"/><stop offset="1" stop-color="#0f766e"/></linearGradient></defs><rect width="500" height="240" fill="url(#m1)"/><circle cx="75" cy="48" r="90" fill="#86efac" opacity=".13"/><g transform="translate(75 34)"><rect width="145" height="170" rx="22" fill="#e7fff5" transform="rotate(-8 72 85)"/><text x="72" y="112" text-anchor="middle" font-size="78">🦜</text></g><g transform="translate(280 38)"><rect width="145" height="170" rx="22" fill="#fff5d9" transform="rotate(7 72 85)"/><text x="72" y="112" text-anchor="middle" font-size="78">🐯</text></g></svg>`,
+ goal:`<svg viewBox="0 0 500 240"><defs><linearGradient id="g1" y2="1"><stop stop-color="#75d5ff"/><stop offset=".55" stop-color="#b5ecff"/><stop offset=".56" stop-color="#2f9f52"/><stop offset="1" stop-color="#0b5f2d"/></linearGradient></defs><rect width="500" height="240" fill="url(#g1)"/><path d="M85 180V70h330v110M85 70h330" fill="none" stroke="#fff" stroke-width="9"/><g stroke="#fff" opacity=".45"><path d="M105 75v105m35-105v105m35-105v105m35-105v105m35-105v105m35-105v105m35-105v105m35-105v105m35-105v105M90 100h320M90 130h320M90 160h320"/></g><circle cx="250" cy="188" r="31" fill="#fff"/><path d="M250 160l14 10-5 17h-18l-5-17zM220 179l14-9M280 179l-14-9M231 211l10-24M269 211l-10-24" stroke="#111827" stroke-width="7" fill="#111827"/></svg>`
+};
+const achievements=[
+ {id:'first',name:'First Launch',desc:'Play your first game.',icon:'🚀'},
+ {id:'score100',name:'Triple Digits',desc:'Score 100 points in any game.',icon:'💯'},
+ {id:'drift500',name:'Road Legend',desc:'Score 500 in Neon Drift.',icon:'🏎️'},
+ {id:'space300',name:'Star Guardian',desc:'Score 300 in Star Defender.',icon:'🛡️'},
+ {id:'memory',name:'Sharp Memory',desc:'Finish Jungle Match.',icon:'🧠'},
+ {id:'goal10',name:'Top Striker',desc:'Score 10 goals in Goal Rush.',icon:'⚽'},
+ {id:'played10',name:'Game Regular',desc:'Play 10 total games.',icon:'🎟️'},
+ {id:'all',name:'MUSABX Master',desc:'Try every game.',icon:'👑'}
+];
+let progress=JSON.parse(localStorage.getItem('musabxGameProgress')||'null')||{played:0,best:0,scores:{},achievements:[],tried:[]};
+let soundOn=true,currentGame=null,raf=0,cleanupFns=[];
+const canvas=document.getElementById('gameCanvas'),ctx=canvas.getContext('2d'),stage=document.getElementById('gameStage');
+function saveProgress(){localStorage.setItem('musabxGameProgress',JSON.stringify(progress));updateStats();renderAchievements()}
+function unlock(id){if(!progress.achievements.includes(id)){progress.achievements.push(id);toast('Achievement unlocked: '+achievements.find(a=>a.id===id).name);saveProgress()}}
+function recordPlay(id){progress.played++;if(!progress.tried.includes(id))progress.tried.push(id);unlock('first');if(progress.played>=10)unlock('played10');if(progress.tried.length===gameData.length)unlock('all');saveProgress()}
+function recordScore(id,score){score=Math.floor(score);progress.scores[id]=Math.max(progress.scores[id]||0,score);progress.best=Math.max(progress.best,score);if(score>=100)unlock('score100');if(id==='drift'&&score>=500)unlock('drift500');if(id==='space'&&score>=300)unlock('space300');saveProgress()}
+function updateStats(){gamesPlayed.textContent=progress.played;bestScore.textContent=progress.best;achievementCount.textContent=progress.achievements.length+'/'+achievements.length}
+function makeCover(g){let p=g.palette||['#22d3ee','#7c3aed'],n=(g.seed||7)%7;return `<svg viewBox="0 0 500 240"><defs><linearGradient id="cg${g.id}" x2="1" y2="1"><stop stop-color="${p[0]}"/><stop offset="1" stop-color="${p[1]}"/></linearGradient></defs><rect width="500" height="240" fill="#07111f"/><circle cx="${90+n*35}" cy="55" r="110" fill="${p[0]}" opacity=".18"/><circle cx="420" cy="190" r="130" fill="${p[1]}" opacity=".2"/><path d="M0 205 Q120 ${90+n*8} 250 190 T500 120 V240 H0Z" fill="url(#cg${g.id})" opacity=".72"/><g transform="translate(250 120)"><circle r="63" fill="rgba(3,9,18,.75)" stroke="white" stroke-opacity=".35" stroke-width="4"/><text y="20" text-anchor="middle" font-size="58">${({racer:'🏎️',collect:'💎',dodge:'⚡',shooter:'🚀',breakout:'🧱',snake:'🐍',maze:'🧭',target:'🎯',stack:'🏗️',platform:'🦘',goal:'⚽'})[g.engine]||'🎮'}</text></g><path d="M20 35H170" stroke="white" stroke-width="6" opacity=".7"/><path d="M330 205H480" stroke="white" stroke-width="6" opacity=".45"/></svg>`}
+function cardHTML(g){return `<article class="game-card" data-title="${g.title.toLowerCase()} ${g.genre.toLowerCase()}" data-genre="${g.genre}"><div class="cover">${covers[g.cover]||makeCover(g)}<span class="cover-label">${g.genre}</span></div><div class="card-body"><h3>${g.title}</h3><p>${g.desc}</p><div class="meta"><span class="badge">BEST ${progress.scores[g.id]||0}</span><button class="play-btn" onclick="launchGame('${g.id}')">Play</button></div></div></article>`}
+featuredGrid.innerHTML=gameData.slice(0,4).map(cardHTML).join('');libraryGrid.innerHTML=gameData.map(cardHTML).join('');document.querySelectorAll('.library-count').forEach(e=>e.textContent=gameData.length);
+function renderAchievements(){achievementGrid.innerHTML=achievements.map(a=>{let on=progress.achievements.includes(a.id);return `<article class="game-card" style="opacity:${on?1:.48}"><div class="card-body" style="min-height:155px"><div style="font-size:42px">${a.icon}</div><h3>${a.name}</h3><p>${a.desc}</p><span class="badge">${on?'UNLOCKED':'LOCKED'}</span></div></article>`}).join('')}
+function switchView(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('.nav-btn').forEach(b=>b.onclick=()=>switchView(b.dataset.view));
+searchInput.addEventListener('input',e=>{switchView('library');let q=e.target.value.toLowerCase();document.querySelectorAll('#libraryGrid .game-card').forEach(c=>c.style.display=c.dataset.title.includes(q)?'block':'none')});
+const genres=['All',...new Set(gameData.map(g=>g.genre))];let activeGenre='All';categoryRow.innerHTML=genres.map(x=>`<button class="filter-chip ${x==='All'?'active':''}" data-genre="${x}">${x}</button>`).join('');categoryRow.onclick=e=>{let b=e.target.closest('.filter-chip');if(!b)return;activeGenre=b.dataset.genre;categoryRow.querySelectorAll('.filter-chip').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('#libraryGrid .game-card').forEach(c=>c.style.display=(activeGenre==='All'||c.dataset.genre===activeGenre)?'block':'none')};
+function applyTheme(t){document.body.className=t==='default'?'':'theme-'+t;localStorage.setItem('musabxTheme',t);document.querySelectorAll('.theme-card').forEach(c=>c.classList.toggle('active',c.dataset.theme===t))}
+document.querySelectorAll('.theme-card').forEach(c=>c.onclick=()=>applyTheme(c.dataset.theme));applyTheme(localStorage.getItem('musabxTheme')||'default');
+soundBtn.onclick=()=>{soundOn=!soundOn;soundBtn.textContent=soundOn?'🔊':'🔇'};fullBtn.onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
+function beep(freq=440,d=.06,type='sine'){if(!soundOn)return;try{let ac=beep.ac||(beep.ac=new AudioContext()),o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(.055,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(g).connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
+function setOverlay(title,text,button='Start Game',controls=''){overlayTitle.textContent=title;overlayText.textContent=text;overlayButton.textContent=button;overlayControls.textContent=controls;gameOverlay.classList.remove('hidden')}
+function hideOverlay(){gameOverlay.classList.add('hidden')}
+function cleanupGame(){cancelAnimationFrame(raf);cleanupFns.forEach(f=>f());cleanupFns=[];stage.querySelector('.memory-board')?.remove();canvas.style.display='block'}
+function launchGame(id){cleanupGame();currentGame=id;gameScreen.classList.add('open');let g=gameData.find(x=>x.id===id);gameTitle.textContent=g.title;recordPlay(id);if(id==='drift')setupDrift();else if(id==='space')setupSpace();else if(id==='memory')setupMemory();else if(id==='goal')setupGoal();else setupMegaGame(g)}
+function closeGame(){cleanupGame();gameScreen.classList.remove('open');currentGame=null}
+function restartCurrentGame(){if(currentGame)launchGame(currentGame)}
+function fitCanvas(){canvas.width=1100;canvas.height=680}
+function roundRect(x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.stroke()}}
+function setupDrift(){fitCanvas();canvas.style.display='block';let running=false,score=0,speed=7,lane=1,playerX=550,obstacles=[],cores=[],stars=[];for(let i=0;i<80;i++)stars.push({x:Math.random()*1100,y:Math.random()*680,s:Math.random()*2+1});hudLeft.textContent='Score: 0';hudRight.textContent='Best: '+(progress.scores.drift||0);setOverlay('Neon Drift','Change lanes, avoid traffic, and collect cyan energy cores. Speed increases over time.','Start Race','Controls: A / D or Left / Right arrows');
+ const key=e=>{if(!running)return;if(['ArrowLeft','a','A'].includes(e.key))lane=Math.max(0,lane-1);if(['ArrowRight','d','D'].includes(e.key))lane=Math.min(2,lane+1)};addEventListener('keydown',key);cleanupFns.push(()=>removeEventListener('keydown',key));overlayButton.onclick=()=>{hideOverlay();running=true;loop()};
+ function spawn(){let l=Math.floor(Math.random()*3);obstacles.push({lane:l,y:-150,type:Math.random()>.5?0:1});if(Math.random()>.45)cores.push({lane:Math.floor(Math.random()*3),y:-80,spin:0})}
+ function drawCar(x,y,enemy=false,type=0){ctx.save();ctx.translate(x,y);ctx.shadowBlur=22;ctx.shadowColor=enemy?(type?'#fb7185':'#fbbf24'):'#67e8f9';let color=enemy?(type?'#ef476f':'#f59e0b'):'#18c8ff';roundRect(-50,-85,100,170,24,color);roundRect(-36,-55,72,55,16,enemy?'#202638':'#dff8ff');roundRect(-36,13,72,45,12,'#172033');ctx.fillStyle='#05070d';ctx.fillRect(-59,-52,14,43);ctx.fillRect(45,-52,14,43);ctx.fillRect(-59,38,14,43);ctx.fillRect(45,38,14,43);ctx.fillStyle='#fff';ctx.fillRect(-38,-78,25,8);ctx.fillRect(13,-78,25,8);ctx.restore()}
+ function loop(){if(!running)return;score+=.18*speed;speed=Math.min(17,7+score/170);if(Math.random()<.026)spawn();playerX+=(310+lane*240-playerX)*.18;ctx.clearRect(0,0,1100,680);let bg=ctx.createLinearGradient(0,0,0,680);bg.addColorStop(0,'#07152c');bg.addColorStop(1,'#13051f');ctx.fillStyle=bg;ctx.fillRect(0,0,1100,680);stars.forEach(s=>{s.y+=speed*.22;if(s.y>680)s.y=0;ctx.fillStyle='rgba(255,255,255,.65)';ctx.fillRect(s.x,s.y,s.s,s.s)});ctx.fillStyle='#131b2b';ctx.beginPath();ctx.moveTo(180,680);ctx.lineTo(390,0);ctx.lineTo(710,0);ctx.lineTo(920,680);ctx.fill();ctx.strokeStyle='#6d5dfc';ctx.lineWidth=5;ctx.stroke();for(let y=-80;y<760;y+=120){let yy=(y+(score*6)%120);ctx.strokeStyle='rgba(255,255,255,.78)';ctx.lineWidth=7;ctx.setLineDash([38,28]);ctx.beginPath();ctx.moveTo(470,yy);ctx.lineTo(420+(yy/680)*25,yy+70);ctx.stroke();ctx.beginPath();ctx.moveTo(630,yy);ctx.lineTo(680-(yy/680)*25,yy+70);ctx.stroke()}ctx.setLineDash([]);
+ obstacles.forEach(o=>{o.y+=speed;let x=310+o.lane*240;drawCar(x,o.y,true,o.type)});cores.forEach(c=>{c.y+=speed;c.spin+=.1;let x=310+c.lane*240;ctx.save();ctx.translate(x,c.y);ctx.rotate(c.spin);ctx.shadowBlur=24;ctx.shadowColor='#67e8f9';ctx.fillStyle='#67e8f9';ctx.beginPath();ctx.moveTo(0,-25);ctx.lineTo(22,0);ctx.lineTo(0,25);ctx.lineTo(-22,0);ctx.closePath();ctx.fill();ctx.restore()});drawCar(playerX,560,false);
+ let hit=obstacles.find(o=>Math.abs((310+o.lane*240)-playerX)<72&&Math.abs(o.y-560)<125);cores=cores.filter(c=>{if(Math.abs((310+c.lane*240)-playerX)<72&&Math.abs(c.y-560)<105){score+=40;beep(760,.08,'triangle');return false}return c.y<760});obstacles=obstacles.filter(o=>o.y<820);hudLeft.textContent='Score: '+Math.floor(score);if(hit){running=false;beep(90,.3,'sawtooth');recordScore('drift',score);setOverlay('Race Over','You scored '+Math.floor(score)+' points.','Race Again','Use quick lane changes to survive at higher speeds.');overlayButton.onclick=()=>setupDrift();return}raf=requestAnimationFrame(loop)} }
+function setupSpace(){fitCanvas();let running=false,score=0,lives=3,keys={},player={x:550,y:580},shots=[],rocks=[],particles=[],stars=Array.from({length:90},()=>({x:Math.random()*1100,y:Math.random()*680,z:Math.random()*2+1}));hudLeft.textContent='Score: 0';hudRight.textContent='Lives: 3';setOverlay('Star Defender','Move the starfighter, fire lasers, and stop crystal meteors from reaching the station.','Begin Mission','Controls: WASD / arrows to move, Space to fire');let kd=e=>{keys[e.key.toLowerCase()]=true;if(e.code==='Space')e.preventDefault()},ku=e=>keys[e.key.toLowerCase()]=false;addEventListener('keydown',kd);addEventListener('keyup',ku);cleanupFns.push(()=>removeEventListener('keydown',kd),()=>removeEventListener('keyup',ku));overlayButton.onclick=()=>{hideOverlay();running=true;loop()};let fireDelay=0;
+ function ship(){ctx.save();ctx.translate(player.x,player.y);ctx.shadowBlur=25;ctx.shadowColor='#60a5fa';ctx.fillStyle='#e7f8ff';ctx.beginPath();ctx.moveTo(0,-54);ctx.lineTo(45,35);ctx.lineTo(17,27);ctx.lineTo(0,48);ctx.lineTo(-17,27);ctx.lineTo(-45,35);ctx.closePath();ctx.fill();ctx.fillStyle='#172554';ctx.beginPath();ctx.ellipse(0,-5,15,25,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#ff5ea8';ctx.fillRect(-34,34,18,22);ctx.fillRect(16,34,18,22);ctx.restore()}
+ function crystal(r){ctx.save();ctx.translate(r.x,r.y);ctx.rotate(r.a);ctx.shadowBlur=15;ctx.shadowColor='#f472b6';ctx.fillStyle='#c084fc';ctx.beginPath();for(let i=0;i<8;i++){let ang=i*Math.PI/4,rad=i%2?18:r.size;ctx.lineTo(Math.cos(ang)*rad,Math.sin(ang)*rad)}ctx.closePath();ctx.fill();ctx.strokeStyle='#f5d0fe';ctx.stroke();ctx.restore()}
+ function loop(){if(!running)return;score+=.08;if(keys.a||keys.arrowleft)player.x-=8;if(keys.d||keys.arrowright)player.x+=8;if(keys.w||keys.arrowup)player.y-=8;if(keys.s||keys.arrowdown)player.y+=8;player.x=Math.max(55,Math.min(1045,player.x));player.y=Math.max(120,Math.min(620,player.y));if(fireDelay>0)fireDelay--;if((keys[' ']||keys.space||keys.spacebar)&&fireDelay<=0){shots.push({x:player.x,y:player.y-50});fireDelay=9;beep(620,.04,'square')}if(Math.random()<.025+score/70000)rocks.push({x:60+Math.random()*980,y:-50,size:24+Math.random()*25,v:2.7+Math.random()*2.8+score/240,a:0});ctx.fillStyle='#040818';ctx.fillRect(0,0,1100,680);stars.forEach(s=>{s.y+=s.z;if(s.y>680){s.y=0;s.x=Math.random()*1100}ctx.fillStyle=`rgba(255,255,255,${.25+s.z*.25})`;ctx.fillRect(s.x,s.y,s.z,s.z)});let neb=ctx.createRadialGradient(180,200,10,180,200,270);neb.addColorStop(0,'rgba(84,46,180,.25)');neb.addColorStop(1,'transparent');ctx.fillStyle=neb;ctx.fillRect(0,0,500,500);shots.forEach(s=>s.y-=13);rocks.forEach(r=>{r.y+=r.v;r.a+=.03;crystal(r)});ctx.fillStyle='#67e8f9';ctx.shadowBlur=12;ctx.shadowColor='#67e8f9';shots.forEach(s=>ctx.fillRect(s.x-3,s.y-18,6,30));ctx.shadowBlur=0;
+ shots=shots.filter(s=>{let hit=rocks.find(r=>Math.hypot(r.x-s.x,r.y-s.y)<r.size+8);if(hit){rocks.splice(rocks.indexOf(hit),1);score+=25;beep(250,.05,'triangle');return false}return s.y>-30});rocks=rocks.filter(r=>{if(r.y>700){lives--;beep(110,.18,'sawtooth');return false}return true});ship();hudLeft.textContent='Score: '+Math.floor(score);hudRight.textContent='Lives: '+lives;if(lives<=0){running=false;recordScore('space',score);setOverlay('Mission Complete','Final score: '+Math.floor(score),'Play Again','Destroy meteors early to protect all three lives.');overlayButton.onclick=()=>setupSpace();return}raf=requestAnimationFrame(loop)} }
+function setupMemory(){canvas.style.display='none';let old=stage.querySelector('.memory-board');if(old)old.remove();let board=document.createElement('div');board.className='memory-board';stage.appendChild(board);let icons=['🦜','🐯','🐸','🦋','🦥','🐼','🦎','🌺'];let deck=[...icons,...icons].sort(()=>Math.random()-.5),first=null,lock=false,matches=0,moves=0,time=90,timer;hudLeft.textContent='Moves: 0';hudRight.textContent='Time: 90';setOverlay('Jungle Match','Find all eight matching pairs before time runs out.','Start Puzzle','Click two cards to reveal their jungle pictures.');deck.forEach((icon,i)=>{let c=document.createElement('button');c.className='memory-card';c.innerHTML=`<span class="memory-inner"><span class="memory-face memory-back">✦</span><span class="memory-face memory-front">${icon}</span></span>`;c.onclick=()=>flip(c,icon);board.appendChild(c)});overlayButton.onclick=()=>{hideOverlay();timer=setInterval(()=>{time--;hudRight.textContent='Time: '+time;if(time<=0){clearInterval(timer);finish(false)}},1000)};cleanupFns.push(()=>clearInterval(timer));function flip(c,icon){if(lock||c.classList.contains('flipped')||c.classList.contains('matched'))return;c.classList.add('flipped');beep(440,.04);if(!first){first={c,icon};return}moves++;hudLeft.textContent='Moves: '+moves;if(first.icon===icon){first.c.classList.add('matched');c.classList.add('matched');matches++;first=null;beep(750,.09,'triangle');if(matches===8)finish(true)}else{lock=true;setTimeout(()=>{first.c.classList.remove('flipped');c.classList.remove('flipped');first=null;lock=false},700)}}function finish(win){clearInterval(timer);let score=win?Math.max(100,1000-moves*20+time*5):0;if(win){unlock('memory');recordScore('memory',score)}setOverlay(win?'Jungle Cleared!':'Time Up',win?`Score ${score} with ${moves} moves.`:'Try again and remember each picture location.','Play Again','Fewer moves and more time remaining earn a higher score.');overlayButton.onclick=()=>setupMemory()}}
+function setupGoal(){fitCanvas();let running=false,score=0,shots=10,streak=0,keeperX=550,keeperDir=1,aim={x:550,y:260},ball={x:550,y:590,tx:550,ty:260,moving:false,t:0};hudLeft.textContent='Goals: 0';hudRight.textContent='Shots: 10';setOverlay('Goal Rush','Move the target and shoot around the goalkeeper. Consecutive goals build your streak.','Kick Off','Mouse: aim and click. Keyboard: arrows to aim, Space to shoot.');let move=e=>{let r=canvas.getBoundingClientRect();aim.x=(e.clientX-r.left)*canvas.width/r.width;aim.y=(e.clientY-r.top)*canvas.height/r.height},click=()=>shoot(),key=e=>{if(e.key==='ArrowLeft')aim.x-=25;if(e.key==='ArrowRight')aim.x+=25;if(e.key==='ArrowUp')aim.y-=20;if(e.key==='ArrowDown')aim.y+=20;if(e.code==='Space')shoot()};canvas.addEventListener('mousemove',move);canvas.addEventListener('click',click);addEventListener('keydown',key);cleanupFns.push(()=>canvas.removeEventListener('mousemove',move),()=>canvas.removeEventListener('click',click),()=>removeEventListener('keydown',key));overlayButton.onclick=()=>{hideOverlay();running=true;loop()};function shoot(){if(!running||ball.moving||shots<=0)return;ball.moving=true;ball.t=0;ball.tx=Math.max(160,Math.min(940,aim.x));ball.ty=Math.max(110,Math.min(395,aim.y));shots--;beep(160,.08,'square')}
+ function drawBall(x,y,r=27){ctx.save();ctx.translate(x,y);ctx.fillStyle='white';ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);ctx.fill();ctx.fillStyle='#111827';ctx.beginPath();for(let i=0;i<5;i++){let a=-Math.PI/2+i*Math.PI*2/5;ctx.lineTo(Math.cos(a)*r*.38,Math.sin(a)*r*.38)}ctx.closePath();ctx.fill();ctx.restore()}
+ function loop(){if(!running)return;keeperX+=keeperDir*4.5;if(keeperX>825||keeperX<275)keeperDir*=-1;ctx.clearRect(0,0,1100,680);let sky=ctx.createLinearGradient(0,0,0,680);sky.addColorStop(0,'#73d6ff');sky.addColorStop(.55,'#d8f5ff');sky.addColorStop(.56,'#2c9b50');sky.addColorStop(1,'#09542c');ctx.fillStyle=sky;ctx.fillRect(0,0,1100,680);for(let i=0;i<1100;i+=55){ctx.fillStyle=i%110?'rgba(255,255,255,.2)':'rgba(0,0,0,.08)';ctx.fillRect(i,380,27,300)}ctx.strokeStyle='white';ctx.lineWidth=12;ctx.strokeRect(140,95,820,330);ctx.lineWidth=2;ctx.globalAlpha=.35;for(let x=160;x<960;x+=35){ctx.beginPath();ctx.moveTo(x,100);ctx.lineTo(x,425);ctx.stroke()}for(let y=120;y<425;y+=30){ctx.beginPath();ctx.moveTo(145,y);ctx.lineTo(955,y);ctx.stroke()}ctx.globalAlpha=1;ctx.save();ctx.translate(keeperX,315);ctx.fillStyle='#ffcf56';roundRect(-28,-95,56,95,18,'#ffcf56');ctx.fillStyle='#172033';ctx.fillRect(-27,0,22,72);ctx.fillRect(5,0,22,72);ctx.strokeStyle='#ffcf56';ctx.lineWidth=18;ctx.beginPath();ctx.moveTo(-20,-65);ctx.lineTo(-75,-35);ctx.moveTo(20,-65);ctx.lineTo(75,-35);ctx.stroke();ctx.fillStyle='#f0b18a';ctx.beginPath();ctx.arc(0,-118,25,0,Math.PI*2);ctx.fill();ctx.restore();ctx.strokeStyle='#67e8f9';ctx.lineWidth=4;ctx.beginPath();ctx.arc(aim.x,aim.y,24,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.moveTo(aim.x-34,aim.y);ctx.lineTo(aim.x+34,aim.y);ctx.moveTo(aim.x,aim.y-34);ctx.lineTo(aim.x,aim.y+34);ctx.stroke();if(ball.moving){ball.t+=.035;let e=1-Math.pow(1-Math.min(ball.t,1),3),x=550+(ball.tx-550)*e,y=590+(ball.ty-590)*e-120*Math.sin(Math.PI*e),r=27-12*e;drawBall(x,y,r);if(ball.t>=1){ball.moving=false;let saved=Math.abs(ball.tx-keeperX)<92&&ball.ty>190;let goal=!saved&&ball.tx>155&&ball.tx<945&&ball.ty>100&&ball.ty<420;if(goal){score++;streak++;beep(820,.15,'triangle');if(score>=10)unlock('goal10')}else{streak=0;beep(100,.15,'sawtooth')}hudLeft.textContent='Goals: '+score+(streak>1?' • Streak '+streak:'');hudRight.textContent='Shots: '+shots;if(shots<=0){running=false;recordScore('goal',score*100);setOverlay('Final Whistle',`You scored ${score} out of 10 shots.`,'Play Again','Aim away from the moving goalkeeper.');overlayButton.onclick=()=>setupGoal();return}}}else drawBall(550,590);raf=requestAnimationFrame(loop)} }
+
+
+function setupMegaGame(g){fitCanvas();const W=1100,H=680,p=g.palette||['#22d3ee','#7c3aed'];let running=false,score=0,lives=3,time=45,keys={},objects=[],player={x:W/2,y:H-90,w:52,h:52,vx:0,vy:0},last=0,tick=0;hudLeft.textContent='Score: 0';hudRight.textContent='Lives: 3';setOverlay(g.title,g.desc,'Start Game',controlText(g.engine));let kd=e=>{keys[e.key.toLowerCase()]=true;if([' ','arrowup','arrowdown','arrowleft','arrowright'].includes(e.key.toLowerCase()))e.preventDefault()},ku=e=>keys[e.key.toLowerCase()]=false,click=e=>{if(g.engine==='target'&&running){let r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)*W/r.width,y=(e.clientY-r.top)*H/r.height;objects.forEach(o=>{if(Math.hypot(o.x-x,o.y-y)<o.r){o.hit=true;score+=10;beep(700,.04)}})}};addEventListener('keydown',kd);addEventListener('keyup',ku);canvas.addEventListener('click',click);cleanupFns.push(()=>removeEventListener('keydown',kd),()=>removeEventListener('keyup',ku),()=>canvas.removeEventListener('click',click));overlayButton.onclick=()=>{hideOverlay();running=true;spawnInitial();last=performance.now();loop(last)};
+function controlText(e){return ({racer:'Arrow keys or WASD to steer.',collect:'Move with Arrow keys or WASD and collect every item.',dodge:'Move with Arrow keys or WASD and avoid hazards.',shooter:'Move with Arrow keys or WASD. Space fires.',breakout:'Move paddle with Left/Right or A/D.',snake:'Use Arrow keys or WASD.',maze:'Use Arrow keys or WASD to reach the exit.',target:'Click targets before they disappear.',stack:'Press Space to drop each moving block.',platform:'Move with Arrow keys or A/D. Space jumps.'})[e]||'Arrow keys or WASD.'}
+function spawnInitial(){objects=[];if(g.engine==='breakout'){for(let y=0;y<5;y++)for(let x=0;x<10;x++)objects.push({x:95+x*92,y:85+y*42,w:78,h:28,hp:1});player={x:W/2-70,y:H-55,w:140,h:20};objects.ball={x:W/2,y:H-90,vx:5,vy:-6,r:12}}else if(g.engine==='snake'){player={x:15,y:10,dir:{x:1,y:0},body:[{x:15,y:10}],food:{x:25,y:12}}}else if(g.engine==='maze'){let cols=22,rows=13;objects.maze=[];for(let y=0;y<rows;y++){objects.maze[y]=[];for(let x=0;x<cols;x++)objects.maze[y][x]=(x===0||y===0||x===cols-1||y===rows-1||((x*7+y*11+g.seed)%9===0))?1:0}objects.maze[1][1]=0;objects.maze[rows-2][cols-2]=0;player={gx:1,gy:1};objects.lastMove=0}else if(g.engine==='stack'){objects.push({x:390,y:H-50,w:320,h:35});objects.moving={x:0,y:H-90,w:320,h:35,vx:5};objects.level=1}else if(g.engine==='platform'){player={x:80,y:520,w:42,h:52,vx:0,vy:0,on:false};objects=[{x:0,y:610,w:1100,h:70},{x:170,y:500,w:190,h:24},{x:430,y:420,w:170,h:24},{x:680,y:330,w:170,h:24},{x:890,y:245,w:150,h:24}];objects.goal={x:975,y:185}}}
+function finish(msg='Game Over'){running=false;recordScore(g.id,score);setOverlay(msg,`Final score: ${Math.floor(score)}. Best: ${Math.max(progress.scores[g.id]||0,Math.floor(score))}.`,'Play Again',controlText(g.engine));overlayButton.onclick=()=>setupMegaGame(g)}
+function bg(){let gr=ctx.createLinearGradient(0,0,W,H);gr.addColorStop(0,'#07111f');gr.addColorStop(1,p[1]);ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);for(let i=0;i<45;i++){ctx.globalAlpha=.25;ctx.fillStyle=i%2?p[0]:'#fff';ctx.beginPath();ctx.arc((i*83+g.seed*31)%W,(i*47+tick*.15)%H,i%3+1,0,7);ctx.fill()}ctx.globalAlpha=1}
+function loop(now){if(!running)return;let dt=Math.min(32,now-last)/16.67;last=now;tick+=dt;bg();if(g.engine==='racer')racer(dt);else if(g.engine==='collect')collect(dt);else if(g.engine==='dodge')dodge(dt);else if(g.engine==='shooter')shooter(dt);else if(g.engine==='breakout')breakout(dt);else if(g.engine==='snake')snake(now);else if(g.engine==='maze')maze(now);else if(g.engine==='target')target(dt);else if(g.engine==='stack')stack();else if(g.engine==='platform')platform(dt);hudLeft.textContent='Score: '+Math.floor(score);hudRight.textContent=g.engine==='target'?'Time: '+Math.ceil(time):'Lives: '+lives;if(running)raf=requestAnimationFrame(loop)}
+function move(dt,s=7){let dx=(keys.arrowright||keys.d?1:0)-(keys.arrowleft||keys.a?1:0),dy=(keys.arrowdown||keys.s?1:0)-(keys.arrowup||keys.w?1:0);player.x=Math.max(20,Math.min(W-player.w-20,player.x+dx*s*dt));player.y=Math.max(50,Math.min(H-player.h-20,player.y+dy*s*dt))}
+function drawPlayer(icon='◆'){ctx.fillStyle=p[0];ctx.shadowColor=p[0];ctx.shadowBlur=20;roundRect(player.x,player.y,player.w,player.h,14,p[0]);ctx.shadowBlur=0;ctx.fillStyle='#fff';ctx.font='28px sans-serif';ctx.textAlign='center';ctx.fillText(icon,player.x+player.w/2,player.y+35)}
+function hit(o){return player.x<o.x+(o.w||o.r*2)&&player.x+player.w>o.x&&player.y<o.y+(o.h||o.r*2)&&player.y+player.h>o.y}
+function racer(dt){move(dt,9);player.y=H-105;drawPlayer('🏎');if(Math.random()<.035+.00015*score)objects.push({x:80+Math.random()*900,y:-80,w:55,h:80,v:5+score/180});objects.forEach(o=>{o.y+=o.v*dt;roundRect(o.x,o.y,o.w,o.h,12,'#fb7185');if(hit(o)&&!o.dead){o.dead=true;lives--;beep(90,.1);if(lives<=0)finish()}if(o.y>H){o.dead=true;score+=5}});objects=objects.filter(o=>!o.dead);ctx.strokeStyle='rgba(255,255,255,.25)';ctx.setLineDash([28,22]);ctx.lineWidth=5;for(let x=220;x<900;x+=220){ctx.beginPath();ctx.moveTo(x,(tick*12)%50-50);ctx.lineTo(x,H);ctx.stroke()}ctx.setLineDash([])}
+function collect(dt){move(dt);drawPlayer('🧭');if(objects.length<8&&Math.random()<.04)objects.push({x:30+Math.random()*1020,y:70+Math.random()*560,r:16});objects.forEach(o=>{ctx.fillStyle='#facc15';ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,7);ctx.fill();ctx.fillStyle='#fff';ctx.font='17px sans-serif';ctx.fillText('◆',o.x,o.y+6);if(Math.hypot(player.x+26-o.x,player.y+26-o.y)<38){o.dead=true;score+=10;beep(600,.04)}});objects=objects.filter(o=>!o.dead);if(score>=300)finish('Collection Complete!')}
+function dodge(dt){move(dt,8);drawPlayer('⚡');if(Math.random()<.05)objects.push({x:20+Math.random()*1040,y:-30,w:30+Math.random()*35,h:30+Math.random()*35,v:5+tick/800});objects.forEach(o=>{o.y+=o.v*dt;roundRect(o.x,o.y,o.w,o.h,10,'#fb7185');if(hit(o)&&!o.dead){o.dead=true;lives--;if(lives<=0)finish()}if(o.y>H){o.dead=true;score+=3}});objects=objects.filter(o=>!o.dead)}
+function shooter(dt){move(dt,7);drawPlayer('🚀');if((keys[' ']||keys.space)&&(!objects.lastShot||tick-objects.lastShot>10)){objects.push({shot:true,x:player.x+24,y:player.y-10,w:5,h:18,v:-12});objects.lastShot=tick;beep(300,.03,'square')}if(Math.random()<.035)objects.push({x:30+Math.random()*1030,y:-40,w:40,h:40,v:3+score/250});objects.forEach(o=>{o.y+=o.v*dt;ctx.fillStyle=o.shot?'#fff':'#fb7185';ctx.fillRect(o.x,o.y,o.w,o.h);if(!o.shot&&hit(o)){o.dead=true;lives--;if(lives<=0)finish()}if(o.y>H||o.y<-30)o.dead=true});let shots=objects.filter(o=>o.shot),foes=objects.filter(o=>!o.shot);shots.forEach(s=>foes.forEach(f=>{if(!s.dead&&!f.dead&&s.x<f.x+f.w&&s.x+s.w>f.x&&s.y<f.y+f.h&&s.y+s.h>f.y){s.dead=f.dead=true;score+=15;beep(700,.04)}}));objects=objects.filter(o=>!o.dead)}
+function breakout(dt){let b=objects.ball;player.x=Math.max(0,Math.min(W-player.w,player.x+(((keys.arrowright||keys.d)?1:0)-((keys.arrowleft||keys.a)?1:0))*10*dt));roundRect(player.x,player.y,player.w,player.h,10,p[0]);b.x+=b.vx*dt;b.y+=b.vy*dt;if(b.x<12||b.x>W-12)b.vx*=-1;if(b.y<45)b.vy=Math.abs(b.vy);if(b.y>H){lives--;if(lives<=0)return finish();b.x=W/2;b.y=H-90;b.vy=-6}if(b.x>player.x&&b.x<player.x+player.w&&b.y>player.y-15&&b.y<player.y+20)b.vy=-Math.abs(b.vy);objects.forEach(o=>{roundRect(o.x,o.y,o.w,o.h,8,p[(o.x/90|0)%2]);if(o.hp&&b.x>o.x&&b.x<o.x+o.w&&b.y>o.y&&b.y<o.y+o.h){o.hp=0;b.vy*=-1;score+=10}});objects=objects.filter(o=>o.hp!==0);objects.ball=b;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,7);ctx.fill();if(objects.filter(o=>o.hp).length===0)finish('Board Cleared!')}
+function snake(now){let cell=26,ox=250,oy=150;if(now-(objects.lastMove||0)>105){objects.lastMove=now;let nd=keys.arrowup||keys.w?{x:0,y:-1}:keys.arrowdown||keys.s?{x:0,y:1}:keys.arrowleft||keys.a?{x:-1,y:0}:keys.arrowright||keys.d?{x:1,y:0}:player.dir;if(nd.x!==-player.dir.x||nd.y!==-player.dir.y)player.dir=nd;let h={x:player.body[0].x+player.dir.x,y:player.body[0].y+player.dir.y};if(h.x<0||h.x>=23||h.y<0||h.y>=15||player.body.some(q=>q.x===h.x&&q.y===h.y))return finish();player.body.unshift(h);if(h.x===player.food.x&&h.y===player.food.y){score+=10;player.food={x:(Math.random()*23)|0,y:(Math.random()*15)|0}}else player.body.pop()}ctx.fillStyle='#facc15';ctx.beginPath();ctx.arc(ox+player.food.x*cell+13,oy+player.food.y*cell+13,10,0,7);ctx.fill();player.body.forEach((q,i)=>roundRect(ox+q.x*cell,oy+q.y*cell,24,24,7,i?p[1]:p[0]))}
+function maze(now){let m=objects.maze,cw=46,ch=44,ox=45,oy=70;if(now-objects.lastMove>120){let dx=(keys.arrowright||keys.d?1:0)-(keys.arrowleft||keys.a?1:0),dy=(keys.arrowdown||keys.s?1:0)-(keys.arrowup||keys.w?1:0);if(dx||dy){let nx=player.gx+dx,ny=player.gy+dy;if(!m[ny][nx]){player.gx=nx;player.gy=ny;score++}objects.lastMove=now}}m.forEach((r,y)=>r.forEach((v,x)=>{if(v)roundRect(ox+x*cw,oy+y*ch,cw-3,ch-3,7,p[1])}));ctx.fillStyle='#34d399';ctx.fillRect(ox+(m[0].length-2)*cw+8,oy+(m.length-2)*ch+8,28,28);roundRect(ox+player.gx*cw+8,oy+player.gy*ch+8,28,28,8,p[0]);if(player.gx===m[0].length-2&&player.gy===m.length-2)finish('Maze Escaped!')}
+function target(dt){time-=dt/60;if(time<=0)return finish('Time Up!');if(objects.length<5&&Math.random()<.07)objects.push({x:70+Math.random()*960,y:100+Math.random()*500,r:18+Math.random()*18,life:150});objects.forEach(o=>{o.life-=dt;ctx.globalAlpha=Math.max(0,o.life/35);ctx.fillStyle=o.hit?'#34d399':p[0];ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,7);ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=4;ctx.stroke();ctx.globalAlpha=1;if(o.life<=0||o.hit)o.dead=true});objects=objects.filter(o=>!o.dead)}
+function stack(){let m=objects.moving;m.x+=m.vx;if(m.x<0||m.x+m.w>W)m.vx*=-1;roundRect(m.x,m.y,m.w,m.h,8,p[0]);objects.forEach(o=>roundRect(o.x,o.y,o.w,o.h,8,p[1]));if(keys[' ']&&!objects.lock){objects.lock=true;let prev=objects[objects.length-1],left=Math.max(m.x,prev.x),right=Math.min(m.x+m.w,prev.x+prev.w),w=right-left;if(w<15)return finish();objects.push({x:left,y:m.y,w,h:m.h});score+=20;objects.level++;objects.moving={x:0,y:m.y-40,w,vx:(objects.level%2?1:-1)*(5+objects.level*.18),h:35};if(objects.moving.y<100)return finish('Tower Complete!')}if(!keys[' '])objects.lock=false}
+function platform(dt){let dx=((keys.arrowright||keys.d)?1:0)-((keys.arrowleft||keys.a)?1:0);player.vx=dx*7;if((keys[' ']||keys.arrowup||keys.w)&&player.on){player.vy=-13;player.on=false}player.vy+=.65*dt;player.x+=player.vx*dt;player.y+=player.vy*dt;player.on=false;objects.forEach(o=>{roundRect(o.x,o.y,o.w,o.h,8,p[1]);if(player.vy>=0&&player.x+player.w>o.x&&player.x<o.x+o.w&&player.y+player.h>o.y&&player.y+player.h<o.y+25){player.y=o.y-player.h;player.vy=0;player.on=true}});drawPlayer('★');ctx.fillStyle='#34d399';ctx.beginPath();ctx.arc(objects.goal.x,objects.goal.y,25,0,7);ctx.fill();if(Math.hypot(player.x-objects.goal.x,player.y-objects.goal.y)<60){score=500;finish('Level Complete!')}if(player.y>H)finish()}
+}
+
+// ===== MUSABX ORIGINAL PROXY BROWSER =====
+const WORKER_URL = 'https://musabx-proxy.muqimh.workers.dev';
+const browserFrame=document.getElementById('browserFrame'),browserUrl=document.getElementById('browserUrl'),browserLoading=document.getElementById('browserLoading');
+let browserHistory=JSON.parse(localStorage.getItem('musabx_history')||'[]');
+let browserBookmarks=JSON.parse(localStorage.getItem('musabx_bookmarks')||'[]');
+let browserTabsData=JSON.parse(localStorage.getItem('musabx_tabs')||'null')||[{url:'https://html.duckduckgo.com/html/',title:'Search'}];
+let activeBrowserTab=Math.min(Number(localStorage.getItem('musabx_active_tab')||0),browserTabsData.length-1);
+function normalizeBrowserTarget(value){value=value.trim();if(!value)return null;if(/^https?:\/\//i.test(value))return value;if(value.includes('.')&&!value.includes(' '))return 'https://'+value;return 'https://html.duckduckgo.com/html/?q='+encodeURIComponent(value)}
+function browserLoad(target,{remember=true}={}){if(!target)return;closeBrowserPanel();browserLoading.classList.add('show');document.getElementById('browserStatus').textContent='LOADING';browserTabsData[activeBrowserTab].url=target;browserTabsData[activeBrowserTab].title=browserTitle(target);browserUrl.value=target;browserFrame.src=WORKER_URL+'/proxy?url='+encodeURIComponent(target);if(remember){browserHistory.push({url:target,time:Date.now()});browserHistory=browserHistory.slice(-100);localStorage.setItem('musabx_history',JSON.stringify(browserHistory))}saveBrowserTabs();renderBrowserTabs()}
+function browserTitle(url){try{let u=new URL(url);if(u.hostname.includes('duckduckgo'))return 'Search';return u.hostname.replace(/^www\./,'')}catch{return 'New Tab'}}
+function browserGo(){let t=normalizeBrowserTarget(browserUrl.value);if(t)browserLoad(t)}
+function browserHome(){browserLoad('https://html.duckduckgo.com/html/')}
+function browserReload(){browserLoading.classList.add('show');browserFrame.src=browserFrame.src}
+function browserBack(){try{browserFrame.contentWindow.history.back()}catch(e){}}
+function browserForward(){try{browserFrame.contentWindow.history.forward()}catch(e){}}
+function browserFullscreen(){let el=document.querySelector('.browser-shell');if(!document.fullscreenElement)el.requestFullscreen?.();else document.exitFullscreen?.()}
+function newBrowserTab(){browserTabsData.push({url:'https://html.duckduckgo.com/html/',title:'Search'});activeBrowserTab=browserTabsData.length-1;saveBrowserTabs();renderBrowserTabs();browserHome()}
+function selectBrowserTab(i){activeBrowserTab=i;saveBrowserTabs();renderBrowserTabs();browserLoad(browserTabsData[i].url,{remember:false})}
+function closeBrowserTab(i,event){event.stopPropagation();if(browserTabsData.length===1){browserTabsData[0]={url:'https://html.duckduckgo.com/html/',title:'Search'};activeBrowserTab=0}else{browserTabsData.splice(i,1);if(activeBrowserTab>=browserTabsData.length)activeBrowserTab=browserTabsData.length-1}saveBrowserTabs();renderBrowserTabs();browserLoad(browserTabsData[activeBrowserTab].url,{remember:false})}
+function saveBrowserTabs(){localStorage.setItem('musabx_tabs',JSON.stringify(browserTabsData));localStorage.setItem('musabx_active_tab',activeBrowserTab)}
+function renderBrowserTabs(){let box=document.getElementById('browserTabs');box.innerHTML='';browserTabsData.forEach((tab,i)=>{let b=document.createElement('button');b.className='browser-tab '+(i===activeBrowserTab?'active':'');b.onclick=()=>selectBrowserTab(i);b.innerHTML='<span>🌐</span><span class="browser-tab-title"></span><span class="browser-tab-close">×</span>';b.querySelector('.browser-tab-title').textContent=tab.title||browserTitle(tab.url);b.querySelector('.browser-tab-close').onclick=e=>closeBrowserTab(i,e);box.appendChild(b)});let add=document.createElement('button');add.className='browser-add-tab';add.textContent='＋';add.onclick=newBrowserTab;box.appendChild(add)}
+function saveBrowserBookmark(){let target=browserTabsData[activeBrowserTab]?.url;if(!target)return;if(!browserBookmarks.some(x=>(typeof x==='string'?x:x.url)===target))browserBookmarks.push({url:target,time:Date.now()});localStorage.setItem('musabx_bookmarks',JSON.stringify(browserBookmarks));toast('Bookmark saved ⭐')}
+function showBrowserPanel(type){let panel=document.getElementById('browserPanel'),title=document.getElementById('browserPanelTitle'),list=document.getElementById('browserPanelList');panel.classList.add('open');title.textContent=type==='history'?'History':'Bookmarks';let data=type==='history'?[...browserHistory].reverse():[...browserBookmarks].reverse();list.innerHTML='';if(!data.length){list.innerHTML='<div class="browser-empty">Nothing saved yet.</div>';return}data.slice(0,60).forEach(entry=>{let u=typeof entry==='string'?entry:entry.url,b=document.createElement('button');b.className='browser-list-item';b.textContent=u;b.onclick=()=>browserLoad(u);list.appendChild(b)})}
+function closeBrowserPanel(){document.getElementById('browserPanel').classList.remove('open')}
+browserFrame.addEventListener('load',()=>{browserLoading.classList.remove('show');document.getElementById('browserStatus').textContent='READY'});
+browserUrl.addEventListener('keydown',e=>{if(e.key==='Enter')browserGo()});
+renderBrowserTabs();browserLoad(browserTabsData[activeBrowserTab].url,{remember:false});
+
+updateStats();renderAchievements();
+</script>
+</body>
+</html>
+
